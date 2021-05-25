@@ -1,0 +1,4 @@
+# e.g. +989119941033 or 09119941033
+PERSIAN_PHONE_NUMBER_PATTERN = r'^(\+98|0)?9\d{9}$'
+
+INTERNATIONAL_PHONE_NUMBER_PATTERN = r'^(\(?\+?[0-9]*\)?)?[0-9_\- \(\)]*$'

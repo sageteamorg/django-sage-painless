@@ -1,0 +1,30 @@
+"""
+Auto Generated models.py
+You may need to change some parts
+"""
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
+{% for model in models %}
+
+class {{model.name}}(models.Model):
+    """
+    {{model.name}} Model
+    Auto generated
+    """
+    {% for field in model.fields %}
+    {% if field.type %}
+    {{field.name}} = models.{{field.type}}({% for attr in field.attrs %}
+             {% if attr.key == 'on_delete' %}{{attr.key}}=models.{{attr.value}},{% else %}{{attr.key}}={{attr.value}},{%endif%}{% endfor %}
+    )
+    {% endif %}
+    {% endfor %}
+
+    def __str__(self):
+        return {% if model.get_str %} f"{{model.get_str}}" {% else %} None {% endif %} # you may change this section
+
+    class Meta:
+        verbose_name = _("{{model.verbose_name}}")  # auto generated verbose_name
+        verbose_name_plural = _("{{model.verbose_name_plural}}")
+
+{% endfor %}
