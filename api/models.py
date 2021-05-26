@@ -33,6 +33,10 @@ class User(models.Model):
         blank=True,
     )
 
+    is_active = models.BooleanField(
+        default=True,
+    )
+
     last_login = models.DateTimeField(
         auto_now=True,
     )

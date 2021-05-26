@@ -34,6 +34,17 @@ tables:
       - verbose_name: User
       - verbose_name_plural: Users
 
+    admin:
+      - list_display:
+          - username
+          - first_name
+          - last_name
+      - list_filter:
+          - is_active
+          - last_login
+      - search_fields:
+          - username
+
   - Profile:
       fields:
         - user:
@@ -47,3 +58,9 @@ tables:
         - image:
           - type: image
           - blank: True
+
+      admin:
+        - list_display:
+            - user
+        - raw_id_fields:
+            - user

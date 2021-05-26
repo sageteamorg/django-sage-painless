@@ -52,6 +52,10 @@ class Field:
         'image': {
             'type': 'ImageField',
             'required': []
+        },
+        'bool': {
+            'type': 'BooleanField',
+            'required': []
         }
     }
 

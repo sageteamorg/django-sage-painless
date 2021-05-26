@@ -8,16 +8,18 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('-a', '--app', type=str, help='app label that will generate admin.py for')
+        parser.add_argument('-d', '--diagram', type=str, help='diagram that will generate admin.py for')
 
     def handle(self, *args, **options):
         app_label = options.get('app')
+        diagram_path = options.get('diagram')
         admin_generator = AdminGenerator(app_label)
-        generated = admin_generator.generate()
+        generated, message = admin_generator.generate(diagram_path)
         if generated:
             self.stdout.write(
-                self.style.SUCCESS('admin.py generated successfully for app {}'.format(app_label))
+                self.style.SUCCESS(message)
             )
         else:
             self.stdout.write(
-                self.style.ERROR('Error in generating admin.py')
+                self.style.ERROR(message)
             )

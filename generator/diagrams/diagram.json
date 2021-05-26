@@ -1,0 +1,71 @@
+{
+  "User": {
+    "fields": {
+      "username": {
+        "type": "character",
+        "unique": true,
+        "max_length": 255,
+        "blank": false
+      },
+      "password": {
+        "type": "character",
+        "max_length": 255,
+        "blank": false
+      },
+      "first_name": {
+        "type": "character",
+        "max_length": 255,
+        "blank": true
+      },
+      "last_name": {
+        "type": "character",
+        "max_length": 255,
+        "blank": true
+      },
+      "is_active": {
+        "type": "bool",
+        "default": true
+      },
+      "last_login": {
+        "type": "datetime",
+        "auto_now": true
+      }
+    },
+    "admin": {
+      "list_display": [
+        "username",
+        "first_name",
+        "last_name"
+      ],
+      "list_filter": [
+        "is_active",
+        "last_login"
+      ],
+      "search_fields": [
+        "username"
+      ]
+    }
+  },
+  "Profile": {
+    "fields": {
+      "user": {
+        "type": "one2one",
+        "to": "User",
+        "on_delete": "CASCADE"
+      },
+      "description": {
+        "type": "character",
+        "max_length": 255,
+        "blank": true
+      },
+      "image": {
+        "type": "image",
+        "blank": true
+      }
+    },
+    "admin": {
+      "list_display": ["user"],
+      "raw_id_fields": ["user"]
+    }
+  }
+}

@@ -3,7 +3,6 @@ Auto Generated admin.py
 You may need to change some parts
 """
 from django.contrib import admin
-from django.db.models import CharField, DateField, DateTimeField
 from api.models import *
 
 
@@ -13,14 +12,20 @@ class UserAdmin(admin.ModelAdmin):
     User Admin
     Auto generated
     """
-    list_display = [
-        field.column for field in User._meta.get_fields() if isinstance(
-            field, CharField)]
+    list_display = ['username', 'first_name', 'last_name']
 
-    list_filter = [
-        field.column for field in User._meta.get_fields() if isinstance(
-            field, DateField) or isinstance(
-            field, DateTimeField)]
+    list_filter = ['is_active', 'last_login']
+
+    search_fields = ['username']
+
+    def has_add_permission(self, *args, **kwargs):
+        return True
+
+    def has_change_permission(self, *args, **kwargs):
+        return True
+
+    def has_delete_permission(self, *args, **kwargs):
+        return True
 
 
 @admin.register(Profile)
@@ -29,11 +34,15 @@ class ProfileAdmin(admin.ModelAdmin):
     Profile Admin
     Auto generated
     """
-    list_display = [
-        field.column for field in Profile._meta.get_fields() if isinstance(
-            field, CharField)]
+    list_display = ['user']
 
-    list_filter = [
-        field.column for field in Profile._meta.get_fields() if isinstance(
-            field, DateField) or isinstance(
-            field, DateTimeField)]
+    raw_id_fields = ['user']
+
+    def has_add_permission(self, *args, **kwargs):
+        return True
+
+    def has_change_permission(self, *args, **kwargs):
+        return True
+
+    def has_delete_permission(self, *args, **kwargs):
+        return True

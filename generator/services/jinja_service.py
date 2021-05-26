@@ -1,7 +1,7 @@
 from jinja2 import Environment
 
 
-class Jinja:
+class JinjaHandler:
     env = Environment(autoescape=False, optimized=False)
 
     def load_template(self, template_path):
