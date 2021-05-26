@@ -14,12 +14,14 @@ class UserAdmin(admin.ModelAdmin):
     Auto generated
     """
     list_display = [
-        field.column for field in User._meta.get_fields() if type(field) == CharField
-    ]
+        field.column for field in User._meta.get_fields() if isinstance(
+            field, CharField)]
 
     list_filter = [
-        field.column for field in User._meta.get_fields() if type(field) == DateField or type(field) == DateTimeField
-    ]
+        field.column for field in User._meta.get_fields() if isinstance(
+            field, DateField) or isinstance(
+            field, DateTimeField)]
+
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -28,9 +30,10 @@ class ProfileAdmin(admin.ModelAdmin):
     Auto generated
     """
     list_display = [
-        field.column for field in Profile._meta.get_fields() if type(field) == CharField
-    ]
+        field.column for field in Profile._meta.get_fields() if isinstance(
+            field, CharField)]
 
     list_filter = [
-        field.column for field in Profile._meta.get_fields() if type(field) == DateField or type(field) == DateTimeField
-    ]
+        field.column for field in Profile._meta.get_fields() if isinstance(
+            field, DateField) or isinstance(
+            field, DateTimeField)]
