@@ -4,6 +4,7 @@ from django.conf import settings
 
 from generator.classes.field import Field
 from generator.classes.model import Model
+
 from generator.services.jinja_service import JinjaHandler
 from generator.services.json_service import JsonHandler
 from generator.services.pep8_service import Pep8
@@ -15,6 +16,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
     """
 
     FIELDS_KEYWORD = 'fields'
+    API_DIR = 'api'
 
     def __init__(self, app_label):
         self.app_label = app_label
@@ -52,6 +54,10 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         if not os.path.exists(f'{settings.BASE_DIR}/{self.app_label}/{directory}'):
             os.mkdir(f'{settings.BASE_DIR}/{self.app_label}/{directory}')
 
+    def add_urls_to_kernel(self):
+        with open(f'{settings.BASE_DIR}/kernel/urls.py', 'a+') as f:
+            f.writelines(f'\nurlpatterns.append(path("api/", include("{self.app_label}.{self.API_DIR}.urls")))')
+
     def generate_api(self, diagram_path):
         """
         stream serializers to app_name/api/serializers.py
@@ -60,7 +66,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         diagram = self.load_json(diagram_path)
         models = self.extract_models(diagram)
 
-        self.create_dir_is_not_exists('api')
+        self.create_dir_is_not_exists(self.API_DIR)
 
         # stream to serializers.py
         self.stream_to_template(
@@ -73,8 +79,30 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         )
 
         # stream to views.py
-        pass
+        self.stream_to_template(
+            output_path=f'{settings.BASE_DIR}/{self.app_label}/api/views.py',
+            template_path=f'{settings.BASE_DIR}/generator/templates/views.txt',
+            data={
+                'app_name': self.app_label,
+                'models': models,
+            }
+        )
+
+        # stream to urls.py
+        self.stream_to_template(
+            output_path=f'{settings.BASE_DIR}/{self.app_label}/api/urls.py',
+            template_path=f'{settings.BASE_DIR}/generator/templates/urls.txt',
+            data={
+                'app_name': self.app_label,
+                'models': models,
+            }
+        )
+
+        # self.add_urls_to_kernel()  # TODO: might be changed
 
         self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/api/serializers.py')
+        self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/api/views.py')
+        self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/api/urls.py')
+        # self.fix_pep8(f'{settings.BASE_DIR}/kernel/urls.py')
 
-        return True, 'Generated successfully'
+        return True, 'API Generated Successfully. Changes are in these files:\nserializers.py\nviews.py\nurls.py'

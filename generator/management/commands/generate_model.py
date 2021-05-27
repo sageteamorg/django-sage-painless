@@ -14,14 +14,14 @@ class Command(BaseCommand):
         app_label = options.get('app')
         diagram_path = options.get('diagram')
         model_generator = ModelGenerator(app_label)
-        generated = model_generator.generate_models(
+        generated, message = model_generator.generate_models(
             diagram_path=diagram_path
         )
         if generated:
             self.stdout.write(
-                self.style.SUCCESS('models.py generated successfully for app {}'.format(app_label))
+                self.style.SUCCESS(message)
             )
         else:
             self.stdout.write(
-                self.style.ERROR('Error in generating models.py')
+                self.style.ERROR(message)
             )

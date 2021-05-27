@@ -1,0 +1,10 @@
+from rest_framework.viewsets import ModelViewSet
+
+from {{app_name}}.models import *
+from {{app_name}}.api.serializers import *
+
+{% for model in models %}
+class {{model.name}}Viewset(ModelViewSet):
+    serializer_class = {{model.name}}Serializer
+    queryset = {{model.name}}.objects.all()
+{% endfor %}

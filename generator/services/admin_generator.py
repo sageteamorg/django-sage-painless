@@ -2,6 +2,7 @@ from django.apps import apps
 from django.conf import settings
 
 from generator.classes.admin import Admin
+
 from generator.services.jinja_service import JinjaHandler
 from generator.services.json_service import JsonHandler
 from generator.services.pep8_service import Pep8
@@ -82,7 +83,7 @@ class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
 
             self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/admin.py')
 
-            return True, 'Generated successfully'
+            return True, 'Admin Generated Successfully. Changes are in this file:\nadmin.py'
         else:
             return False, f'models.py is not match with diagram differences : {message}'
 

@@ -20,9 +20,10 @@ INSTALLED_APPS.append('django.contrib.admindocs')
 INSTALLED_APPS.append('django.contrib.sites')
 
 # packages
-# INSTALLED_APPS.append('rest_framework')
+INSTALLED_APPS.append('rest_framework')
 # INSTALLED_APPS.append('rest_framework_simplejwt.token_blacklist')
 INSTALLED_APPS.append('django_extensions')
+INSTALLED_APPS.append('drf_yasg')
 # INSTALLED_APPS.append('django_celery_beat')
 # INSTALLED_APPS.append('safedelete')
 # INSTALLED_APPS.append('sorl.thumbnail')
@@ -55,24 +56,24 @@ INSTALLED_APPS.append('generator')
 #     REST FRAMEWORK     #
 # ###################### #
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',  # react, oauth
-#         'rest_framework.authentication.TokenAuthentication',  # mobile devices
-#         # 'rest_framework.authentication.SessionAuthentication',  # web based
-#     ],
-#     # 'DEFAULT_RENDERER_CLASSES': (
-#     #     'rest_framework.renderers.JSONRenderer',
-#     # ),
-#     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-#     'DEFAULT_THROTTLE_RATES': {
-#         'check_membership_existence_anon': '5/day',
-#         'anon_otp': '1/minute',
-#         'user_otp': '1/minute',
-#     },
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-#     'PAGE_SIZE': 100
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # react, oauth
+        'rest_framework.authentication.TokenAuthentication',  # mobile devices
+        # 'rest_framework.authentication.SessionAuthentication',  # web based
+    ],
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'rest_framework.renderers.JSONRenderer',
+    # ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_THROTTLE_RATES': {
+        'check_membership_existence_anon': '5/day',
+        'anon_otp': '1/minute',
+        'user_otp': '1/minute',
+    },
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}
 #
 # SIMPLE_JWT = {
 #     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
