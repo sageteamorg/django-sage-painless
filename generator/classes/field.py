@@ -13,6 +13,21 @@ class Attribute:
         self.key = attr_key
         self.value = attr_value
 
+class Validator:
+    """
+    Validator attribute for Field
+    """
+    def __init__(self):
+        self.func = None
+        self.arg = None
+
+    def set_validator(self, func, arg):
+        """
+        set `func` and `kwargs`
+        """
+        self.func = func
+        self.arg = arg
+
 
 class Field:
     """
@@ -23,6 +38,7 @@ class Field:
         self.name = None
         self.type = None
         self.attrs = list()
+        self.validators = list()
 
     field_types = {
         'character': {
@@ -80,3 +96,11 @@ class Field:
         attr.set_attr(key, value)
         self.attrs.append(attr)
         return True
+
+    def add_validator(self, func, arg):
+        """
+        Add validator to Field
+        """
+        validator = Validator()
+        validator.set_validator(func, arg)
+        self.validators.append(validator)

@@ -5,6 +5,9 @@ You may need to change some parts
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from importlib import import_module
+validators = import_module('django.core.validators')
+
 
 class User(models.Model):
     """
@@ -16,29 +19,41 @@ class User(models.Model):
         unique=True,
         max_length=255,
         blank=False,
+
+        validators=[
+
+            getattr(validators, 'EmailValidator')(None),
+
+        ]
+
     )
 
     password = models.CharField(
         max_length=255,
         blank=False,
+
     )
 
     first_name = models.CharField(
         max_length=255,
         blank=True,
+
     )
 
     last_name = models.CharField(
         max_length=255,
         blank=True,
+
     )
 
     is_active = models.BooleanField(
         default=True,
+
     )
 
     last_login = models.DateTimeField(
         auto_now=True,
+
     )
 
     def __str__(self):
@@ -58,15 +73,26 @@ class Profile(models.Model):
     user = models.OneToOneField(
         to=User,
         on_delete=models.CASCADE,
+
     )
 
     description = models.CharField(
         max_length=255,
         blank=True,
+
+        validators=[
+
+            getattr(validators, 'MinLengthValidator')(1),
+
+            getattr(validators, 'MaxLengthValidator')(255),
+
+        ]
+
     )
 
     image = models.ImageField(
         blank=True,
+
     )
 
     def __str__(self):

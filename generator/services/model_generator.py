@@ -15,6 +15,9 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
     FIELDS_KEYWORD = 'fields'
     TYPE_KEYWORD = 'type'
+    VALIDATORS_KEYWORD = 'validators'
+    FUNC_KEYWORD = 'func'
+    ARG_KEYWORD = 'arg'
 
     def __init__(self, app_label):
         self.app_label = app_label
@@ -44,8 +47,13 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
                 field_data = fields.get(field_name)
 
                 for key in field_data.keys():
+
                     if key == self.TYPE_KEYWORD:
                         model_field.set_type(field_data.get(self.TYPE_KEYWORD))
+
+                    elif key == self.VALIDATORS_KEYWORD:
+                        for validator in field_data.get(self.VALIDATORS_KEYWORD):
+                            model_field.add_validator(validator.get(self.FUNC_KEYWORD), validator.get(self.ARG_KEYWORD))
                     else:
                         value = field_data.get(key)
                         model_field.add_attribute(key, value)
@@ -57,6 +65,17 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return models
 
+    def check_validator_support(self, models):
+        """
+        check models have validator
+        """
+        for model in models:
+            for field in model.fields:
+                if len(field.validators) > 0:
+                    return True
+
+        return False
+
     def generate_models(self, diagram_path):
         """
         stream models to app_name/models.py
@@ -67,7 +86,8 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
             output_path=f'{settings.BASE_DIR}/{self.app_label}/models.py',
             template_path=f'{settings.BASE_DIR}/generator/templates/models.txt',  # TODO: Should be dynamic
             data={
-                'models': models
+                'models': models,
+                'validator_support': self.check_validator_support(models)
             }
         )
 

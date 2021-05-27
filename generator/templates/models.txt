@@ -4,6 +4,10 @@ You may need to change some parts
 """
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+{% if validator_support %}
+from importlib import import_module
+validators = import_module('django.core.validators')
+{% endif %}
 
 {% for model in models %}
 
@@ -16,6 +20,13 @@ class {{model.name}}(models.Model):
     {% if field.type %}
     {{field.name}} = models.{{field.type}}({% for attr in field.attrs %}
              {% if attr.key == 'on_delete' %}{{attr.key}}=models.{{attr.value}},{% else %}{{attr.key}}={{attr.value}},{%endif%}{% endfor %}
+             {% if field.validators %}
+             validators=[
+                {% for validator in field.validators %}
+                getattr(validators, '{{validator.func}}')({{validator.arg}}),
+                {% endfor %}
+             ]
+             {% endif %}
     )
     {% endif %}
     {% endfor %}
