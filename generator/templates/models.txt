@@ -8,7 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 from importlib import import_module
 validators = import_module('django.core.validators')
 {% endif %}
-
+{% if signal_support %}
+from django.db.models import signals
+{% endif %}
 {% for model in models %}
 
 class {{model.name}}(models.Model):
@@ -38,4 +40,11 @@ class {{model.name}}(models.Model):
         verbose_name = _("{{model.verbose_name}}")  # auto generated verbose_name
         verbose_name_plural = _("{{model.verbose_name_plural}}")
 
+{% endfor %}
+{% if signal_support %}# Signals{% endif %}
+{% for signal in signals %}
+def {{signal.model_b.lower()}}_post_save(sender, instance, created, **kwargs):
+    if created:
+        {{signal.model_a}}.objects.create({{signal.field}}=instance)
+signals.post_save.connect({{signal.model_b.lower()}}_post_save, sender={{signal.model_b}})
 {% endfor %}

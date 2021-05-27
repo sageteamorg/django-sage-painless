@@ -2,6 +2,7 @@
 Auto Generated models.py
 You may need to change some parts
 """
+from django.db.models import signals
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -101,3 +102,13 @@ class Profile(models.Model):
     class Meta:
         verbose_name = _("Profile")  # auto generated verbose_name
         verbose_name_plural = _("Profiles")
+
+
+# Signals
+
+def user_post_save(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+signals.post_save.connect(user_post_save, sender=User)

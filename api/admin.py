@@ -34,7 +34,7 @@ class ProfileAdmin(admin.ModelAdmin):
     Profile Admin
     Auto generated
     """
-    list_display = ['user']
+    list_display = ['pk']
 
     raw_id_fields = ['user']
 

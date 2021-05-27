@@ -2,6 +2,7 @@ from django.conf import settings
 
 from generator.classes.field import Field
 from generator.classes.model import Model
+from generator.classes.signal import Signal
 
 from generator.services.jinja_service import JinjaHandler
 from generator.services.json_service import JsonHandler
@@ -33,6 +34,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
         extract models
         """
         models = list()
+        signals = list()
         for table_name in diagram.keys():
             table = diagram.get(table_name)
             fields = self.get_table_fields(table)
@@ -51,9 +53,15 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
                     if key == self.TYPE_KEYWORD:
                         model_field.set_type(field_data.get(self.TYPE_KEYWORD))
 
+                        if model_field.type == 'OneToOneField':
+                            signal = Signal()
+                            signal.set_signal('post_save', table_name, field_data.get('to'), field_name)
+                            signals.append(signal)
+
                     elif key == self.VALIDATORS_KEYWORD:
                         for validator in field_data.get(self.VALIDATORS_KEYWORD):
                             model_field.add_validator(validator.get(self.FUNC_KEYWORD), validator.get(self.ARG_KEYWORD))
+
                     else:
                         value = field_data.get(key)
                         model_field.add_attribute(key, value)
@@ -63,7 +71,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
             model.fields = model_fields
             models.append(model)
 
-        return models
+        return models, signals
 
     def check_validator_support(self, models):
         """
@@ -76,18 +84,31 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return False
 
+    def check_signal_support(self, models):
+        """
+        check models have one2one
+        """
+        for model in models:
+            for field in model.fields:
+                if field.type == 'OneToOneField':
+                    return True
+
+        return False
+
     def generate_models(self, diagram_path):
         """
         stream models to app_name/models.py
         """
         diagram = self.load_json(diagram_path)
-        models = self.extract_models(diagram)
+        models, signals = self.extract_models(diagram)
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/{self.app_label}/models.py',
             template_path=f'{settings.BASE_DIR}/generator/templates/models.txt',  # TODO: Should be dynamic
             data={
                 'models': models,
-                'validator_support': self.check_validator_support(models)
+                'signals': signals,
+                'validator_support': self.check_validator_support(models),
+                'signal_support': self.check_signal_support(models)
             }
         )
 
