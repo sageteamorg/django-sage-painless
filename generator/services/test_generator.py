@@ -76,31 +76,9 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return models, signals
 
-    def check_validator_support(self, models):
-        """
-        check models have validator
-        """
-        for model in models:
-            for field in model.fields:
-                if len(field.validators) > 0:
-                    return True
-
-        return False
-
     def create_dir_is_not_exists(self, directory):
         if not os.path.exists(f'{settings.BASE_DIR}/{self.app_label}/{directory}'):
             os.mkdir(f'{settings.BASE_DIR}/{self.app_label}/{directory}')
-
-    def check_signal_support(self, models):
-        """
-        check models have one2one
-        """
-        for model in models:
-            for field in model.fields:
-                if field.type == 'OneToOneField':
-                    return True
-
-        return False
 
     def generate_tests(self, diagram_path):
         """
@@ -118,9 +96,7 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
             data={
                 'app_name': self.app_label,
                 'models': models,
-                'signals': signals,
-                'validator_support': self.check_validator_support(models),
-                'signal_support': self.check_signal_support(models)
+                'signals': signals
             }
         )
 
@@ -130,14 +106,11 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
             template_path=f'{settings.BASE_DIR}/generator/templates/test_api.txt',  # TODO: Should be dynamic
             data={
                 'app_name': self.app_label,
-                'models': models,
-                'signals': signals,
-                'validator_support': self.check_validator_support(models),
-                'signal_support': self.check_signal_support(models)
+                'models': models
             }
         )
 
         self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_model.py')
         self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_api.py')
 
-        return True, 'Tests Generated Successfully. Changes are in this file:\ntest_model.py\ntest_api.py'
+        return True, 'Tests Generated Successfully. Changes are in these files:\ntest_model.py\ntest_api.py'
