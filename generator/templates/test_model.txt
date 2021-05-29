@@ -19,15 +19,23 @@ class {{app_name.capitalize()}}ModelTest(APITestCase):
     {% for model in models %}
     {% if not model.has_one_to_one() %}
     def test_{{model.name.lower()}}_model(self):
+        """
+        test {{model.name}} creation
+        """
         seeder.add_entity({{model.name}}, 1)
-        seeder.execute()
+        seeder.execute() # create instance
+        # assertions
         self.assertTrue({{model.name}}.objects.exists())
     {% endif %}
     {% endfor %}
     {% for signal in signals %}
     def test_{{signal.model_a.lower()}}_model_signal(self):
+        """
+        test {{signal.model_b}} - {{signal.model_a}} signal
+        """
         seeder.add_entity({{signal.model_b}}, 1)
-        seeder.execute()
+        seeder.execute() # create instance
+        # assertions
         self.assertTrue({{signal.model_b}}.objects.exists())
         self.assertTrue({{signal.model_a}}.objects.exists())
         first_object = {{signal.model_b}}.objects.first()

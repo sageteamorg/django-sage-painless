@@ -111,6 +111,7 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
 
         self.create_dir_is_not_exists(self.TESTS_DIR)
 
+        # generate model tests
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/{self.app_label}/tests/test_model.py',
             template_path=f'{settings.BASE_DIR}/generator/templates/test_model.txt',  # TODO: Should be dynamic
@@ -123,6 +124,20 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
             }
         )
 
-        self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_model.py')
+        # generate api tests
+        self.stream_to_template(
+            output_path=f'{settings.BASE_DIR}/{self.app_label}/tests/test_api.py',
+            template_path=f'{settings.BASE_DIR}/generator/templates/test_api.txt',  # TODO: Should be dynamic
+            data={
+                'app_name': self.app_label,
+                'models': models,
+                'signals': signals,
+                'validator_support': self.check_validator_support(models),
+                'signal_support': self.check_signal_support(models)
+            }
+        )
 
-        return True, 'Tests Generated Successfully. Changes are in this file:\ntest_model.py'
+        self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_model.py')
+        self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_api.py')
+
+        return True, 'Tests Generated Successfully. Changes are in this file:\ntest_model.py\ntest_api.py'

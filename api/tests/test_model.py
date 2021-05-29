@@ -20,13 +20,21 @@ class ApiModelTest(APITestCase):
         pass
 
     def test_user_model(self):
+        """
+        test User creation
+        """
         seeder.add_entity(User, 1)
-        seeder.execute()
+        seeder.execute()  # create instance
+        # assertions
         self.assertTrue(User.objects.exists())
 
     def test_profile_model_signal(self):
+        """
+        test User - Profile signal
+        """
         seeder.add_entity(User, 1)
-        seeder.execute()
+        seeder.execute()  # create instance
+        # assertions
         self.assertTrue(User.objects.exists())
         self.assertTrue(Profile.objects.exists())
         first_object = User.objects.first()
