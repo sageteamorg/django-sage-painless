@@ -6,6 +6,16 @@ class Model:
     name = None
     fields = []
 
+    def has_one_to_one(self):
+        """
+        model has one2one field
+        """
+        for field in self.fields:
+            if field.type == 'OneToOneField':
+                return True
+
+        return False
+
     @property
     def verbose_name(self):
         """
