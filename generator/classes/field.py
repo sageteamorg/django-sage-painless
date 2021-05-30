@@ -72,6 +72,10 @@ class Field:
         'bool': {
             'type': 'BooleanField',
             'required': []
+        },
+        'slug': {
+            'type': 'SlugField',
+            'required': []
         }
     }
 
