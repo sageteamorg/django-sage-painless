@@ -12,12 +12,15 @@ class JinjaHandler:
             template = self.env.from_string(t.read())
         return template
 
-    def stream_to_template(self, output_path, template_path, data):
+    def stream_to_template(self, output_path, template_path, data=None):
         """
         generate output file using template and data
         """
         template = self.load_template(template_path)
         with open(output_path, 'w') as o:
-            template.stream(
-                **data
-            ).dump(o)
+            if data:
+                template.stream(
+                    **data
+                ).dump(o)
+            else:
+                template.stream().dump(o)

@@ -4,9 +4,9 @@ from generator.classes.field import Field
 from generator.classes.model import Model
 from generator.classes.signal import Signal
 
-from generator.services.jinja_service import JinjaHandler
-from generator.services.json_service import JsonHandler
-from generator.services.pep8_service import Pep8
+from generator.utils.jinja_service import JinjaHandler
+from generator.utils.json_service import JsonHandler
+from generator.utils.pep8_service import Pep8
 
 
 class ModelGenerator(JinjaHandler, JsonHandler, Pep8):

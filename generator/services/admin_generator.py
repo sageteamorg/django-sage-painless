@@ -3,9 +3,9 @@ from django.conf import settings
 
 from generator.classes.admin import Admin
 
-from generator.services.jinja_service import JinjaHandler
-from generator.services.json_service import JsonHandler
-from generator.services.pep8_service import Pep8
+from generator.utils.jinja_service import JinjaHandler
+from generator.utils.json_service import JsonHandler
+from generator.utils.pep8_service import Pep8
 
 
 class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
