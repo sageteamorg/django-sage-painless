@@ -58,7 +58,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         with open(f'{settings.BASE_DIR}/kernel/urls.py', 'a+') as f:
             f.writelines(f'\nurlpatterns.append(path("api/", include("{self.app_label}.{self.API_DIR}.urls")))')
 
-    def generate_api(self, diagram_path):
+    def generate_api(self, diagram_path, cache_support=False):
         """
         stream serializers to app_name/api/serializers.py
         stream viewsets to app_name/api/views.py
@@ -74,7 +74,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
             template_path=f'{settings.BASE_DIR}/generator/templates/serializers.txt',
             data={
                 'app_name': self.app_label,
-                'models': models,
+                'models': models
             }
         )
 
@@ -85,6 +85,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
             data={
                 'app_name': self.app_label,
                 'models': models,
+                'cache_support': cache_support
             }
         )
 

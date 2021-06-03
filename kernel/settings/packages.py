@@ -39,7 +39,9 @@ INSTALLED_APPS.append('painless')
 # INSTALLED_APPS.append('users')
 INSTALLED_APPS.append('upload_center')
 INSTALLED_APPS.append('api')
+INSTALLED_APPS.append('articles')
 INSTALLED_APPS.append('generator')
+INSTALLED_APPS.append('products')
 # INSTALLED_APPS.append('authentication')
 # INSTALLED_APPS.append('education')
 # INSTALLED_APPS.append('subscription')
@@ -134,15 +136,15 @@ BACKGROUND_TASK_RUN_ASYNC = True
 # CELERY_TIMEZONE = 'UTC'
 
 
-# ########## #
-#   CACHE    #
-# ########## #
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": config('REDIS_HOST')
-#     }
-# }
+########### #
+#  CACHE    #
+########### #
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": config('REDIS_HOST')
+    }
+}
 # CACHE_QUERYSET_ENABLED = True
 # # CACHE_PAGE_ENABLED = True
 # # CACHE_PAGE_PER_SITE_PREFIX = 'view'

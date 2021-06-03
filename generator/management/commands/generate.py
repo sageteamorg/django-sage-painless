@@ -21,13 +21,19 @@ class Command(BaseCommand):
         create_admin = input('Would you like to generate admin.py(yes/no)? ')
         create_api = input('Would you like to generate serializers.py & views.py(yes/no)? ')
         create_test = input('Would you like to generate test for your project(yes/no)? ')
+        cache_support = input('Would you like to add cache queryset support(yes/no)? ')
         docker_support = input('Would you like to dockerize your project(yes/no)? ')
 
         stdout_messages = list()
 
         if create_model == 'yes':
             model_generator = ModelGenerator(app_label)
-            check, message = model_generator.generate_models(diagram_path)
+
+            if cache_support == 'yes':
+                check, message = model_generator.generate_models(diagram_path, True)
+            else:
+                check, message = model_generator.generate_models(diagram_path)
+
             if check:
                 stdout_messages.append(self.style.SUCCESS(message))
             else:
@@ -42,11 +48,13 @@ class Command(BaseCommand):
                 stdout_messages.append(self.style.ERROR(message))
 
         if create_api == 'yes':
-            redis_cache = input('Would you like to add redis cache queryset support(yes/no)? ')
-            if redis_cache:
-                pass  # TODO: add cache to api view
             api_generator = APIGenerator(app_label)
-            check, message = api_generator.generate_api(diagram_path)
+
+            if cache_support == 'yes':
+                check, message = api_generator.generate_api(diagram_path, True)
+            else:
+                check, message = api_generator.generate_api(diagram_path)
+
             if check:
                 stdout_messages.append(self.style.SUCCESS(message))
             else:

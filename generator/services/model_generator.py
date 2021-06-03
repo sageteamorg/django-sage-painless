@@ -95,7 +95,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return False
 
-    def generate_models(self, diagram_path):
+    def generate_models(self, diagram_path, cache_support=False):
         """
         stream models to app_name/models.py
         """
@@ -108,7 +108,8 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
                 'models': models,
                 'signals': signals,
                 'validator_support': self.check_validator_support(models),
-                'signal_support': self.check_signal_support(models)
+                'signal_support': self.check_signal_support(models),
+                'cache_support': cache_support
             }
         )
 
