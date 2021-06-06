@@ -90,6 +90,22 @@ urlpatterns = [
   ...
 ]
 ```
+- You have to migrate your new models
+```shell
+$ python manage.py makemigrations
+$ python manage.py migrate
+```
+- You can run tests for your app
+```shell
+$ python manage.py test products
+```
+- Django run server
+```shell
+$ python manage.py runserver
+```
+- Rest API documentation is available at `localhost:8000/api/doc/`
+
+
 
 
 
