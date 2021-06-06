@@ -141,7 +141,7 @@ class {{model.name}}(models.Model{% if cache_support %}, ModelCacheMixin{% endif
     {% endfor %}
 
     def __str__(self):
-        return {% if model.get_str %} f"{{model.get_str}}" {% else %} None {% endif %} # you may change this section
+        return {% if model.get_str %} f"{{model.get_str}} {self.pk}" {% else %} f"{self.pk}" {% endif %} # you may change this section
 
     class Meta:
         verbose_name = _("{{model.verbose_name}}")  # auto generated verbose_name
