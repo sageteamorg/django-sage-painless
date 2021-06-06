@@ -83,7 +83,7 @@ class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
 
             self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/admin.py')
 
-            return True, 'Admin Generated Successfully. Changes are in this file:\nadmin.py'
+            return True, 'Admin Generated Successfully. Changes are in this file:\nadmin.py\n'
         else:
             return False, f'models.py is not match with diagram differences : {message}'
 

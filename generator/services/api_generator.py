@@ -106,4 +106,4 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/api/urls.py')
         # self.fix_pep8(f'{settings.BASE_DIR}/kernel/urls.py')
 
-        return True, 'API Generated Successfully. Changes are in these files:\nserializers.py\nviews.py\nurls.py'
+        return True, 'API Generated Successfully. Changes are in these files:\nserializers.py\nviews.py\nurls.py\n'

@@ -113,4 +113,4 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_model.py')
         self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_api.py')
 
-        return True, 'Tests Generated Successfully. Changes are in these files:\ntest_model.py\ntest_api.py'
+        return True, 'Tests Generated Successfully. Changes are in these files:\ntest_model.py\ntest_api.py\n'

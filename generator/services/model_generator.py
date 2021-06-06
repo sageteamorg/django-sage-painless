@@ -115,4 +115,4 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
         self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/models.py')
 
-        return True, 'Models Generated Successfully. Changes are in this file:\nmodels.py'
+        return True, 'Models Generated Successfully. Changes are in this file:\nmodels.py\n'

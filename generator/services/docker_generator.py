@@ -60,4 +60,4 @@ class DockerGenerator(JinjaHandler):
             }
         )
 
-        return True, 'Docker config Generated Successfully. Changes are in these files:\nDockerfile\ndocker-compose.yml'
+        return True, 'Docker config Generated Successfully. Changes are in these files:\nDockerfile\ndocker-compose.yml\n'
