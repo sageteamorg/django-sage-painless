@@ -23,9 +23,6 @@ INSTALLED_APPS.append('django_seed')
 # Applications
 INSTALLED_APPS.append('generator')
 
-# Generated
-INSTALLED_APPS.append('products')
-
 # ###################### #
 #     REST FRAMEWORK     #
 # ###################### #
