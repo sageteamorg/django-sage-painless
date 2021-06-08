@@ -61,7 +61,8 @@
       "product": {
         "type": "one2one",
         "to": "Product",
-        "related_name": "'discounts'"
+        "related_name": "'discounts'",
+        "on_delete": "CASCADE"
       },
       "discount": {
         "type": "integer"

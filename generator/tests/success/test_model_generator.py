@@ -10,7 +10,8 @@ from generator.classes.field import Field
 class TestModelGenerator(TestCase):
     def setUp(self) -> None:
         self.json_handler = JsonHandler()
-        self.model_generator = ModelGenerator('products')
+        self.app_name = 'products'
+        self.model_generator = ModelGenerator(self.app_name)
         self.diagram_path = settings.BASE_DIR + '/generator/tests/diagrams/product_diagram.json'
         self.diagram = self.json_handler.load_json(self.diagram_path)
         self.field = Field()
