@@ -33,5 +33,6 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
-    path('api/doc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-swagger-ui')
+    path('api/doc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/', include('products.api.urls')),
 ]
