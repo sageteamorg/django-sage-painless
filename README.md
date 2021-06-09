@@ -1,5 +1,5 @@
-# [Project Name]
-#### [project name] is a useful package based on Django Web Framework & Django Rest Framework for high-level and rapid web development.
+# Django Sage Painless
+#### django-sage-painless is a useful package based on Django Web Framework & Django Rest Framework for high-level and rapid web development.
 ## Project Detail
 
 You can find all technologies we used in our project into these files:
@@ -64,7 +64,7 @@ Then add '[project name]' to INSTALLED_APPS in settings.py
 ```python
 INSTALLED_APPS = [
   ...
-  '[project name]',
+  'sage_painless',
   ...
 ]
 ```
@@ -104,8 +104,3 @@ $ python manage.py test products
 $ python manage.py runserver
 ```
 - Rest API documentation is available at `localhost:8000/api/doc/`
-
-
-
-
-
