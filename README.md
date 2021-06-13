@@ -1,5 +1,11 @@
 # Django Sage Painless
 #### django-sage-painless is a useful package based on Django Web Framework & Django Rest Framework for high-level and rapid web development.
+
+- [Project Detail](#project-detail)
+- [Git Rules](#git-rules)
+- [Get Started](#getting-started)
+- [Usage](#usage)
+- [Contribute](#contribute)
 ## Project Detail
 
 You can find all technologies we used in our project into these files:
