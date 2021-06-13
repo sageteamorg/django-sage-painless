@@ -68,10 +68,19 @@ First install package
 $ pip install django-sage-painless
 ```
 Then add 'sage_painless' to INSTALLED_APPS in settings.py
+
+These apps should be in your INSTALLED_APPS:
+- 'rest_framework'
+- 'drf_yasg'
+- 'django_seed'
 ```python
 INSTALLED_APPS = [
   ...
   'sage_painless',
+  ...
+  'rest_framework',
+  'drf_yasg',
+  'django_seed',
   ...
 ]
 ```
