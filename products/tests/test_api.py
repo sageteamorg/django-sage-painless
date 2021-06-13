@@ -23,8 +23,6 @@ class ProductsAPITest(APITestCase):
 
         seeder.add_entity(Product, 3)
 
-        seeder.add_entity(Discount, 3)
-
         seeder.execute()  # create instances
 
     def test_category_list_success(self):
@@ -35,9 +33,11 @@ class ProductsAPITest(APITestCase):
         response = self.client.get(url)
         # assertions
         self.assertEqual(response.status_code, 200)
-        if response.data.get('count'):
-            self.assertGreater(response.data['count'], 0)
-        self.assertGreater(len(response.data), 0)
+        if isinstance(response.data, dict):
+            if response.data.get('count'):
+                self.assertGreater(response.data['count'], 0)
+        else:
+            self.assertGreater(len(response.data), 0)
 
     def test_category_detail_success(self):
         """
@@ -59,9 +59,11 @@ class ProductsAPITest(APITestCase):
         response = self.client.get(url)
         # assertions
         self.assertEqual(response.status_code, 200)
-        if response.data.get('count'):
-            self.assertGreater(response.data['count'], 0)
-        self.assertGreater(len(response.data), 0)
+        if isinstance(response.data, dict):
+            if response.data.get('count'):
+                self.assertGreater(response.data['count'], 0)
+        else:
+            self.assertGreater(len(response.data), 0)
 
     def test_product_detail_success(self):
         """
@@ -87,9 +89,11 @@ class ProductsAPITest(APITestCase):
         response = self.client.get(url)
         # assertions
         self.assertEqual(response.status_code, 200)
-        if response.data.get('count'):
-            self.assertGreater(response.data['count'], 0)
-        self.assertGreater(len(response.data), 0)
+        if isinstance(response.data, dict):
+            if response.data.get('count'):
+                self.assertGreater(response.data['count'], 0)
+        else:
+            self.assertGreater(len(response.data), 0)
 
     def test_discount_detail_success(self):
         """

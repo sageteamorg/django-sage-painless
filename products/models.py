@@ -6,6 +6,9 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
+from django.db.models import signals
+
+
 from django.core.cache import cache
 from django.db.models import signals
 
@@ -217,7 +220,7 @@ class Discount(models.Model, ModelCacheMixin):
 
     CACHE_KEY = 'discount'
 
-    product = models.ForeignKey(
+    product = models.OneToOneField(
         to=Product,
         related_name='discounts',
         on_delete=models.CASCADE,
@@ -225,6 +228,7 @@ class Discount(models.Model, ModelCacheMixin):
     )
 
     discount = models.IntegerField(
+        default=0,
 
     )
 
@@ -252,3 +256,13 @@ def discount_clear_cache(sender, **kwargs):
 
 signals.post_save.connect(discount_clear_cache, sender=Discount)
 signals.pre_delete.connect(discount_clear_cache, sender=Discount)
+
+
+# Signals
+
+def product_post_save(sender, instance, created, **kwargs):
+    if created:
+        Discount.objects.create(product=instance)
+
+
+signals.post_save.connect(product_post_save, sender=Product)
