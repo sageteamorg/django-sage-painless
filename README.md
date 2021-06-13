@@ -25,7 +25,7 @@ $ python3.9 -m virtualenv venv
 
 To activate virtualenvironment in ubuntu:
 ```shell
-$ source venv\bin\activate
+$ source venv/bin/activate
 ```
 
 To deactive vritualenvironment use:
