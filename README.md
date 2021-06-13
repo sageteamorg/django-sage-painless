@@ -144,7 +144,7 @@ INSTALLED_APPS = [
 ]
 ```
 - you have to generate everything for this app
-- diagram file is available here: [Diagram]('sage_painless/tests/diagrams/product_diagram.json')
+- diagram file is available here: [Diagram](sage_painless/tests/diagrams/product_diagram.json)
 ```shell
 $ python manage.py generate --app products --diagram sage_painless/tests/diagrams/product_diagram.json
 ```
