@@ -1,4 +1,4 @@
-## [project name] was originally created in May 2021
+## django-sage-painless was originally created in May 2021
 #### Here is an inevitably incomplete list of MUCH-APPRECIATED CONTRIBUTORS 
 
 | Name                          | Role                     | Status                     | Email                      |
