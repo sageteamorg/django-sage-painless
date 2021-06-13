@@ -12,7 +12,7 @@ setup(
     author = 'Sage Team',                   # Type in your name
     author_email = 'mail@sageteam.org',      # Type in your E-Mail
     url = 'https://github.com/sageteam-org/django-sage-painless',   # Provide either the link to your github or to your website
-    download_url = 'https://github.com/sageteam-org/django-sage-painless/archive/refs/tags/0.1.tar.gz',    # I explain this later on
+    download_url = 'https://github.com/sageteam-org/django-sage-painless/archive/refs/tags/0.2.tar.gz',    # I explain this later on
     keywords = ['django', 'python', 'generate', 'code generator'],   # Keywords that define your package best
     install_requires=required
 )
