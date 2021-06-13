@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: db
+    image: {{db_image}}
+    hostname: db
+    restart: on-failure
+    environment:
+      - POSTGRES_DB={{db_name}}
+      - POSTGRES_USER={{db_user}}
+      - POSTGRES_PASSWORD={{db_pass}}
+
+  {% if redis_support %}
+  redis:
+    container_name: redis
+    image: redis:alpine
+  {% endif %}
+
+  {% if rabbit_support %}
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER={{rabbitmq_user}}
+      - RABBITMQ_DEFAULT_PASS={{rabbitmq_pass}}
+      - RABBITMQ_DEFAULT_VHOST=/
+  {% endif %}
+
+  web:
+    container_name: web
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    hostname: web
+    {% if redis_support %}
+    environment:
+      - REDIS_URL='redis://redis:6379/'
+    {% endif %}
+    depends_on:
+      - db
+      {% if redis_support %}
+      - redis
+      {% endif %}
+      {% if rabbit_support %}
+      - rabbitmq
+      {% endif %}

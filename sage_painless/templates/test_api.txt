@@ -1,0 +1,54 @@
+"""
+Auto Generated test
+You may need to change some parts
+"""
+from django.urls import reverse
+from rest_framework.test import APITestCase
+from django_seed import Seed
+
+from {{app_name}}.models import *
+
+seeder = Seed.seeder()
+
+class {{app_name.capitalize()}}APITest(APITestCase):
+    """
+    {{app_name}} API Test
+    Auto Generated
+    """
+    def setUp(self) -> None:
+        {% for model in models %}
+        {% if not model.has_one_to_one() %}
+        seeder.add_entity({{model.name}}, 3)
+        {% endif %}
+        {% endfor %}
+        seeder.execute() # create instances
+    {% for model in models %}
+    def test_{{model.name.lower()}}_list_success(self):
+        """
+        test {{model.name}} list
+        """
+        url = reverse('{{model.name.lower()}}-list')
+        response = self.client.get(url)
+        # assertions
+        self.assertEqual(response.status_code, 200)
+        if type(response.data) == dict:
+            if response.data.get('count'):
+                self.assertGreater(response.data['count'], 0)
+        else:
+            self.assertGreater(len(response.data), 0)
+
+    def test_{{model.name.lower()}}_detail_success(self):
+        """
+        test {{model.name}} detail
+        """
+        {{model.name.lower()}} = {{model.name}}.objects.first()
+        url = reverse('{{model.name.lower()}}-detail', args=[{{model.name.lower()}}.pk])
+        response = self.client.get(url)
+        # assertions
+        self.assertEqual(response.status_code, 200)
+        {% for field in model.fields %}
+        {% if field.type != 'DateTimeField' and field.type != 'DateField' and field.type != 'ForeignKey' and field.type != 'OneToOneField' and field.type != 'ManyToMany' and field.type != 'ImageField' %}
+        self.assertEqual(response.data.get('{{field.name}}'), {{model.name.lower()}}.{{field.name}})
+        {% endif %}
+        {% endfor %}
+    {% endfor %}

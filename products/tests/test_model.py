@@ -41,12 +41,15 @@ class ProductsModelTest(APITestCase):
         self.assertTrue(Product.objects.exists())
         self.assertIn('Product', self.models_name)
 
-    def test_discount_model(self):
+    def test_discount_model_signal(self):
         """
-        test Discount creation
+        test Product - Discount signal
         """
-        seeder.add_entity(Discount, 1)
+        seeder.add_entity(Product, 1)
         seeder.execute()  # create instance
         # assertions
+        self.assertTrue(Product.objects.exists())
         self.assertTrue(Discount.objects.exists())
-        self.assertIn('Discount', self.models_name)
+        first_object = Product.objects.first()
+        second_object = Discount.objects.first()
+        self.assertEqual(second_object.product, first_object)
