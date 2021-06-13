@@ -1,0 +1,41 @@
+"""
+Auto Generated views.py
+You may need to change some parts
+"""
+{% if cache_support %}
+from django.http import Http404
+{% endif %}
+from rest_framework.viewsets import ModelViewSet
+
+from {{app_name}}.models import *
+from {{app_name}}.api.serializers import *
+
+{% for model in models %}
+class {{model.name}}Viewset(ModelViewSet):
+    """
+    {{model.name}} Viewset
+    Auto generated
+    """
+    serializer_class = {{model.name}}Serializer
+    {% if cache_support %}
+    model_class = {{model.name}}
+
+    def get_queryset(self):
+        """
+        get queryset from cache
+        """
+        return self.model_class.get_all_from_cache()
+
+    def get_object(self):
+        """
+        get object from cache
+        """
+        queryset = self.get_queryset()
+        if len(queryset) == 0:
+            raise Http404('Not Found')
+        obj = queryset[0]
+        return obj
+    {% else %}
+    queryset = {{model.name}}.objects.all()
+    {% endif %}
+{% endfor %}

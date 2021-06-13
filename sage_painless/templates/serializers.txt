@@ -1,0 +1,17 @@
+"""
+Auto Generated serializers.py
+You may need to change some parts
+"""
+from rest_framework.serializers import ModelSerializer
+
+from {{app_name}}.models import *
+
+{% for model in models %}
+class {{model.name}}Serializer(ModelSerializer):
+    class Meta:
+        model = {{model.name}}
+        fields = [
+        {%for field in model.fields%}'{{field.name}}',
+        {% endfor %}
+        ]
+{% endfor %}

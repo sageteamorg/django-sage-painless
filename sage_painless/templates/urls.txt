@@ -1,0 +1,13 @@
+"""
+Auto Generated urls.py
+You may need to change some parts
+"""
+from rest_framework.routers import DefaultRouter
+
+from {{app_name}}.api.views import *
+
+router = DefaultRouter()
+{% for model in models %}
+router.register(r'{{model.name.lower()}}', {{model.name}}Viewset, basename='{{model.name.lower()}}')
+{% endfor %}
+urlpatterns = router.urls

@@ -1,0 +1,35 @@
+"""
+Auto Generated admin.py
+You may need to change some parts
+"""
+from django.contrib import admin
+from {{app_name}}.models import *
+
+{% for admin in admins %}
+@admin.register({{admin.model}})
+class {{admin.model}}Admin(admin.ModelAdmin):
+    """
+    {{admin.model}} Admin
+    Auto generated
+    """
+    {%if admin.list_display%}list_display = {{admin.list_display}}{%endif%}
+
+    {%if admin.list_filter%}list_filter = {{admin.list_filter}}{%endif%}
+
+    {%if admin.search_fields%}search_fields = {{admin.search_fields}}{%endif%}
+
+    {%if admin.raw_id_fields%}raw_id_fields = {{admin.raw_id_fields}}{%endif%}
+
+    {%if admin.filter_horizontal%}filter_horizontal = {{admin.filter_horizontal}}{%endif%}
+
+    {%if admin.filter_vertical%}filter_vertical = {{admin.filter_vertical}}{%endif%}
+
+    def has_add_permission(self, *args, **kwargs):
+        {%if admin.has_add_permission%}return True{%else%}return False{%endif%}
+
+    def has_change_permission(self, *args, **kwargs):
+        {%if admin.has_change_permission%}return True{%else%}return False{%endif%}
+
+    def has_delete_permission(self, *args, **kwargs):
+        {%if admin.has_delete_permission%}return True{%else%}return False{%endif%}
+{% endfor %}
