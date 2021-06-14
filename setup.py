@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name = 'django-sage-painless',         # How you named your package folder (MyLib)
     packages = find_packages(exclude=['tests*']),   # Chose the same as "name"
-    version = '0.0.2',      # Start with a small number and increase it with every change you make
+    version = '0.0.3',      # Start with a small number and increase it with every change you make
     license='GNU',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description = 'django package for auto generating projects',   # Give a short description about your library
     author = 'Sage Team',                   # Type in your name
