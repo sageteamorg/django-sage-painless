@@ -6,12 +6,13 @@ class Pep8:
         """
         fix pep8
         """
-        subprocess.run(
+        subprocess.call(
             [
                 'autopep8',
                 '--in-place',
                 '--aggressive',
                 '--aggressive',
                 file_path
-            ]
+            ],
+            shell=True
         )
