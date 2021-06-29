@@ -6,31 +6,31 @@
 Welcome to django-sage-painless's documentation!
 ================================================
 
-.. image:: https://scontent-lhr8-2.cdninstagram.com/v/t51.2885-19/s150x150/146741985_232766155121801_707358238210726258_n.jpg?tp=1&_nc_ht=scontent-lhr8-2.cdninstagram.com&_nc_ohc=mKSUVCdSADYAX-ufK14&tn=fNNAGPwCHkajXqxG&edm=ABfd0MgBAAAA&ccb=7-4&oh=d0483bcf584ed75235e9ee58fcbe52c6&oe=60CD737A&_nc_sid=7bff83
+.. image:: https://sageteamlogo.com
    :target: https://sageteam.org/
    :alt: SageTeam
 
-.. image:: https://img.shields.io/github/stars/jazzband/django-axes.svg?label=Stars&style=socialcA
+.. image:: https://sageteamstars.com
    :target: https://github.com/sageteam-org/django-sage-painless
    :alt: GitHub
 
-.. image:: https://img.shields.io/pypi/v/django-axes.svg
+.. image:: https://sageteampypi.com
    :target: https://pypi.org/project/django-sage-painless/
    :alt: PyPI release
 
-.. image:: https://img.shields.io/pypi/pyversions/django-axes.svg
+.. image:: https://sageteampythonversions.com
    :target: https://pypi.org/project/django-sage-painless/
    :alt: Supported Python versions
 
-.. image:: https://img.shields.io/pypi/djversions/django-axes.svg
+.. image:: https://sageteamdjangoversions.com
    :target: https://pypi.org/project/django-sage-painless/
    :alt: Supported Django versions
 
-.. image:: https://img.shields.io/readthedocs/django-axes.svg
-   :target: https://django-axes.readthedocs.io/
+.. image:: https://sageteamdoc.com
+   :target: https://django-sage-painless.readthedocs.io/
    :alt: Documentation
 
-.. image:: https://github.com/jazzband/django-axes/workflows/Test/badge.svg
+.. image:: https://sageteamgithubactions.com
    :target: https://github.com/sageteam-org/django-sage-painless
    :alt: GitHub Actions
 
