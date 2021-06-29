@@ -50,7 +50,7 @@ Functionality
 
 painless creates django backend projects without developer coding
 
-it can generate these stuff:
+it can generate these parts:
 
 - models.py
 - admin.py
