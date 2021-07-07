@@ -10,7 +10,7 @@ Welcome to django-sage-painless's documentation!
    :target: https://sageteam.org/
    :alt: SageTeam
 
-.. image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi.png?raw=true
+.. image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi_0.0.8.png?raw=true
    :target: https://pypi.org/project/django-sage-painless/
    :alt: PyPI release
 
