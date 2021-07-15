@@ -29,15 +29,19 @@ class Model:
         create model `verbose_name_plural`
         """
         if self.name:
-            result = self.name.capitalize()
-            if result[-1] == 's':
-                result = f'{result}es'
+            wordlist = []
+            for char in self.name:
+                wordlist.append(char)
+            if self.name[len(self.name) - 1] == "y":
+                wordlist[len(self.name) - 1] = "ies"
             else:
-                result = f'{result}s'
+                wordlist.append("s")
+            word = ""
+            for i in wordlist:
+                word += i
+            return word
         else:
-            result = 'Not Defined'
-
-        return result
+            return 'Not Defined'
 
     @property
     def get_str(self):
