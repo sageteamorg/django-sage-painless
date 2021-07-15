@@ -73,7 +73,9 @@ class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
         generate admin.py for given app
         """
         diagram = self.load_json(diagram_path)
-        check, message = self.validate_diagram(diagram)
+        # check, message = self.validate_diagram(diagram)  # TODO: for future
+        check = True
+        message = None
         if check:
             admins = self.extract_admin(diagram)
             self.stream_to_template(
