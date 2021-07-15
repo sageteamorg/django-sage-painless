@@ -5,16 +5,15 @@ You may need to change some parts
 {% if signal_support %}
 from django.db.models import signals
 {% if cache_support %}
-from {{app_name}}.models import (
-{% for model in models %}{{model.name}},
+{% for model in models %}
+from {{app_name}}.models.{{model.name.lower()}} import {{model.name}}
 {% endfor %}
-)
 from {{app_name}}.services import clear_cache_for_model
 {% else %}
-from {{app_name}}.models import (
-{% for signal in signals %}{{signal.model_a}}, {{signal.model_b}},
+{% for signal in signals %}
+from {{app_name}}.models.{{signal.model_a.lower()}} import {{signal.model_a}}
+from {{app_name}}.models.{{signal.model_b.lower()}} import {{signal.model_b}}
 {% endfor %}
-)
 {% endif %}
 
 {% for model in models %}

@@ -11,6 +11,11 @@ validators = import_module('django.core.validators')
 {% if cache_support %}
 from {{app_name}}.mixins import ModelCacheMixin
 {% endif %}
+{% if fk_models %}
+{% for model in fk_models %}
+from {{app_name}}.models.{{model.lower()}} import {{model}}
+{% endfor %}
+{% endif %}
 {% for model in models %}
 
 class {{model.name}}(models.Model{% if cache_support %}, ModelCacheMixin{% endif %}):

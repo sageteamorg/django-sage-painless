@@ -7,10 +7,9 @@ from django.http import Http404
 {% endif %}
 from rest_framework.viewsets import ModelViewSet
 
-from {{app_name}}.models import (
-{% for model in models %}{{model.name}},
+{% for model in models %}
+from {{app_name}}.models.{{model.name.lower()}} import {{model.name}}
 {% endfor %}
-)
 from {{app_name}}.api.serializers import (
 {% for model in models %}{{model.name}}Serializer,
 {% endfor %}

@@ -6,10 +6,9 @@ from django.apps import apps
 from rest_framework.test import APITestCase
 from django_seed import Seed
 
-from {{app_name}}.models import (
-{% for model in models %}{{model.name}},
+{% for model in models %}
+from {{app_name}}.models.{{model.name.lower()}} import {{model.name}}
 {% endfor %}
-)
 
 seeder = Seed.seeder()
 
