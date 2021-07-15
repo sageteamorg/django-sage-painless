@@ -203,6 +203,6 @@ $ python manage.py test sage_painless
 ```
 
 ## Team
-| [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true" width="230px" height="230px">](https://github.com/gr2m) | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true" width="225px" height="340px">](https://github.com/pvdlg) |
+| [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true" width="230px" height="230px">](https://github.com/sepehr-akbarzadeh) | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true" width="225px" height="340px">](https://github.com/mrhnz) |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Sepehr Akbarazadeh](https://github.com/sepehr-akbarzadeh)                                                                                                             | [Mehran Rahmanzadeh](https://github.com/mrhnz)                                                                                                       |
