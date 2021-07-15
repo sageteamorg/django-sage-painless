@@ -1,0 +1,34 @@
+"""
+Auto Generated signals.py
+You may need to change some parts
+"""
+{% if signal_support %}
+from django.db.models import signals
+{% if cache_support %}
+from {{app_name}}.models import (
+{% for model in models %}{{model.name}},
+{% endfor %}
+)
+from {{app_name}}.services import clear_cache_for_model
+{% else %}
+from {{app_name}}.models import (
+{% for signal in signals %}{{signal.model_a}}, {{signal.model_b}},
+{% endfor %}
+)
+{% endif %}
+
+{% for model in models %}
+{% if cache_support %}
+def {{model.name.lower()}}_clear_cache(sender, **kwargs):
+    clear_cache_for_model(sender.CACHE_KEY)
+signals.post_save.connect({{model.name.lower()}}_clear_cache, sender={{model.name}})
+signals.pre_delete.connect({{model.name.lower()}}_clear_cache, sender={{model.name}})
+{% endif %}
+{% endfor %}
+{% for signal in signals %}
+def {{signal.model_b.lower()}}_post_save(sender, instance, created, **kwargs):
+    if created:
+        {{signal.model_a}}.objects.create({{signal.field}}=instance)
+signals.post_save.connect({{signal.model_b.lower()}}_post_save, sender={{signal.model_b}})
+{% endfor %}
+{% endif %}
