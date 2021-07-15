@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from django.conf import settings
 
@@ -82,6 +83,15 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         if not os.path.exists(f'{settings.BASE_DIR}/{self.app_label}/{directory}'):
             os.mkdir(f'{settings.BASE_DIR}/{self.app_label}/{directory}')
 
+    def create_file_is_not_exists(self, file_path):
+        if not os.path.isfile(file_path):
+            file = Path(file_path)
+            file.touch(exist_ok=True)
+
+    def delete_file_is_exists(self, file_path):
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
     def generate_tests(self, diagram_path):
         """
         stream tests to app_name/tests/*.py
@@ -90,6 +100,8 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         models, signals = self.extract_models(diagram)
 
         self.create_dir_is_not_exists(self.TESTS_DIR)
+        self.create_file_is_not_exists(f'{settings.BASE_DIR}/{self.app_label}/tests/__init__.py')
+        self.delete_file_is_exists(f'{settings.BASE_DIR}/{self.app_label}/tests.py')
 
         # generate model tests
         self.stream_to_template(
