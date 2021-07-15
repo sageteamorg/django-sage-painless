@@ -4,6 +4,9 @@ Django Sage Painless
 django-sage-painless is a useful package based on Django Web Framework & Django Rest Framework for high-level and rapid web development.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+|SageTeam| |PyPI release| |Supported Python versions| |Supported Django
+versions| |Documentation| |Test|
+
 -  `Project Detail <#project-detail>`__
 -  `Git Rules <#git-rules>`__
 -  `Get Started <#getting-started>`__
@@ -20,8 +23,10 @@ rest framework 3.12.4 - Jinja2 3.0.1 \* Language: Python 3.9.4
 Git Rules
 ---------
 
-Sage team Git Rules Policy is available here: - `Sage Git
-Policy <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`__
+Sage team Git Rules Policy is available here:
+
+-  `Sage Git
+   Policy <https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow>`__
 
 Getting Started
 ---------------
@@ -68,9 +73,7 @@ Now we have to add 'products' to INSTALLED\_APPS in settings.py
 .. code:: python
 
     INSTALLED_APPS = [
-      ...
       'products',
-      ...
     ]
 
 Install Generator
@@ -84,19 +87,19 @@ First install package
 
 Then add 'sage\_painless' to INSTALLED\_APPS in settings.py
 
-These apps should be in your INSTALLED\_APPS: - 'rest\_framework' -
-'drf\_yasg' - 'django\_seed'
+These apps should be in your INSTALLED\_APPS:
+
+-  'rest\_framework'
+-  'drf\_yasg'
+-  'django\_seed'
 
 .. code:: python
 
     INSTALLED_APPS = [
-      ...
       'sage_painless',
-      ...
       'rest_framework',
       'drf_yasg',
       'django_seed',
-      ...
     ]
 
 Usage
@@ -122,50 +125,61 @@ If you generated api you have to add app urls to urls.py:
 .. code:: python
 
     urlpatterns = [
-      ...
       path('api/', include('products.api.urls')),
-      ...
     ]
 
 -  You have to migrate your new models
 
-   .. code:: shell
+.. code:: shell
 
-       $ python manage.py makemigrations
-       $ python manage.py migrate
+    $ python manage.py makemigrations
+    $ python manage.py migrate
 
 -  You can run tests for your app
 
-   .. code:: shell
+.. code:: shell
 
-       $ python manage.py test products
+    $ python manage.py test products
 
 -  Django run server
 
-   .. code:: shell
+.. code:: shell
 
-       $ python manage.py runserver
+    $ python manage.py runserver
 
 -  Rest API documentation is available at ``localhost:8000/api/doc/``
--  For support Rest API doc add this part to your urls.py \`\`\`python
-   from rest\_framework.permissions import AllowAny from drf\_yasg.views
-   import get\_schema\_view from drf\_yasg import openapi
 
-schema\_view = get\_schema\_view( openapi.Info( title="Rest API Doc",
-default\_version='v1', description="Auto Generated API Docs",
-license=openapi.License(name="S.A.G.E License"), ), public=True,
-permission\_classes=(AllowAny,), )
+-  For support Rest API doc add this part to your urls.py
 
-urlpatterns = [ ... path('api/doc/', schema\_view.with\_ui('redoc',
-cache\_timeout=0), name='schema-swagger-ui'), ...
+.. code:: python
 
-\`\`\ ``- Rest API documentation is available at``\ localhost:8000/api/doc/\`
+    from rest_framework.permissions import AllowAny
+    from drf_yasg.views import get_schema_view
+    from drf_yasg import openapi
+
+    schema_view = get_schema_view(
+        openapi.Info(
+            title="Rest API Doc",
+            default_version='v1',
+            description="Auto Generated API Docs",
+            license=openapi.License(name="S.A.G.E License"),
+        ),
+        public=True,
+        permission_classes=(AllowAny,),
+    )
+
+    urlpatterns = [
+        path('api/doc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-swagger-ui'),
+    ]
+
+-  Rest API documentation is available at ``localhost:8000/api/doc/``
 
 Contribute
 ----------
 
-Run project tests before starting to develop - ``products`` app is
-required for running tests
+Run project tests before starting to develop
+
+-  ``products`` app is required for running tests
 
 .. code:: shell
 
@@ -174,23 +188,44 @@ required for running tests
 .. code:: python
 
     INSTALLED_APPS = [
-      ...
       'products',
-      ...
     ]
 
 -  you have to generate everything for this app
+
 -  diagram file is available here:
    `Diagram <sage_painless/tests/diagrams/product_diagram.json>`__
 
-   .. code:: shell
+.. code:: shell
 
-       $ python manage.py generate --app products --diagram sage_painless/tests/diagrams/product_diagram.json
+    $ python manage.py generate --app products --diagram sage_painless/tests/diagrams/product_diagram.json
 
 -  run tests
 
-   .. code:: shell
+.. code:: shell
 
-       $ python manage.py test sage_painless
+    $ python manage.py test sage_painless
 
+Team
+----
 
++-----------------------------------------------------------------+---------------------------------------------------------+
+| |sepehr|                                                        |                            |mehran|                     |
++=================================================================+=========================================================+
+| `Sepehr Akbarazadeh <https://github.com/sepehr-akbarzadeh>`__   | `Mehran Rahmanzadeh <https://github.com/mrhnz>`__       |
++-----------------------------------------------------------------+---------------------------------------------------------+
+
+.. |SageTeam| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true
+.. |PyPI release| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi_0.0.8.png?raw=true
+.. |Supported Python versions| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_python-02.png?raw=true
+.. |Supported Django versions| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_django.png?raw=true
+.. |Documentation| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_docs.png?raw=true
+.. |Test| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_test.png?raw=true
+.. |sepehr| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true
+            :height: 460px
+            :width: 460px
+            :scale: 50%
+.. |mehran| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true
+            :scale: 50%
+            :height: 677px
+            :width: 450px
