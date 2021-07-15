@@ -3,8 +3,10 @@ Auto Generated admin.py
 You may need to change some parts
 """
 from django.contrib import admin
-from {{app_name}}.models import *
-
+from {{app_name}}.models import (
+{% for admin in admins %}{{admin.model}},
+{% endfor %}
+)
 {% for admin in admins %}
 @admin.register({{admin.model}})
 class {{admin.model}}Admin(admin.ModelAdmin):

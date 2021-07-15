@@ -7,8 +7,14 @@ from django.http import Http404
 {% endif %}
 from rest_framework.viewsets import ModelViewSet
 
-from {{app_name}}.models import *
-from {{app_name}}.api.serializers import *
+from {{app_name}}.models import (
+{% for model in models %}{{model.name}},
+{% endfor %}
+)
+from {{app_name}}.api.serializers import (
+{% for model in models %}{{model.name}}Serializer,
+{% endfor %}
+)
 
 {% for model in models %}
 class {{model.name}}Viewset(ModelViewSet):

@@ -4,7 +4,10 @@ You may need to change some parts
 """
 from rest_framework.routers import DefaultRouter
 
-from {{app_name}}.api.views import *
+from {{app_name}}.api.views import (
+{% for model in models %}{{model.name}}Viewset,
+{% endfor %}
+)
 
 router = DefaultRouter()
 {% for model in models %}
