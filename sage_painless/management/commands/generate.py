@@ -1,3 +1,5 @@
+import datetime
+
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
@@ -6,6 +8,7 @@ from sage_painless.services.admin_generator import AdminGenerator
 from sage_painless.services.api_generator import APIGenerator
 from sage_painless.services.test_generator import TestGenerator
 from sage_painless.services.docker_generator import DockerGenerator
+from sage_painless.utils.report_service import ReportUserAnswer
 
 
 class Command(BaseCommand):
@@ -46,44 +49,108 @@ class Command(BaseCommand):
         cache_support = input('Would you like to add cache queryset support(yes/no)? ')
         docker_support = input('Would you like to dockerize your project(yes/no)? ')
 
+        reporter = ReportUserAnswer(
+            app_name=app_label,
+            file_prefix=f'{app_label}-{datetime.date.today()}'
+        )
+        reporter.init_report_file()
+
         stdout_messages = list()
 
         if create_model == 'yes':
             model_generator = ModelGenerator(app_label)
-
+            reporter.add_question_answer(
+                question='create models.py',
+                answer=True
+            )
             if cache_support == 'yes':
+                reporter.add_question_answer(
+                    question='cache support',
+                    answer=True
+                )
                 check, message = model_generator.generate_models(diagram_path, True)
             else:
+                reporter.add_question_answer(
+                    question='cache support',
+                    answer=False
+                )
                 check, message = model_generator.generate_models(diagram_path)
 
             if check:
                 stdout_messages.append(self.style.SUCCESS(message))
             else:
                 stdout_messages.append(self.style.ERROR(message))
+        else:
+            reporter.add_question_answer(
+                question='create models.py',
+                answer=False
+            )
 
         if create_admin == 'yes':
+            reporter.add_question_answer(
+                question='create admin.py',
+                answer=True
+            )
             admin_generator = AdminGenerator(app_label)
             check, message = admin_generator.generate(diagram_path)
             if check:
                 stdout_messages.append(self.style.SUCCESS(message))
             else:
                 stdout_messages.append(self.style.ERROR(message))
+        else:
+            reporter.add_question_answer(
+                question='create admin.py',
+                answer=False
+            )
 
         if create_api == 'yes':
+            reporter.add_question_answer(
+                question='create serializers.py',
+                answer=True
+            )
+            reporter.add_question_answer(
+                question='create views.py',
+                answer=True
+            )
             self.validate_settings(step='api')
             api_generator = APIGenerator(app_label)
 
             if cache_support == 'yes':
+                reporter.add_question_answer(
+                    question='cache support',
+                    answer=True
+                )
                 check, message = api_generator.generate_api(diagram_path, True)
             else:
+                reporter.add_question_answer(
+                    question='cache support',
+                    answer=False
+                )
                 check, message = api_generator.generate_api(diagram_path)
 
             if check:
                 stdout_messages.append(self.style.SUCCESS(message))
             else:
                 stdout_messages.append(self.style.ERROR(message))
+        else:
+            reporter.add_question_answer(
+                question='create serializers.py',
+                answer=False
+            )
+            reporter.add_question_answer(
+                question='create views.py',
+                answer=False
+            )
 
         if create_test == 'yes':
+            reporter.add_question_answer(
+                question='create test_api.py',
+                answer=True
+            )
+            reporter.add_question_answer(
+                question='create test_model.py',
+                answer=True
+            )
             self.validate_settings(step='test')
             test_generator = TestGenerator(app_label)
             check, message = test_generator.generate_tests(diagram_path)
@@ -91,8 +158,25 @@ class Command(BaseCommand):
                 stdout_messages.append(self.style.SUCCESS(message))
             else:
                 stdout_messages.append(self.style.ERROR(message))
+        else:
+            reporter.add_question_answer(
+                question='create test_api.py',
+                answer=False
+            )
+            reporter.add_question_answer(
+                question='create test_model.py',
+                answer=False
+            )
 
         if docker_support == 'yes':
+            reporter.add_question_answer(
+                question='create docker-compose.yml',
+                answer=True
+            )
+            reporter.add_question_answer(
+                question='create Dockerfile',
+                answer=True
+            )
             version = input('Please enter the version of your project(e.g 2.1): ')
             db_image = input("Please enter your project's database image(e.g postgres): ")
             db_name = input('Please enter database name: ')
@@ -103,8 +187,28 @@ class Command(BaseCommand):
             rabbit_user = None
             rabbit_pass = None
             if rabbit_support == 'yes':
+                reporter.add_question_answer(
+                    question='rabbitmq support',
+                    answer=True
+                )
                 rabbit_user = input('Please enter rabbitMQ user username: ')
                 rabbit_pass = input('Please enter rabbitMQ user password: ')
+            else:
+                reporter.add_question_answer(
+                    question='rabbitmq support',
+                    answer=False
+                )
+
+            if redis_support == 'yes':
+                reporter.add_question_answer(
+                    question='redis support',
+                    answer=True
+                )
+            else:
+                reporter.add_question_answer(
+                    question='redis support',
+                    answer=False
+                )
 
             docker_generator = DockerGenerator(
                 app_label, version,
@@ -133,6 +237,15 @@ class Command(BaseCommand):
                     }
                 }
                 """)
+        else:
+            reporter.add_question_answer(
+                question='create docker-compose.yml',
+                answer=False
+            )
+            reporter.add_question_answer(
+                question='create Dockerfile',
+                answer=False
+            )
 
         for message in stdout_messages:
             self.stdout.write(message)
