@@ -51,7 +51,7 @@ class Command(BaseCommand):
 
         reporter = ReportUserAnswer(
             app_name=app_label,
-            file_prefix=f'{app_label}-{datetime.date.today()}'
+            file_prefix=f'{app_label}-{datetime.datetime.now()}'
         )
         reporter.init_report_file()
 
