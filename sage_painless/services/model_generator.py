@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+
 from django.conf import settings
 
 from sage_painless.classes.field import Field
@@ -97,12 +99,42 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return False
 
+    def get_fk_model_names(self, models):
+        """
+        check models have fk,m2m,one2one,... and return model names
+        """
+        model_names = list()
+        for model in models:
+            for field in model.fields:
+                if field.type in ['ManyToManyField', 'OneToOneField', 'ForeignKey']:
+                    model_names.append(field.get_attribute('to'))
+
+        return model_names
+
+    def create_dir_is_not_exists(self, directory):
+        if not os.path.exists(f'{settings.BASE_DIR}/{self.app_label}/{directory}'):
+            os.mkdir(f'{settings.BASE_DIR}/{self.app_label}/{directory}')
+
+    def create_file_is_not_exists(self, file_path):
+        if not os.path.isfile(file_path):
+            file = Path(file_path)
+            file.touch(exist_ok=True)
+
+    def delete_file_is_exists(self, file_path):
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
     def generate_models(self, diagram_path, cache_support=False):
         """
         stream models to app_name/models.py
         """
         diagram = self.load_json(diagram_path)
         models, signals = self.extract_models(diagram)
+
+        # initialize
+        self.create_dir_is_not_exists('models')
+        self.create_file_is_not_exists(f'{settings.BASE_DIR}/{self.app_label}/models/__init__.py')
+        self.delete_file_is_exists(f'{settings.BASE_DIR}/{self.app_label}/models.py')
 
         # mixins & services
         if cache_support:
@@ -124,17 +156,19 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
             self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/services.py')
 
         # models
-        self.stream_to_template(
-            output_path=f'{settings.BASE_DIR}/{self.app_label}/models.py',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'models.txt'),
-            data={
-                'app_name': self.app_label,
-                'models': models,
-                'validator_support': self.check_validator_support(models),
-                'cache_support': cache_support
-            }
-        )
-        self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/models.py')
+        for model in models:
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/models/{model.name.lower()}.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'models.txt'),
+                data={
+                    'app_name': self.app_label,
+                    'models': [model],
+                    'validator_support': self.check_validator_support([model]),
+                    'cache_support': cache_support,
+                    'fk_models': self.get_fk_model_names([model])
+                }
+            )
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/models/{model.name.lower()}.py')
 
         # signals
         if self.check_signal_support(models):
