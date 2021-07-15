@@ -12,27 +12,32 @@ class Command(BaseCommand):
     help = 'Generate all files need to your new app.'
 
     def add_arguments(self, parser):
+        """initialize arguments"""
         parser.add_argument('-a', '--app', type=str, help='app label that will generate models.py for')
         parser.add_argument('-d', '--diagram', type=str, help='sql diagram path that will make models.py from it')
 
-    def validate_settings(self):
+    def validate_settings(self, step):
+        """validate required settings in each step"""
         if not 'sage_painless' in settings.INSTALLED_APPS:
             raise IOError('Add `sage_painless` to your INSTALLED_APPS')
-        
-        if not 'rest_framework' in settings.INSTALLED_APPS:
-            raise IOError('Add `rest_framework` to your INSTALLED_APPS')
-        
-        if not 'drf_yasg' in settings.INSTALLED_APPS:
-            raise IOError('Add `drf_yasg` to your INSTALLED_APPS')
-        
-        if not 'django_seed' in settings.INSTALLED_APPS:
-            raise IOError('Add `django_seed` to your INSTALLED_APPS')
 
+        if step == 'api':
+            if not 'rest_framework' in settings.INSTALLED_APPS:
+                raise IOError('Add `rest_framework` to your INSTALLED_APPS')
+
+        if step == 'test':
+            if not 'rest_framework' in settings.INSTALLED_APPS:
+                raise IOError('Add `rest_framework` to your INSTALLED_APPS')
+            if not 'django_seed' in settings.INSTALLED_APPS:
+                raise IOError('Add `django_seed` to your INSTALLED_APPS')
+
+        if step == 'docs':
+            if not 'drf_yasg' in settings.INSTALLED_APPS:
+                raise IOError('Add `drf_yasg` to your INSTALLED_APPS')
 
     def handle(self, *args, **options):
-        self.validate_settings()
-
-        app_label = options.get('app')
+        """get configs from user and generate"""
+        app_label = options.get('app').replace('/', '')
         diagram_path = options.get('diagram')
         create_model = input('Would you like to generate models.py(yes/no)? ')
         create_admin = input('Would you like to generate admin.py(yes/no)? ')
@@ -65,6 +70,7 @@ class Command(BaseCommand):
                 stdout_messages.append(self.style.ERROR(message))
 
         if create_api == 'yes':
+            self.validate_settings(step='api')
             api_generator = APIGenerator(app_label)
 
             if cache_support == 'yes':
@@ -78,6 +84,7 @@ class Command(BaseCommand):
                 stdout_messages.append(self.style.ERROR(message))
 
         if create_test == 'yes':
+            self.validate_settings(step='test')
             test_generator = TestGenerator(app_label)
             check, message = test_generator.generate_tests(diagram_path)
             if check:
@@ -113,7 +120,7 @@ class Command(BaseCommand):
                 stdout_messages.append(self.style.SUCCESS(message))
             else:
                 stdout_messages.append(self.style.ERROR(message))
-            
+
             if not redis_support and cache_support:
                 print("""
                 hint: Add this setting to your settings.py
