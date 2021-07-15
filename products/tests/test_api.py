@@ -6,12 +6,13 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from django_seed import Seed
 
-from products.models import (
-    Category,
-    Product,
-    Discount,
 
-)
+from products.models.category import Category
+
+from products.models.product import Product
+
+from products.models.discount import Discount
+
 
 seeder = Seed.seeder()
 

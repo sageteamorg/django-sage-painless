@@ -7,12 +7,13 @@ from django.http import Http404
 
 from rest_framework.viewsets import ModelViewSet
 
-from products.models import (
-    Category,
-    Product,
-    Discount,
 
-)
+from products.models.category import Category
+
+from products.models.product import Product
+
+from products.models.discount import Discount
+
 from products.api.serializers import (
     CategorySerializer,
     ProductSerializer,

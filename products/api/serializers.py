@@ -4,12 +4,11 @@ You may need to change some parts
 """
 from rest_framework.serializers import ModelSerializer
 
-from products.models import (
-    Category,
-    Product,
-    Discount,
+from products.models.category import Category
 
-)
+from products.models.product import Product
+
+from products.models.discount import Discount
 
 
 class CategorySerializer(ModelSerializer):

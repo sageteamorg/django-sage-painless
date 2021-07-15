@@ -5,12 +5,13 @@ You may need to change some parts
 
 from django.db.models import signals
 
-from products.models import (
-    Category,
-    Product,
-    Discount,
 
-)
+from products.models.category import Category
+
+from products.models.product import Product
+
+from products.models.discount import Discount
+
 from products.services import clear_cache_for_model
 
 

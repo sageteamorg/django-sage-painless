@@ -3,12 +3,13 @@ Auto Generated admin.py
 You may need to change some parts
 """
 from django.contrib import admin
-from products.models import (
-    Category,
-    Product,
-    Discount,
 
-)
+from products.models.category import Category
+
+from products.models.product import Product
+
+from products.models.discount import Discount
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
