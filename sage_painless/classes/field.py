@@ -101,6 +101,16 @@ class Field:
         self.attrs.append(attr)
         return True
 
+    def get_attribute(self, key):
+        """
+        Get attribute from field
+        """
+        for attr in self.attrs:
+            if attr.key == key:
+                return attr.value
+
+        return 'Not defined'
+
     def add_validator(self, func, arg):
         """
         Add validator to Field
