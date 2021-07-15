@@ -3,8 +3,12 @@ Auto Generated admin.py
 You may need to change some parts
 """
 from django.contrib import admin
-from products.models import *
+from products.models import (
+    Category,
+    Product,
+    Discount,
 
+)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -26,7 +30,6 @@ class CategoryAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, *args, **kwargs):
         return True
-
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -50,7 +53,6 @@ class ProductAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, *args, **kwargs):
         return True
-
 
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):

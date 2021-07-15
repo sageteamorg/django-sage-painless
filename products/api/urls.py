@@ -4,7 +4,12 @@ You may need to change some parts
 """
 from rest_framework.routers import DefaultRouter
 
-from products.api.views import *
+from products.api.views import (
+    CategoryViewset,
+    ProductViewset,
+    DiscountViewset,
+
+)
 
 router = DefaultRouter()
 

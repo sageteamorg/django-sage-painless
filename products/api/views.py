@@ -7,8 +7,18 @@ from django.http import Http404
 
 from rest_framework.viewsets import ModelViewSet
 
-from products.models import *
-from products.api.serializers import *
+from products.models import (
+    Category,
+    Product,
+    Discount,
+
+)
+from products.api.serializers import (
+    CategorySerializer,
+    ProductSerializer,
+    DiscountSerializer,
+
+)
 
 
 class CategoryViewset(ModelViewSet):
@@ -17,7 +27,7 @@ class CategoryViewset(ModelViewSet):
     Auto generated
     """
     serializer_class = CategorySerializer
-
+    
     model_class = Category
 
     def get_queryset(self):
@@ -35,7 +45,7 @@ class CategoryViewset(ModelViewSet):
             raise Http404('Not Found')
         obj = queryset[0]
         return obj
-
+    
 
 class ProductViewset(ModelViewSet):
     """
@@ -43,7 +53,7 @@ class ProductViewset(ModelViewSet):
     Auto generated
     """
     serializer_class = ProductSerializer
-
+    
     model_class = Product
 
     def get_queryset(self):
@@ -61,7 +71,7 @@ class ProductViewset(ModelViewSet):
             raise Http404('Not Found')
         obj = queryset[0]
         return obj
-
+    
 
 class DiscountViewset(ModelViewSet):
     """
@@ -69,7 +79,7 @@ class DiscountViewset(ModelViewSet):
     Auto generated
     """
     serializer_class = DiscountSerializer
-
+    
     model_class = Discount
 
     def get_queryset(self):
@@ -87,3 +97,4 @@ class DiscountViewset(ModelViewSet):
             raise Http404('Not Found')
         obj = queryset[0]
         return obj
+    

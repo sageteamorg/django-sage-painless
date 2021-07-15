@@ -4,7 +4,12 @@ You may need to change some parts
 """
 from rest_framework.serializers import ModelSerializer
 
-from products.models import *
+from products.models import (
+    Category,
+    Product,
+    Discount,
+
+)
 
 
 class CategorySerializer(ModelSerializer):
@@ -14,9 +19,8 @@ class CategorySerializer(ModelSerializer):
             'title',
             'created',
             'modified',
-
+        
         ]
-
 
 class ProductSerializer(ModelSerializer):
     class Meta:
@@ -28,9 +32,8 @@ class ProductSerializer(ModelSerializer):
             'category',
             'created',
             'modified',
-
+        
         ]
-
 
 class DiscountSerializer(ModelSerializer):
     class Meta:
@@ -40,5 +43,5 @@ class DiscountSerializer(ModelSerializer):
             'discount',
             'created',
             'modified',
-
+        
         ]
