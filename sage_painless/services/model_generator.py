@@ -103,18 +103,100 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
         """
         diagram = self.load_json(diagram_path)
         models, signals = self.extract_models(diagram)
+
+        # mixins & services
+        if cache_support:
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/mixins.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'mixins.txt'),
+                data={
+                    'cache_support': cache_support
+                }
+            )
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/services.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'services.txt'),
+                data={
+                    'cache_support': cache_support
+                }
+            )
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/mixins.py')
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/services.py')
+
+        # models
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/{self.app_label}/models.py',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'models.txt'),  # TODO: Should be dynamic
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'models.txt'),
             data={
+                'app_name': self.app_label,
                 'models': models,
-                'signals': signals,
                 'validator_support': self.check_validator_support(models),
-                'signal_support': self.check_signal_support(models),
                 'cache_support': cache_support
             }
         )
-
         self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/models.py')
 
-        return True, 'Models Generated Successfully. Changes are in this file:\nmodels.py\n'
+        # signals
+        if self.check_signal_support(models):
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/signals.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'signals.txt'),
+                data={
+                    'app_name': self.app_label,
+                    'models': models,
+                    'signals': signals,
+                    'signal_support': True,
+                    'cache_support': cache_support
+                }
+            )
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/__init__.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
+                data={
+                    'app_name': self.app_label
+                }
+            )
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/apps.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
+                data={
+                    'app_name': self.app_label,
+                    'signal_support': True
+                }
+            )
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/signals.py')
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/apps.py')
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/__init__.py')
+
+        elif cache_support:
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/signals.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'signals.txt'),
+                data={
+                    'app_name': self.app_label,
+                    'models': models,
+                    'signals': signals,
+                    'signal_support': True,
+                    'cache_support': cache_support
+                }
+            )
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/__init__.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
+                data={
+                    'app_name': self.app_label
+                }
+            )
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{self.app_label}/apps.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
+                data={
+                    'app_name': self.app_label,
+                    'signal_support': True
+                }
+            )
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/signals.py')
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/apps.py')
+            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/__init__.py')
+
+        return True, 'Models Generated Successfully.'
