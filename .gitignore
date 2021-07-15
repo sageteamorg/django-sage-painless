@@ -121,3 +121,6 @@ jwt-key
 jwt-key.pub
 
 .docker
+
+kernel/
+manage.py
