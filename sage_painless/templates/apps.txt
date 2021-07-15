@@ -1,0 +1,10 @@
+from django.apps import AppConfig
+
+
+class {{app_name.capitalize()}}Config(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = '{{app_name}}'
+    {%if signal_support%}
+    def ready(self):
+        import {{app_name}}.signals
+    {%endif%}
