@@ -222,10 +222,8 @@ Team
 .. |Documentation| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_docs.png?raw=true
 .. |Test| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_test.png?raw=true
 .. |sepehr| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true
-            :height: 460px
-            :width: 460px
-            :scale: 50%
+            :height: 230px
+            :width: 230px
 .. |mehran| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true
-            :scale: 50%
-            :height: 677px
-            :width: 450px
+            :height: 340px
+            :width: 225px
