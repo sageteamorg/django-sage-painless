@@ -216,14 +216,22 @@ Team
 +-----------------------------------------------------------------+---------------------------------------------------------+
 
 .. |SageTeam| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true
+            :alt: SageTeam
 .. |PyPI release| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi_0.0.8.png?raw=true
+            :alt: django-sage-painless
 .. |Supported Python versions| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_python-02.png?raw=true
+            :alt: django-sage-painless
 .. |Supported Django versions| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_django.png?raw=true
+            :alt: django-sage-painless
 .. |Documentation| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_docs.png?raw=true
+            :alt: django-sage-painless
 .. |Test| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_test.png?raw=true
+            :alt: django-sage-painless
 .. |sepehr| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true
             :height: 230px
             :width: 230px
+            :alt: Sepehr Akbarzadeh
 .. |mehran| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true
             :height: 340px
             :width: 225px
+            :alt: Mehran Rahmanzadeh

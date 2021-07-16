@@ -3,12 +3,12 @@
 
 ##### The Latest version of [django-sage-painless](https://django-sage-painless.readthedocs.io/) documentation
 
-![SageTeam](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true "a title")
-![PyPI release](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi_0.0.8.png?raw=true "a title")
-![Supported Python versions](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_python-02.png?raw=true "a title")
-![Supported Django versions](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_django.png?raw=true "a title")
-![Documentation](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_docs.png?raw=true "a title")
-![Test](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_test.png?raw=true "a title")
+![SageTeam](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true "SageTeam")
+![PyPI release](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi_0.0.8.png?raw=true "django-sage-painless")
+![Supported Python versions](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_python-02.png?raw=true "django-sage-painless")
+![Supported Django versions](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_django.png?raw=true "django-sage-painless")
+![Documentation](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_docs.png?raw=true "django-sage-painless")
+![Test](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_test.png?raw=true "django-sage-painless")
 
 - [Project Detail](#project-detail)
 - [Git Rules](#git-rules)
@@ -203,6 +203,6 @@ $ python manage.py test sage_painless
 ```
 
 ## Team
-| [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true" width="230px" height="230px">](https://github.com/sepehr-akbarzadeh) | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true" width="225px" height="340px">](https://github.com/mrhnz) |
+| [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true" width="230px" height="230px" alt="Sepehr Akbarzadeh">](https://github.com/sepehr-akbarzadeh) | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true" width="225px" height="340px" alt="Mehran Rahmanzadeh">](https://github.com/mrhnz) |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Sepehr Akbarazadeh](https://github.com/sepehr-akbarzadeh)                                                                                                             | [Mehran Rahmanzadeh](https://github.com/mrhnz)                                                                                                       |
