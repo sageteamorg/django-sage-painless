@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2021-07-17
+### Fixed
+- Fixed management command
+
 ## [1.2.0] - 2021-07-17
 ### Added
 - Added API method support
@@ -26,3 +30,6 @@ All notable changes to this project will be documented in this file.
 
 [1.0.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.1.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.1.1]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.2.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.2.1]: https://github.com/sageteam-org/django-sage-painless/commits/develop
