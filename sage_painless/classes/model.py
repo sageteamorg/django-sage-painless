@@ -5,6 +5,7 @@ class Model:
 
     name = None
     fields = []
+    api_config = None
 
     def has_one_to_one(self):
         """
