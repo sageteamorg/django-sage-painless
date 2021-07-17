@@ -29,6 +29,8 @@ class CategoryViewset(ModelViewSet):
     """
     serializer_class = CategorySerializer
     
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+    
     model_class = Category
 
     def get_queryset(self):
