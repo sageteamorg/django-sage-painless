@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2021-07-17
+### Fixed
+- Change report file name pattern
+
 ## [1.1.0] - 2021-07-15
 ### Added
 - Generate models in multiple files
