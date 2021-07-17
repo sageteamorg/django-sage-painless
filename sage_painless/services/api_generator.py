@@ -18,6 +18,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
     """
 
     FIELDS_KEYWORD = 'fields'
+    API_KEYWORD = 'api'
     API_DIR = 'api'
 
     def __init__(self, app_label):
@@ -29,6 +30,24 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         """
         return table.get(self.FIELDS_KEYWORD)
 
+    def get_table_api(self, table):
+        """
+        extract api
+        """
+        return table.get(self.API_KEYWORD)
+
+    def normalize_api_config(self, api_config):
+        """
+        get api config
+        normalize api methods
+        return api config
+        """
+        if api_config:
+            if api_config.get('methods'):
+                api_config['methods'] = [method.lower() for method in api_config.get('methods')]
+
+        return api_config
+
     def extract_models(self, diagram):
         """
         extract models
@@ -37,9 +56,11 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         for table_name in diagram.keys():
             table = diagram.get(table_name)
             fields = self.get_table_fields(table)
+            api_config = self.get_table_api(table)
 
             model = Model()
             model.name = table_name
+            model.api_config = self.normalize_api_config(api_config)
             model_fields = list()
 
             for field_name in fields.keys():

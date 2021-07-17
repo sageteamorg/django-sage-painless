@@ -22,6 +22,9 @@ class {{model.name}}Viewset(ModelViewSet):
     Auto generated
     """
     serializer_class = {{model.name}}Serializer
+    {% if model.api_config %}
+    {% if model.api_config.get('methods') %}http_method_names = {{model.api_config.get('methods')}}{%endif%}
+    {% endif %}
     {% if cache_support %}
     model_class = {{model.name}}
 

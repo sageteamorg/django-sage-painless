@@ -19,6 +19,9 @@
       "list_display": ["title", "created", "modified"],
       "list_filter": ["created", "modified"],
       "search_fields": ["title"]
+    },
+    "api": {
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
     }
   },
   "Product": {
