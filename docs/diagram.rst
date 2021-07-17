@@ -32,6 +32,9 @@ the template of the diagram is something like this:
           "list_display": ["title", "created", "modified"],
           "list_filter": ["created", "modified"],
           "search_fields": ["title"]
+        },
+        "api": { # API settings (default is all model mixins)
+          "methods": ["get", "post"]
         }
       }
     }
@@ -72,6 +75,14 @@ has_change_permission     boolean
 has_delete_permission     boolean
 ======================  =======================
 
+in api you can set:
+
+======================  =======================
+      Option             Input
+======================  =======================
+methods                 list of strings
+======================  =======================
+
 Examples
 ----------------
 
@@ -100,6 +111,9 @@ example 1:
           "list_display": ["title", "created", "modified"],
           "list_filter": ["created", "modified"],
           "search_fields": ["title"]
+        },
+        "api": { # API settings
+          "methods": ["get"]
         }
       },
       "Product": {
@@ -135,6 +149,9 @@ example 1:
           "list_filter": ["created", "modified"],
           "search_fields": ["title", "description"],
           "raw_id_fields": ["category"]
+        },
+        "api": { # API settings
+          "methods": ["get"]
         }
       },
       "Discount": {
@@ -162,6 +179,9 @@ example 1:
           "list_display": ["discount", "product", "created", "modified"],
           "list_filter": ["created", "modified"],
           "raw_id_fields": ["product"]
+        },
+        "api": { # API settings
+          "methods": ["get"]
         }
       }
     }
@@ -210,6 +230,9 @@ example 2:
           "list_display": ["title", "created", "updated"],
           "list_filter": ["created", "updated", "options"],
           "search_fields": ["title", "body"]
+        },
+        "api": { # API settings
+          "methods": ["get", "post"]
         }
       }
     }
