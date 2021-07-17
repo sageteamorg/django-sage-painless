@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2021-07-17
+### Added
+- Added API method support
+
 ## [1.1.1] - 2021-07-17
 ### Fixed
 - Change report file name pattern
