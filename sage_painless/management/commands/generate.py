@@ -210,6 +210,9 @@ class Command(BaseCommand):
                     answer=False
                 )
 
+            redis_support = True if redis_support == 'yes' else False
+            rabbit_support = True if rabbit_support == 'yes' else False
+
             docker_generator = DockerGenerator(
                 app_label, version,
                 db_image, db_name,
