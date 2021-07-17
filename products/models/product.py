@@ -6,19 +6,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-from products.mixins import ModelCacheMixin
-
-
 from products.models.category import Category
 
 
-class Product(models.Model, ModelCacheMixin):
+class Product(models.Model):
     """
     Product Model
     Auto generated
     """
-    
-    CACHE_KEY = 'product'
     
     title = models.CharField(
              max_length=255,

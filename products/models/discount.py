@@ -6,19 +6,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-from products.mixins import ModelCacheMixin
-
-
 from products.models.product import Product
 
 
-class Discount(models.Model, ModelCacheMixin):
+class Discount(models.Model):
     """
     Discount Model
     Auto generated
     """
-    
-    CACHE_KEY = 'discount'
     
     product = models.ForeignKey(
              to=Product,
