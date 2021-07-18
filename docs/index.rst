@@ -70,12 +70,13 @@ Documentation
 -------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    quick_start
    usage
    diagram
    contribute
+   faq
 
 Issues
 ------
