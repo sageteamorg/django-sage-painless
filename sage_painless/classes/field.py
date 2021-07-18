@@ -2,6 +2,7 @@ class Attribute:
     """
     Required Field object that contains `key` and `value`
     """
+
     def __init__(self):
         self.key = None
         self.value = None
@@ -13,10 +14,12 @@ class Attribute:
         self.key = attr_key
         self.value = attr_value
 
+
 class Validator:
     """
     Validator attribute for Field
     """
+
     def __init__(self):
         self.func = None
         self.arg = None
@@ -33,6 +36,7 @@ class Field:
     """
     Field object that contains attributes of a django model field
     """
+
     def __init__(self):
 
         self.name = None
@@ -63,6 +67,10 @@ class Field:
         },
         'one2one': {
             'type': 'OneToOneField',
+            'required': []
+        },
+        'm2m': {
+            'type': 'ManyToManyField',
             'required': []
         },
         'image': {
