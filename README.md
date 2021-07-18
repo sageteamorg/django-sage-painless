@@ -68,21 +68,6 @@ $ cd GeneratorTutorials
 $ django-admin startproject kernel .
 ```
 
-Next we have to create an sample app that we want to generate code for it
-(it is required for development. you will run tests on this app)
-
-```shell
-$ python manage.py startapp products
-```
-
-Now we have to add 'products' to INSTALLED_APPS in settings.py
-
-```python
-INSTALLED_APPS = [
-  'products',
-]
-```
-
 ## Install Generator
 
 First install package
@@ -112,7 +97,7 @@ INSTALLED_APPS = [
 
 ## Usage
 
-To generate an Django app you just need a diagram in JSON format. diagram is a json file that contains information about database tables.
+To generate a Django app you just need a diagram in JSON format. diagram is a json file that contains information about database tables.
 
 [Diagram examples](sage_painless/docs/diagrams)
 
@@ -120,7 +105,7 @@ start to generate
 (it is required for development. you will run tests on this app)
 
 ```shell
-$ python manage.py generate --app products --diagram <path to diagram>
+$ python manage.py generate --diagram <path to diagram>
 ```
 
 Here system will ask you what you want to generate for your app.
@@ -200,7 +185,7 @@ INSTALLED_APPS = [
 - diagram file is available here: [Diagram](sage_painless/tests/diagrams/product_diagram.json)
 
 ```shell
-$ python manage.py generate --app products --diagram sage_painless/tests/diagrams/product_diagram.json
+$ python manage.py generate --diagram sage_painless/tests/diagrams/product_diagram.json
 ```
 
 - run tests
