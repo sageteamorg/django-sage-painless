@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from django.conf import settings
+from django.core import management
 
 from sage_painless.classes.field import Field
 from sage_painless.classes.model import Model
@@ -19,6 +20,8 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
     Create model/api tests for given diagram
     """
 
+    APPS_KEYWORD = 'apps'
+    MODELS_KEYWORD = 'models'
     FIELDS_KEYWORD = 'fields'
     TYPE_KEYWORD = 'type'
     VALIDATORS_KEYWORD = 'validators'
@@ -26,19 +29,16 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
     ARG_KEYWORD = 'arg'
     TESTS_DIR = 'tests'
 
-    def __init__(self, app_label):
-        self.app_label = app_label
+    def __init__(self):
+        """init"""
+        pass
 
     def get_table_fields(self, table):
-        """
-        extract fields
-        """
+        """get fields"""
         return table.get(self.FIELDS_KEYWORD)
 
     def extract_models(self, diagram):
-        """
-        extract models
-        """
+        """extract models"""
         models = list()
         signals = list()
         for table_name in diagram.keys():
@@ -79,52 +79,59 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return models, signals
 
-    def create_dir_is_not_exists(self, directory):
-        if not os.path.exists(f'{settings.BASE_DIR}/{self.app_label}/{directory}'):
-            os.mkdir(f'{settings.BASE_DIR}/{self.app_label}/{directory}')
+    def create_dir_if_not_exists(self, directory, app_name):
+        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/{directory}'):
+            os.mkdir(f'{settings.BASE_DIR}/{app_name}/{directory}')
 
-    def create_file_is_not_exists(self, file_path):
+    def create_file_if_not_exists(self, file_path):
         if not os.path.isfile(file_path):
             file = Path(file_path)
             file.touch(exist_ok=True)
 
-    def delete_file_is_exists(self, file_path):
+    def delete_file_if_exists(self, file_path):
         if os.path.isfile(file_path):
             os.remove(file_path)
+
+    def create_app_if_not_exists(self, app_name):
+        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
+            management.call_command('startapp', app_name)
 
     def generate_tests(self, diagram_path):
         """
         stream tests to app_name/tests/*.py
         """
         diagram = self.load_json(diagram_path)
-        models, signals = self.extract_models(diagram)
+        for app_name in diagram.get(self.APPS_KEYWORD).keys():
+            models_diagram = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)  # get models data for current app
+            models, signals = self.extract_models(models_diagram)
 
-        self.create_dir_is_not_exists(self.TESTS_DIR)
-        self.create_file_is_not_exists(f'{settings.BASE_DIR}/{self.app_label}/tests/__init__.py')
-        self.delete_file_is_exists(f'{settings.BASE_DIR}/{self.app_label}/tests.py')
+            self.create_app_if_not_exists(app_name)
+            self.create_dir_if_not_exists(self.TESTS_DIR, app_name)
+            self.create_file_if_not_exists(f'{settings.BASE_DIR}/{app_name}/tests/__init__.py')
+            self.delete_file_if_exists(f'{settings.BASE_DIR}/{app_name}/tests.py')
 
-        # generate model tests
-        self.stream_to_template(
-            output_path=f'{settings.BASE_DIR}/{self.app_label}/tests/test_model.py',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'test_model.txt'),  # TODO: Should be dynamic
-            data={
-                'app_name': self.app_label,
-                'models': models,
-                'signals': signals
-            }
-        )
+            # generate model tests
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{app_name}/tests/test_model.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'test_model.txt'),
+                data={
+                    'app_name': app_name,
+                    'models': models,
+                    'signals': signals
+                }
+            )
 
-        # generate api tests
-        self.stream_to_template(
-            output_path=f'{settings.BASE_DIR}/{self.app_label}/tests/test_api.py',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'test_api.txt'),  # TODO: Should be dynamic
-            data={
-                'app_name': self.app_label,
-                'models': models
-            }
-        )
+            # generate api tests
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/{app_name}/tests/test_api.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'test_api.txt'),
+                data={
+                    'app_name': app_name,
+                    'models': models
+                }
+            )
 
-        self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_model.py')
-        self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/tests/test_api.py')
+            self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/tests/test_model.py')
+            self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/tests/test_api.py')
 
-        return True, 'Tests Generated Successfully. Changes are in these files:\ntest_model.py\ntest_api.py\n'
+        return True, 'Tests Generated Successfully.'

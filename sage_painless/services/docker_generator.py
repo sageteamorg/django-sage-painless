@@ -14,8 +14,6 @@ class DockerGenerator(JinjaHandler):
 
     def __init__(
             self,
-            app_label,
-            version,
             db_image,
             db_name,
             db_user,
@@ -33,8 +31,6 @@ class DockerGenerator(JinjaHandler):
         self.db_name = db_name
         self.db_user = db_user
         self.db_pass = db_pass
-        self.app_name = app_label
-        self.version = version
 
     def generate(self):
         """
@@ -52,7 +48,6 @@ class DockerGenerator(JinjaHandler):
             output_path=f'{settings.BASE_DIR}/docker-compose.yml',
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'docker-compose.txt'),
             data={
-                'version': self.version,
                 'db_image': self.db_image,
                 'db_name': self.db_name,
                 'db_user': self.db_user,
@@ -64,4 +59,4 @@ class DockerGenerator(JinjaHandler):
             }
         )
 
-        return True, 'Docker config Generated Successfully. Changes are in these files:\nDockerfile\ndocker-compose.yml\n'
+        return True, 'Docker config Generated Successfully.'

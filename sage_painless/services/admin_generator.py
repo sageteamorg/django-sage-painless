@@ -2,6 +2,7 @@ import os
 
 from django.apps import apps
 from django.conf import settings
+from django.core import management
 
 from sage_painless.classes.admin import Admin
 
@@ -11,32 +12,28 @@ from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
 
-
 class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
 
     ADMIN_KEYWORD = 'admin'
+    MODELS_KEYWORD = 'models'
+    APPS_KEYWORD = 'apps'
     TYPE_KEYWORD = 'type'
 
-    def __init__(self, app_label):
-        self.app_label = app_label
+    def __init__(self):
+        """init"""
+        pass
 
     def get_app_models(self, app_name):
-        """
-        extract models from app
-        """
+        """extract models from app"""
         return [model.__name__ for model in list(apps.get_app_config(app_name).get_models())]
 
     def get_diagram_models(self, diagram):
-        """
-        extract models from diagram
-        """
+        """extract models from diagram"""
         return list(diagram.keys())
 
-    def validate_diagram(self, diagram):
-        """
-        check diagram models with app models if any difference return False
-        """
-        app_models = self.get_app_models(self.app_label)
+    def validate_diagram(self, diagram, app_name):
+        """check diagram models with app models if any difference return False"""
+        app_models = self.get_app_models(app_name)
         diagram_models = self.get_diagram_models(diagram)
         differences = list(set(diagram_models).symmetric_difference(set(app_models)))
         if len(differences) == 0:
@@ -50,9 +47,7 @@ class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
         return table.get(self.ADMIN_KEYWORD)
 
     def extract_admin(self, diagram):
-        """
-        extract admin attributes from json file
-        """
+        """extract admin attributes from json file"""
         admins = list()
         for table_name in diagram.keys():
             table = diagram.get(table_name)
@@ -68,28 +63,29 @@ class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return admins
 
+    def create_app_if_not_exists(self, app_name):
+        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
+            management.call_command('startapp', app_name)
+
     def generate(self, diagram_path):
-        """
-        generate admin.py for given app
-        """
+        """generate admin.py for given app"""
         diagram = self.load_json(diagram_path)
-        # check, message = self.validate_diagram(diagram)  # TODO: for future
-        check = True
-        message = None
-        if check:
-            admins = self.extract_admin(diagram)
+        for app_name in diagram.get(self.APPS_KEYWORD).keys():
+            models_diagram = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)  # get models data for current app
+            admins = self.extract_admin(models_diagram)
+
+            self.create_app_if_not_exists(app_name)
+
             self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/admin.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'admin.txt'),  # TODO: Should be dynamic
+                output_path=f'{settings.BASE_DIR}/{app_name}/admin.py',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'admin.txt'),
                 data={
-                    'app_name': self.app_label,
+                    'app_name': app_name,
                     'admins': admins,
                 }
             )
 
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/admin.py')
+            self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/admin.py')
 
-            return True, 'Admin Generated Successfully. Changes are in this file:\nadmin.py\n'
-        else:
-            return False, f'models.py is not match with diagram differences : {message}'
+        return True, 'Admin Generated Successfully.'
 
