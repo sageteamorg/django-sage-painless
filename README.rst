@@ -118,7 +118,7 @@ this app)
 
 .. code:: shell
 
-    $ python manage.py generate --app products --diagram <path to diagram>
+    $ python manage.py generate --diagram <path to diagram>
 
 Here system will ask you what you want to generate for your app.
 
@@ -200,7 +200,7 @@ Run project tests before starting to develop
 
 .. code:: shell
 
-    $ python manage.py generate --app products --diagram sage_painless/tests/diagrams/product_diagram.json
+    $ python manage.py generate --diagram sage_painless/tests/diagrams/product_diagram.json
 
 -  run tests
 

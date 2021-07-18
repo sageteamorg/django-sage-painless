@@ -12,7 +12,7 @@ this app)
 
 .. code:: shell
 
-    $ python manage.py generate --app products --diagram <path to diagram>
+    $ python manage.py generate --diagram <path to diagram>
 
 Here system will ask you what you want to generate for your app.
 Questions:
@@ -61,7 +61,7 @@ If you generated api you have to add app urls to urls.py:
       ...
     ]
 
-If you set cache support but you did not dockerize project add CACHES to your settings:
+If you set cache support add CACHES to your settings:
 
 .. code:: python
 
