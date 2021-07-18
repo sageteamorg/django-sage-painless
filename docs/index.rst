@@ -6,30 +6,33 @@
 Welcome to django-sage-painless's documentation!
 ================================================
 
+.. |br| raw:: html
+
+   <br />
+
 .. image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true
    :target: https://sageteam.org/
    :alt: SageTeam
 
-.. image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi_0.0.8.png?raw=true
+|br|
+
+.. image:: https://img.shields.io/pypi/v/django-sage-painless
    :target: https://pypi.org/project/django-sage-painless/
    :alt: PyPI release
 
-.. image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_python-02.png?raw=true
+.. image:: https://img.shields.io/pypi/pyversions/django-sage-painless
    :target: https://pypi.org/project/django-sage-painless/
    :alt: Supported Python versions
 
-.. image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_django.png?raw=true
+.. image:: https://img.shields.io/pypi/djversions/django-sage-painless
    :target: https://pypi.org/project/django-sage-painless/
    :alt: Supported Django versions
 
-.. image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_docs.png?raw=true
+.. image:: https://img.shields.io/readthedocs/django-sage-painless
    :target: https://django-sage-painless.readthedocs.io/
    :alt: Documentation
 
-.. image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_test.png?raw=true
-   :target: https://github.com/sageteam-org/django-sage-painless
-   :alt: Test
-
+|br|
 
 This app supports the following combinations of Django and Python:
 

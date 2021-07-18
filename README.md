@@ -4,11 +4,11 @@
 ##### The Latest version of [django-sage-painless](https://django-sage-painless.readthedocs.io/) documentation
 
 ![SageTeam](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true "SageTeam")
-![PyPI release](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi_0.0.8.png?raw=true "django-sage-painless")
-![Supported Python versions](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_python-02.png?raw=true "django-sage-painless")
-![Supported Django versions](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_django.png?raw=true "django-sage-painless")
-![Documentation](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_docs.png?raw=true "django-sage-painless")
-![Test](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_test.png?raw=true "django-sage-painless")
+
+![PyPI release](https://img.shields.io/pypi/v/django-sage-painless "django-sage-painless")
+![Supported Python versions](https://img.shields.io/pypi/pyversions/django-sage-painless "django-sage-painless")
+![Supported Django versions](https://img.shields.io/pypi/djversions/django-sage-painless "django-sage-painless")
+![Documentation](https://img.shields.io/readthedocs/django-sage-painless "django-sage-painless")
 
 - [Project Detail](#project-detail)
 - [Git Rules](#git-rules)

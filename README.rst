@@ -4,8 +4,10 @@ Django Sage Painless
 django-sage-painless is a useful package based on Django Web Framework & Django Rest Framework for high-level and rapid web development.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-|SageTeam| |PyPI release| |Supported Python versions| |Supported Django
-versions| |Documentation| |Test|
+|SageTeam|
+
+|PyPI release| |Supported Python versions| |Supported Django
+versions| |Documentation|
 
 -  `Project Detail <#project-detail>`__
 -  `Git Rules <#git-rules>`__
@@ -217,15 +219,13 @@ Team
 
 .. |SageTeam| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true
             :alt: SageTeam
-.. |PyPI release| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_pypi_0.0.8.png?raw=true
+.. |PyPI release| image:: https://img.shields.io/pypi/v/django-sage-painless
             :alt: django-sage-painless
-.. |Supported Python versions| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_python-02.png?raw=true
+.. |Supported Python versions| image:: https://img.shields.io/pypi/pyversions/django-sage-painless
             :alt: django-sage-painless
-.. |Supported Django versions| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_django.png?raw=true
+.. |Supported Django versions| image:: https://img.shields.io/pypi/djversions/django-sage-painless
             :alt: django-sage-painless
-.. |Documentation| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_docs.png?raw=true
-            :alt: django-sage-painless
-.. |Test| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_test.png?raw=true
+.. |Documentation| image:: https://img.shields.io/readthedocs/django-sage-painless
             :alt: django-sage-painless
 .. |sepehr| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true
             :height: 230px
