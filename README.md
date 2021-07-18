@@ -1,7 +1,16 @@
 # Django Sage Painless
-#### django-sage-painless is a useful package based on Django Web Framework & Django Rest Framework for high-level and rapid web development.
 
-##### The Latest version of [django-sage-painless](https://django-sage-painless.readthedocs.io/) documentation
+The [django-sage-painless](https://github.com/sageteam-org/django-sage-painless) is a valuable package based on Django Web Framework & Django Rest Framework for high-level and rapid web development. The introduced package generates Django applications. After completing many projects, we concluded that any basic project and essential part is its database structure. You can give the database schema in this package and get some parts of the Django application, such as API, models, admin, signals, model cache, setting configuration, mixins, etc. All of these capabilities come with a unit test. So you no longer have to worry about the simple parts of Django, and now you can write your advanced services in Django. The django-sage-painless dramatically speeds up the initial development of your projects. Documentation of this package is available in [readthedocs](https://django-sage-painless.readthedocs.io/).
+
+## Vision
+
+However, we intend to make it possible to use it in projects that are in-progress.
+
+## Why Painless
+
+We used the name painless instead of the Django code generator because this package allows you to reach your goals with less effort.
+
+&nbsp;
 
 ![SageTeam](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true "SageTeam")
 
@@ -18,24 +27,19 @@
 
 ## Project Detail
 
-You can find all technologies we used in our project into these files:
-* Version: 1.0.0
-* Frameworks: 
-  - Django 3.2.4
-* Libraries:
-  - Django rest framework 3.12.4
-  - Jinja2 3.0.1
-* Language: Python 3.9.4
+- Version: 0.3.2
+- Language: Python > 3.6
+- Framework: Django > 3.1
 
 ## Git Rules
 
-Sage team Git Rules Policy is available here:
+S.A.G.E. team Git Rules Policy is available here:
 
-- [Sage Git Policy](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
+- [S.A.G.E. Git Policy](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
 
 ## Getting Started
 
-Before creating django project you must first create virtualenv.
+Before creating Djagno project you must first create virtualenv.
 
 ``` shell
 $ python3.9 -m pip install virtualenv
@@ -89,7 +93,9 @@ $ pip install django-sage-painless
 
 Then add 'sage_painless' to INSTALLED_APPS in settings.py
 
-These apps should be in your INSTALLED_APPS:
+**TIP:** You do not need to install the following packages unless you request to automatically generate an API or API documentation.
+
+However, you can add following apps in your INSTALLED_APPS:
 
 - 'rest_framework'
 - 'drf_yasg'
@@ -106,10 +112,9 @@ INSTALLED_APPS = [
 
 ## Usage
 
-For generating a whole project you just need a diagram.
-diagram is a json file that contains information about database tables.
+To generate an Django app you just need a diagram in JSON format. diagram is a json file that contains information about database tables.
 
-[you can find examples of diagram file here](sage_painless/docs/diagrams)
+[Diagram examples](sage_painless/docs/diagrams)
 
 start to generate
 (it is required for development. you will run tests on this app)
@@ -146,6 +151,7 @@ $ python manage.py test products
 ```shell
 $ python manage.py runserver
 ```
+
 - Rest API documentation is available at `localhost:8000/api/doc/`
   
 - For support Rest API doc add this part to your urls.py
@@ -173,7 +179,7 @@ urlpatterns = [
 
 - Rest API documentation is available at `localhost:8000/api/doc/`
 
-## Contribute
+## How to Contribute
 
 Run project tests before starting to develop
 
@@ -188,6 +194,7 @@ INSTALLED_APPS = [
   'products',
 ]
 ```
+
 - you have to generate everything for this app
   
 - diagram file is available here: [Diagram](sage_painless/tests/diagrams/product_diagram.json)
@@ -205,4 +212,4 @@ $ python manage.py test sage_painless
 ## Team
 | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true" width="230px" height="230px" alt="Sepehr Akbarzadeh">](https://github.com/sepehr-akbarzadeh) | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true" width="225px" height="340px" alt="Mehran Rahmanzadeh">](https://github.com/mrhnz) |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Sepehr Akbarazadeh](https://github.com/sepehr-akbarzadeh)                                                                                                             | [Mehran Rahmanzadeh](https://github.com/mrhnz)                                                                                                       |
+| [Sepehr Akbarazadeh Maintainer](https://github.com/sepehr-akbarzadeh)                                                                                                             | [Mehran Rahmanzadeh Maintainer](https://github.com/mrhnz)                                                                                                       |
