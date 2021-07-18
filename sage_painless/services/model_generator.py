@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from django.conf import settings
+from django.core import management
 
 from sage_painless.classes.field import Field
 from sage_painless.classes.model import Model
@@ -14,29 +15,26 @@ from sage_painless.utils.pep8_service import Pep8
 from sage_painless import templates
 
 class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
-    """
-    Read models data from a Json file and stream it to app_name/models.py
-    """
+    """Read models data from a Json file and stream it to app_name/models.py"""
 
+    MODELS_KEYWORD = 'models'
+    APPS_KEYWORD = 'apps'
     FIELDS_KEYWORD = 'fields'
     TYPE_KEYWORD = 'type'
     VALIDATORS_KEYWORD = 'validators'
     FUNC_KEYWORD = 'func'
     ARG_KEYWORD = 'arg'
 
-    def __init__(self, app_label):
-        self.app_label = app_label
+    def __init__(self):
+        """init"""
+        pass
 
     def get_table_fields(self, table):
-        """
-        extract fields
-        """
+        """extract fields"""
         return table.get(self.FIELDS_KEYWORD)
 
     def extract_models(self, diagram):
-        """
-        extract models
-        """
+        """extract models"""
         models = list()
         signals = list()
         for table_name in diagram.keys():
@@ -78,9 +76,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
         return models, signals
 
     def check_validator_support(self, models):
-        """
-        check models have validator
-        """
+        """check models have validator"""
         for model in models:
             for field in model.fields:
                 if len(field.validators) > 0:
@@ -89,9 +85,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
         return False
 
     def check_signal_support(self, models):
-        """
-        check models have one2one
-        """
+        """check models have one2one"""
         for model in models:
             for field in model.fields:
                 if field.type == 'OneToOneField':
@@ -100,9 +94,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
         return False
 
     def get_fk_model_names(self, models):
-        """
-        check models have fk,m2m,one2one,... and return model names
-        """
+        """check models have fk,m2m,one2one,... and return model names"""
         model_names = list()
         for model in models:
             for field in model.fields:
@@ -111,126 +103,133 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return model_names
 
-    def create_dir_is_not_exists(self, directory):
-        if not os.path.exists(f'{settings.BASE_DIR}/{self.app_label}/{directory}'):
-            os.mkdir(f'{settings.BASE_DIR}/{self.app_label}/{directory}')
+    def create_dir_if_not_exists(self, directory, app_name):
+        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/{directory}'):
+            os.mkdir(f'{settings.BASE_DIR}/{app_name}/{directory}')
 
-    def create_file_is_not_exists(self, file_path):
+    def create_file_if_not_exists(self, file_path):
         if not os.path.isfile(file_path):
             file = Path(file_path)
             file.touch(exist_ok=True)
 
-    def delete_file_is_exists(self, file_path):
+    def delete_file_if_exists(self, file_path):
         if os.path.isfile(file_path):
             os.remove(file_path)
 
+    def create_app_if_not_exists(self, app_name):
+        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
+            management.call_command('startapp', app_name)
+
     def generate_models(self, diagram_path, cache_support=False):
-        """
-        stream models to app_name/models.py
-        """
+        """stream models to app_name/models.py"""
         diagram = self.load_json(diagram_path)
-        models, signals = self.extract_models(diagram)
 
-        # initialize
-        self.create_dir_is_not_exists('models')
-        self.create_file_is_not_exists(f'{settings.BASE_DIR}/{self.app_label}/models/__init__.py')
-        self.delete_file_is_exists(f'{settings.BASE_DIR}/{self.app_label}/models.py')
+        for app_name in diagram.get(self.APPS_KEYWORD).keys():
+            models_diagram = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)  # get models data for current app
+            models, signals = self.extract_models(models_diagram)  # extract models and signals from diagram data
 
-        # mixins & services
-        if cache_support:
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/mixins.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'mixins.txt'),
-                data={
-                    'cache_support': cache_support
-                }
-            )
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/services.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'services.txt'),
-                data={
-                    'cache_support': cache_support
-                }
-            )
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/mixins.py')
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/services.py')
+            # initialize
+            self.create_app_if_not_exists(app_name)
+            self.create_dir_if_not_exists('models', app_name)
+            self.create_file_if_not_exists(f'{settings.BASE_DIR}/{app_name}/models/__init__.py')
+            self.delete_file_if_exists(f'{settings.BASE_DIR}/{app_name}/models.py')
 
-        # models
-        for model in models:
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/models/{model.name.lower()}.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'models.txt'),
-                data={
-                    'app_name': self.app_label,
-                    'models': [model],
-                    'validator_support': self.check_validator_support([model]),
-                    'cache_support': cache_support,
-                    'fk_models': self.get_fk_model_names([model])
-                }
-            )
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/models/{model.name.lower()}.py')
+            # mixins & services
+            if cache_support:
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/mixins.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'mixins.txt'),
+                    data={
+                        'cache_support': cache_support
+                    }
+                )
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/services.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'services.txt'),
+                    data={
+                        'cache_support': cache_support
+                    }
+                )
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/mixins.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/services.py')
 
-        # signals
-        if self.check_signal_support(models):
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/signals.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'signals.txt'),
-                data={
-                    'app_name': self.app_label,
-                    'models': models,
-                    'signals': signals,
-                    'signal_support': True,
-                    'cache_support': cache_support
-                }
-            )
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/__init__.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
-                data={
-                    'app_name': self.app_label
-                }
-            )
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/apps.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
-                data={
-                    'app_name': self.app_label,
-                    'signal_support': True
-                }
-            )
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/signals.py')
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/apps.py')
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/__init__.py')
+            # models
+            for model in models:
+                model_file_name = f'{model.name.lower()}.py'  # model file name is lower of model name (e.g Category -> category.py)
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/models/{model_file_name}',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'models.txt'),
+                    data={
+                        'app_name': app_name,
+                        'models': [model],
+                        'validator_support': self.check_validator_support([model]),
+                        'cache_support': cache_support,
+                        'fk_models': self.get_fk_model_names([model])
+                    }
+                )
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/models/{model_file_name}')
 
-        elif cache_support:
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/signals.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'signals.txt'),
-                data={
-                    'app_name': self.app_label,
-                    'models': models,
-                    'signals': signals,
-                    'signal_support': True,
-                    'cache_support': cache_support
-                }
-            )
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/__init__.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
-                data={
-                    'app_name': self.app_label
-                }
-            )
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{self.app_label}/apps.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
-                data={
-                    'app_name': self.app_label,
-                    'signal_support': True
-                }
-            )
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/signals.py')
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/apps.py')
-            self.fix_pep8(f'{settings.BASE_DIR}/{self.app_label}/__init__.py')
+            # signals
+            if self.check_signal_support(models):
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/signals.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'signals.txt'),
+                    data={
+                        'app_name': app_name,
+                        'models': models,
+                        'signals': signals,
+                        'signal_support': True,
+                        'cache_support': cache_support
+                    }
+                )
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/__init__.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
+                    data={
+                        'app_name': app_name
+                    }
+                )
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/apps.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
+                    data={
+                        'app_name': app_name,
+                        'signal_support': True
+                    }
+                )
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/signals.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/apps.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/__init__.py')
+
+            elif cache_support:
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/signals.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'signals.txt'),
+                    data={
+                        'app_name': app_name,
+                        'models': models,
+                        'signals': signals,
+                        'signal_support': True,
+                        'cache_support': cache_support
+                    }
+                )
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/__init__.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
+                    data={
+                        'app_name': app_name
+                    }
+                )
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/apps.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
+                    data={
+                        'app_name': app_name,
+                        'signal_support': True
+                    }
+                )
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/signals.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/apps.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/__init__.py')
 
         return True, 'Models Generated Successfully.'
