@@ -4,40 +4,107 @@ Diagram
 Template
 ----------------
 
-Diagram is a json file that contains database tables and settings for admin panel
-it is the only thing that you need to generate a whole project
+Diagram is a json file that contains database tables, settings for admin panel and API configs
+It is the only thing you need to generate a whole project
 
 the template of the diagram is something like this:
 
 .. code:: python
 
     {
-      "Category": { # table name
-        "fields": {
-          "title": {  # field name
-            "type": "character", # field type
-            "max_length": 255, # field arguments
-            "unique": true
+    "apps": {
+      "ecommerce": {
+       "models": {
+        "Category": {
+          "fields": {
+              "title": {
+                "type": "character",
+                "max_length": 255,
+                "unique": true
+              },
+              "created": {
+                "type": "datetime",
+                "auto_now_add": true
+              },
+              "modified": {
+                "type": "datetime",
+                "auto_now": true
+              }
+            },
+            "admin": {
+              "list_display": ["title", "created", "modified"],
+              "list_filter": ["created", "modified"],
+              "search_fields": ["title"]
+            },
+            "api": {
+              "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+            }
           },
-          "created": {
-            "type": "datetime",
-            "auto_now_add": true
+          "Product": {
+            "fields": {
+              "title": {
+                "type": "character",
+                "max_length": 255
+              },
+              "description": {
+                "type": "character",
+                "max_length": 255
+              },
+              "price": {
+                "type": "integer"
+              },
+              "category": {
+                "type": "fk",
+                "to": "Category",
+                "related_name": "'products'",
+                "on_delete": "CASCADE"
+              },
+              "created": {
+                "type": "datetime",
+                "auto_now_add": true
+              },
+              "modified": {
+                "type": "datetime",
+                "auto_now": true
+              }
+            },
+            "admin": {
+              "list_display": ["title", "price", "category"],
+              "list_filter": ["created", "modified"],
+              "search_fields": ["title", "description"],
+              "raw_id_fields": ["category"]
+            }
           },
-          "modified": {
-            "type": "datetime",
-            "auto_now": true
+        "Discount": {
+          "fields": {
+            "product": {
+              "type": "fk",
+              "to": "Product",
+              "related_name": "'discounts'",
+              "on_delete": "CASCADE"
+            },
+            "discount": {
+              "type": "integer"
+            },
+            "created": {
+              "type": "datetime",
+              "auto_now_add": true
+            },
+            "modified": {
+              "type": "datetime",
+              "auto_now": true
+            }
+          },
+          "admin": {
+            "list_display": ["discount", "product", "created", "modified"],
+            "list_filter": ["created", "modified"],
+            "raw_id_fields": ["product"]
           }
-        },
-        "admin": { # django admin settings
-          "list_display": ["title", "created", "modified"],
-          "list_filter": ["created", "modified"],
-          "search_fields": ["title"]
-        },
-        "api": { # API settings (default is all model mixins)
-          "methods": ["get", "post"]
         }
       }
     }
+  }
+}
 
 field types are:
 
@@ -88,100 +155,142 @@ Examples
 
 example 1:
 
+2 apps (ecommerce & discount)
+
 .. code:: json
 
     {
-      "Category": {
-        "fields": {
-          "title": {
-            "type": "character",
-            "max_length": 255,
-            "unique": true
-          },
-          "created": {
-            "type": "datetime",
-            "auto_now_add": true
-          },
-          "modified": {
-            "type": "datetime",
-            "auto_now": true
+      "apps": {
+        "ecommerce": {
+          "models": {
+            "Category": {
+              "fields": {
+                "title": {
+                  "type": "character",
+                  "max_length": 255,
+                  "unique": true
+                },
+                "created": {
+                  "type": "datetime",
+                  "auto_now_add": true
+                },
+                "modified": {
+                  "type": "datetime",
+                  "auto_now": true
+                }
+              },
+              "admin": {
+                "list_display": [
+                  "title",
+                  "created",
+                  "modified"
+                ],
+                "list_filter": [
+                  "created",
+                  "modified"
+                ],
+                "search_fields": [
+                  "title"
+                ]
+              },
+              "api": {
+                "methods": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE"
+                ]
+              }
+            },
+            "Product": {
+              "fields": {
+                "title": {
+                  "type": "character",
+                  "max_length": 255
+                },
+                "description": {
+                  "type": "character",
+                  "max_length": 255
+                },
+                "price": {
+                  "type": "integer"
+                },
+                "category": {
+                  "type": "fk",
+                  "to": "Category",
+                  "related_name": "'products'",
+                  "on_delete": "CASCADE"
+                },
+                "created": {
+                  "type": "datetime",
+                  "auto_now_add": true
+                },
+                "modified": {
+                  "type": "datetime",
+                  "auto_now": true
+                }
+              },
+              "admin": {
+                "list_display": [
+                  "title",
+                  "price",
+                  "category"
+                ],
+                "list_filter": [
+                  "created",
+                  "modified"
+                ],
+                "search_fields": [
+                  "title",
+                  "description"
+                ],
+                "raw_id_fields": [
+                  "category"
+                ]
+              }
+            }
           }
         },
-        "admin": {
-          "list_display": ["title", "created", "modified"],
-          "list_filter": ["created", "modified"],
-          "search_fields": ["title"]
-        },
-        "api": { # API settings
-          "methods": ["get"]
-        }
-      },
-      "Product": {
-        "fields": {
-          "title": {
-            "type": "character",
-            "max_length": 255
-          },
-          "description": {
-            "type": "character",
-            "max_length": 255
-          },
-          "price": {
-            "type": "integer"
-          },
-          "category": {
-            "type": "fk",
-            "to": "Category",
-            "related_name": "'products'",
-            "on_delete": "CASCADE"
-          },
-          "created": {
-            "type": "datetime",
-            "auto_now_add": true
-          },
-          "modified": {
-            "type": "datetime",
-            "auto_now": true
+        "discount": {
+          "models": {
+            "Discount": {
+              "fields": {
+                "product": {
+                  "type": "fk",
+                  "to": "Product",
+                  "related_name": "'discounts'",
+                  "on_delete": "CASCADE"
+                },
+                "discount": {
+                  "type": "integer"
+                },
+                "created": {
+                  "type": "datetime",
+                  "auto_now_add": true
+                },
+                "modified": {
+                  "type": "datetime",
+                  "auto_now": true
+                }
+              },
+              "admin": {
+                "list_display": [
+                  "discount",
+                  "product",
+                  "created",
+                  "modified"
+                ],
+                "list_filter": [
+                  "created",
+                  "modified"
+                ],
+                "raw_id_fields": [
+                  "product"
+                ]
+              }
+            }
           }
-        },
-        "admin": {
-          "list_display": ["title", "price", "category"],
-          "list_filter": ["created", "modified"],
-          "search_fields": ["title", "description"],
-          "raw_id_fields": ["category"]
-        },
-        "api": { # API settings
-          "methods": ["get"]
-        }
-      },
-      "Discount": {
-        "fields": {
-          "product": {
-            "type": "one2one",
-            "to": "Product",
-            "related_name": "'discounts'",
-            "on_delete": "CASCADE"
-          },
-          "discount": {
-            "type": "integer",
-            "default": 0
-          },
-          "created": {
-            "type": "datetime",
-            "auto_now_add": true
-          },
-          "modified": {
-            "type": "datetime",
-            "auto_now": true
-          }
-        },
-        "admin": {
-          "list_display": ["discount", "product", "created", "modified"],
-          "list_filter": ["created", "modified"],
-          "raw_id_fields": ["product"]
-        },
-        "api": { # API settings
-          "methods": ["get"]
         }
       }
     }
@@ -189,50 +298,85 @@ example 1:
 
 example 2:
 
+1 app (articles)
+
 .. code:: json
 
     {
-      "Article": {
-        "fields": {
-          "title": {
-            "type": "character",
-            "max_length": 120
-          },
-          "body": {
-            "type": "character",
-            "max_length": 255
-          },
-          "slug": {
-            "type": "slug",
-            "max_length": 255,
-            "unique": true
-          },
-          "created": {
-            "type": "datetime",
-            "auto_now_add": true
-          },
-          "publish": {
-            "type": "datetime",
-            "null": true,
-            "blank": true
-          },
-          "updated": {
-            "type": "datetime",
-            "auto_now": true
-          },
-          "options": {
-            "type": "character",
-            "max_length": 2,
-            "choices": [["dr", "Draft"], ["pb", "public"], ["sn", "soon"]]
+      "apps": {
+        "articles": {
+          "models": {
+            "Article": {
+              "fields": {
+                "title": {
+                  "type": "character",
+                  "max_length": 120
+                },
+                "body": {
+                  "type": "character",
+                  "max_length": 255
+                },
+                "slug": {
+                  "type": "slug",
+                  "max_length": 255,
+                  "unique": true
+                },
+                "created": {
+                  "type": "datetime",
+                  "auto_now_add": true
+                },
+                "publish": {
+                  "type": "datetime",
+                  "null": true,
+                  "blank": true
+                },
+                "updated": {
+                  "type": "datetime",
+                  "auto_now": true
+                },
+                "options": {
+                  "type": "character",
+                  "max_length": 2,
+                  "choices": [
+                    [
+                      "dr",
+                      "Draft"
+                    ],
+                    [
+                      "pb",
+                      "public"
+                    ],
+                    [
+                      "sn",
+                      "soon"
+                    ]
+                  ]
+                }
+              },
+              "admin": {
+                "list_display": [
+                  "title",
+                  "created",
+                  "updated"
+                ],
+                "list_filter": [
+                  "created",
+                  "updated",
+                  "options"
+                ],
+                "search_fields": [
+                  "title",
+                  "body"
+                ]
+              },
+              "api": {
+                "methods": [
+                  "get",
+                  "post"
+                ]
+              }
+            }
           }
-        },
-        "admin": {
-          "list_display": ["title", "created", "updated"],
-          "list_filter": ["created", "updated", "options"],
-          "search_fields": ["title", "body"]
-        },
-        "api": { # API settings
-          "methods": ["get", "post"]
         }
       }
     }

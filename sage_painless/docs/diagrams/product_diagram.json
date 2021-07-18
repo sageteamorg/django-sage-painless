@@ -4,64 +4,95 @@
       "models": {
         "Category": {
           "fields": {
-              "title": {
-                "type": "character",
-                "max_length": 255,
-                "unique": true
-              },
-              "created": {
-                "type": "datetime",
-                "auto_now_add": true
-              },
-              "modified": {
-                "type": "datetime",
-                "auto_now": true
-              }
+            "title": {
+              "type": "character",
+              "max_length": 255,
+              "unique": true
             },
-            "admin": {
-              "list_display": ["title", "created", "modified"],
-              "list_filter": ["created", "modified"],
-              "search_fields": ["title"]
+            "created": {
+              "type": "datetime",
+              "auto_now_add": true
             },
-            "api": {
-              "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+            "modified": {
+              "type": "datetime",
+              "auto_now": true
             }
           },
-          "Product": {
-            "fields": {
-              "title": {
-                "type": "character",
-                "max_length": 255
-              },
-              "description": {
-                "type": "character",
-                "max_length": 255
-              },
-              "price": {
-                "type": "integer"
-              },
-              "category": {
-                "type": "fk",
-                "to": "Category",
-                "related_name": "'products'",
-                "on_delete": "CASCADE"
-              },
-              "created": {
-                "type": "datetime",
-                "auto_now_add": true
-              },
-              "modified": {
-                "type": "datetime",
-                "auto_now": true
-              }
+          "admin": {
+            "list_display": [
+              "title",
+              "created",
+              "modified"
+            ],
+            "list_filter": [
+              "created",
+              "modified"
+            ],
+            "search_fields": [
+              "title"
+            ]
+          },
+          "api": {
+            "methods": [
+              "GET",
+              "POST",
+              "PUT",
+              "PATCH",
+              "DELETE"
+            ]
+          }
+        },
+        "Product": {
+          "fields": {
+            "title": {
+              "type": "character",
+              "max_length": 255
             },
-            "admin": {
-              "list_display": ["title", "price", "category"],
-              "list_filter": ["created", "modified"],
-              "search_fields": ["title", "description"],
-              "raw_id_fields": ["category"]
+            "description": {
+              "type": "character",
+              "max_length": 255
+            },
+            "price": {
+              "type": "integer"
+            },
+            "category": {
+              "type": "fk",
+              "to": "Category",
+              "related_name": "'products'",
+              "on_delete": "CASCADE"
+            },
+            "created": {
+              "type": "datetime",
+              "auto_now_add": true
+            },
+            "modified": {
+              "type": "datetime",
+              "auto_now": true
             }
           },
+          "admin": {
+            "list_display": [
+              "title",
+              "price",
+              "category"
+            ],
+            "list_filter": [
+              "created",
+              "modified"
+            ],
+            "search_fields": [
+              "title",
+              "description"
+            ],
+            "raw_id_fields": [
+              "category"
+            ]
+          }
+        }
+      }
+    },
+    "discount": {
+      "models": {
         "Discount": {
           "fields": {
             "product": {
@@ -83,9 +114,19 @@
             }
           },
           "admin": {
-            "list_display": ["discount", "product", "created", "modified"],
-            "list_filter": ["created", "modified"],
-            "raw_id_fields": ["product"]
+            "list_display": [
+              "discount",
+              "product",
+              "created",
+              "modified"
+            ],
+            "list_filter": [
+              "created",
+              "modified"
+            ],
+            "raw_id_fields": [
+              "product"
+            ]
           }
         }
       }

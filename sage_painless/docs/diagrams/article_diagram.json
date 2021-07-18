@@ -1,42 +1,78 @@
 {
-  "Article": {
-    "fields": {
-      "title": {
-        "type": "character",
-        "max_length": 120
-      },
-      "body": {
-        "type": "character",
-        "max_length": 255
-      },
-      "slug": {
-        "type": "slug",
-        "max_length": 255,
-        "unique": true
-      },
-      "created": {
-        "type": "datetime",
-        "auto_now_add": true
-      },
-      "publish": {
-        "type": "datetime",
-        "null": true,
-        "blank": true
-      },
-      "updated": {
-        "type": "datetime",
-        "auto_now": true
-      },
-      "options": {
-        "type": "character",
-        "max_length": 2,
-        "choices": [["dr", "Draft"], ["pb", "public"], ["sn", "soon"]]
+  "apps": {
+    "articles": {
+      "models": {
+        "Article": {
+          "fields": {
+            "title": {
+              "type": "character",
+              "max_length": 120
+            },
+            "body": {
+              "type": "character",
+              "max_length": 255
+            },
+            "slug": {
+              "type": "slug",
+              "max_length": 255,
+              "unique": true
+            },
+            "created": {
+              "type": "datetime",
+              "auto_now_add": true
+            },
+            "publish": {
+              "type": "datetime",
+              "null": true,
+              "blank": true
+            },
+            "updated": {
+              "type": "datetime",
+              "auto_now": true
+            },
+            "options": {
+              "type": "character",
+              "max_length": 2,
+              "choices": [
+                [
+                  "dr",
+                  "Draft"
+                ],
+                [
+                  "pb",
+                  "public"
+                ],
+                [
+                  "sn",
+                  "soon"
+                ]
+              ]
+            }
+          },
+          "admin": {
+            "list_display": [
+              "title",
+              "created",
+              "updated"
+            ],
+            "list_filter": [
+              "created",
+              "updated",
+              "options"
+            ],
+            "search_fields": [
+              "title",
+              "body"
+            ]
+          },
+          "api": {
+            "methods": [
+              "get",
+              "post"
+            ]
+          }
+        }
       }
-    },
-    "admin": {
-      "list_display": ["title", "created", "updated"],
-      "list_filter": ["created", "updated", "options"],
-      "search_fields": ["title", "body"]
     }
   }
 }
