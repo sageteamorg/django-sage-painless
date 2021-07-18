@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2021-07-18
+### Added
+- Added multi app generation support
+- Add m2m field
+
 ## [1.2.1] - 2021-07-17
 ### Fixed
 - Fixed management command
