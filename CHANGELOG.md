@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [1.3.0] - 2021-07-18
 ### Added
 - Added multi app generation support
-- Add m2m field
+- Added m2m field
 
 ## [1.2.1] - 2021-07-17
 ### Fixed
@@ -38,3 +38,4 @@ All notable changes to this project will be documented in this file.
 [1.1.1]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.2.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.2.1]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.3.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
