@@ -15,9 +15,9 @@ class TestModelGenerator(TestCase):
     def setUp(self) -> None:
         self.json_handler = JsonHandler()
         self.app_name = 'products'
-        self.model_generator = ModelGenerator(self.app_name)
+        self.model_generator = ModelGenerator()
         self.diagram_path = os.path.abspath(diagrams.__file__).replace('__init__.py', 'product_diagram.json')
-        self.diagram = self.json_handler.load_json(self.diagram_path)
+        self.diagram = self.json_handler.load_json(self.diagram_path).get('apps').get(self.app_name).get('models')
         self.field = Field()
         self.field_types = self.field.field_types
 

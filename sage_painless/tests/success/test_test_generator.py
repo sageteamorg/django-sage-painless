@@ -1,7 +1,6 @@
 import os
 
 from django.test import TestCase
-from django.conf import settings
 
 from sage_painless.classes.field import Field
 from sage_painless.services.test_generator import TestGenerator
@@ -14,9 +13,9 @@ class TestTestGenerator(TestCase):
     def setUp(self) -> None:
         self.json_handler = JsonHandler()
         self.app_name = 'products'
-        self.test_generator = TestGenerator(self.app_name)
+        self.test_generator = TestGenerator()
         self.diagram_path = os.path.abspath(diagrams.__file__).replace('__init__.py', 'product_diagram.json')
-        self.diagram = self.json_handler.load_json(self.diagram_path)
+        self.diagram = self.json_handler.load_json(self.diagram_path).get('apps').get(self.app_name).get('models')
         self.field = Field()
         self.field_types = self.field.field_types
 

@@ -15,9 +15,9 @@ class TestAdminGenerator(TestCase):
     def setUp(self) -> None:
         self.json_handler = JsonHandler()
         self.app_name = 'products'
-        self.admin_generator = AdminGenerator(self.app_name)
+        self.admin_generator = AdminGenerator()
         self.diagram_path = os.path.abspath(diagrams.__file__).replace('__init__.py', 'product_diagram.json')
-        self.diagram = self.json_handler.load_json(self.diagram_path)
+        self.diagram = self.json_handler.load_json(self.diagram_path).get('apps').get(self.app_name).get('models')
 
     def get_diagram_admins(self, diagram):
         admins = list()
@@ -59,7 +59,7 @@ class TestAdminGenerator(TestCase):
     def test_validate_diagram(self):
         app_models = self.admin_generator.get_app_models(self.app_name)
         diagram_models = self.admin_generator.get_diagram_models(self.diagram)
-        check, diff = self.admin_generator.validate_diagram(self.diagram)
+        check, diff = self.admin_generator.validate_diagram(self.diagram, self.app_name)
         test_diff = list(set(diagram_models).symmetric_difference(set(app_models)))
         if len(test_diff) == 0:
             self.assertTrue(check)
