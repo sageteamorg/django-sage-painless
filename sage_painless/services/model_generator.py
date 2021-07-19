@@ -1,4 +1,5 @@
 import os
+import time
 from pathlib import Path
 
 from django.conf import settings
@@ -120,8 +121,13 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
         if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
             management.call_command('startapp', app_name)
 
+    def calculate_execute_time(self, start, end):
+        """calculate time taken"""
+        return (end - start) * 1000.0
+
     def generate_models(self, diagram_path, cache_support=False):
         """stream models to app_name/models.py"""
+        start_time = time.time()
         diagram = self.load_json(diagram_path)
 
         for app_name in diagram.get(self.APPS_KEYWORD).keys():
@@ -231,5 +237,5 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
                 self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/signals.py')
                 self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/apps.py')
                 self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/__init__.py')
-
-        return True, 'Models Generated Successfully.'
+        end_time = time.time()
+        return True, 'models generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))

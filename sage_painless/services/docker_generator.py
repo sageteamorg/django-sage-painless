@@ -1,4 +1,5 @@
 import os
+import time
 
 from django.conf import settings
 
@@ -32,11 +33,15 @@ class DockerGenerator(JinjaHandler):
         self.db_user = db_user
         self.db_pass = db_pass
 
+    def calculate_execute_time(self, start, end):
+        """calculate time taken"""
+        return (end - start) * 1000.0
+
     def generate(self):
         """
         stream docker configs to root
         """
-
+        start_time = time.time()
         # stream to Dockerfile
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/Dockerfile',
@@ -58,5 +63,5 @@ class DockerGenerator(JinjaHandler):
                 'rabbitmq_pass': self.rabbtmq_pass
             }
         )
-
-        return True, 'Docker config Generated Successfully.'
+        end_time = time.time()
+        return True, 'Docker config generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))

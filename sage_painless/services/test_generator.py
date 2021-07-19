@@ -1,4 +1,5 @@
 import os
+import time
 from pathlib import Path
 
 from django.conf import settings
@@ -96,10 +97,13 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
             management.call_command('startapp', app_name)
 
+    def calculate_execute_time(self, start, end):
+        """calculate time taken"""
+        return (end - start) * 1000.0
+
     def generate_tests(self, diagram_path):
-        """
-        stream tests to app_name/tests/*.py
-        """
+        """stream tests to app_name/tests/*.py"""
+        start_time = time.time()
         diagram = self.load_json(diagram_path)
         for app_name in diagram.get(self.APPS_KEYWORD).keys():
             models_diagram = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)  # get models data for current app
@@ -133,5 +137,5 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
 
             self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/tests/test_model.py')
             self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/tests/test_api.py')
-
-        return True, 'Tests Generated Successfully.'
+        end_time = time.time()
+        return True, 'tests generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))

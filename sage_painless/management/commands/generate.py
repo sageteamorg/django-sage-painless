@@ -77,9 +77,9 @@ class Command(BaseCommand, JsonHandler):
                     check, message = model_generator.generate_models(diagram_path)
 
                 if check:
-                    stdout_messages.append(self.style.SUCCESS(f'{app_name}: {message}'))
+                    stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
-                    stdout_messages.append(self.style.ERROR(f'{app_name}: {message}'))
+                    stdout_messages.append(self.style.ERROR(f'{app_name}[INFO]: {message}'))
             else:
                 reporter.add_question_answer(
                     question='create models.py',
@@ -94,9 +94,9 @@ class Command(BaseCommand, JsonHandler):
                 admin_generator = AdminGenerator()
                 check, message = admin_generator.generate(diagram_path)
                 if check:
-                    stdout_messages.append(self.style.SUCCESS(f'{app_name}: {message}'))
+                    stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
-                    stdout_messages.append(self.style.ERROR(f'{app_name}: {message}'))
+                    stdout_messages.append(self.style.ERROR(f'{app_name}[INFO]: {message}'))
             else:
                 reporter.add_question_answer(
                     question='create admin.py',
@@ -140,9 +140,9 @@ class Command(BaseCommand, JsonHandler):
                     check, message = api_generator.generate_api(diagram_path)
 
                 if check:
-                    stdout_messages.append(self.style.SUCCESS(f'{app_name}: {message}'))
+                    stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
-                    stdout_messages.append(self.style.ERROR(f'{app_name}: {message}'))
+                    stdout_messages.append(self.style.ERROR(f'{app_name}[INFO]: {message}'))
             else:
                 reporter.add_question_answer(
                     question='create serializers.py',
@@ -166,9 +166,9 @@ class Command(BaseCommand, JsonHandler):
                 test_generator = TestGenerator()
                 check, message = test_generator.generate_tests(diagram_path)
                 if check:
-                    stdout_messages.append(self.style.SUCCESS(f'{app_name}: {message}'))
+                    stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
-                    stdout_messages.append(self.style.ERROR(f'{app_name}: {message}'))
+                    stdout_messages.append(self.style.ERROR(f'{app_name}[INFO]: {message}'))
             else:
                 reporter.add_question_answer(
                     question='create test_api.py',
@@ -240,9 +240,9 @@ class Command(BaseCommand, JsonHandler):
             check, message = docker_generator.generate()
 
             if check:
-                stdout_messages.append(self.style.SUCCESS(f'deploy: {message}'))
+                stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
             else:
-                stdout_messages.append(self.style.ERROR(f'deploy: {message}'))
+                stdout_messages.append(self.style.ERROR(f'deploy[INFO]: {message}'))
 
         else:
             reporter.add_question_answer(
