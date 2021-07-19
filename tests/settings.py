@@ -14,10 +14,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sage_painless',
-    'rest_framework',
-    'drf_yasg',
-    'django_seed',
-    'products',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
