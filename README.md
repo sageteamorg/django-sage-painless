@@ -18,6 +18,7 @@ We used the name painless instead of the Django code generator because this pack
 ![Supported Python versions](https://img.shields.io/pypi/pyversions/django-sage-painless "django-sage-painless")
 ![Supported Django versions](https://img.shields.io/pypi/djversions/django-sage-painless "django-sage-painless")
 ![Documentation](https://img.shields.io/readthedocs/django-sage-painless "django-sage-painless")
+![Build](https://img.shields.io/appveyor/build/mrhnz/django-sage-painless "django-sage-painless")
 
 - [Project Detail](#project-detail)
 - [Git Rules](#git-rules)

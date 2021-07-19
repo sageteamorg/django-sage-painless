@@ -7,7 +7,7 @@ django-sage-painless is a useful package based on Django Web Framework & Django 
 |SageTeam|
 
 |PyPI release| |Supported Python versions| |Supported Django
-versions| |Documentation|
+versions| |Documentation| |Build|
 
 -  `Project Detail <#project-detail>`__
 -  `Git Rules <#git-rules>`__
@@ -226,6 +226,8 @@ Team
 .. |Supported Django versions| image:: https://img.shields.io/pypi/djversions/django-sage-painless
             :alt: django-sage-painless
 .. |Documentation| image:: https://img.shields.io/readthedocs/django-sage-painless
+            :alt: django-sage-painless
+.. |Build| image:: https://img.shields.io/appveyor/build/mrhnz/django-sage-painless
             :alt: django-sage-painless
 .. |sepehr| image:: https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true
             :height: 230px

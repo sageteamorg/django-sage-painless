@@ -32,6 +32,10 @@ Welcome to django-sage-painless's documentation!
    :target: https://django-sage-painless.readthedocs.io/
    :alt: Documentation
 
+.. image:: https://img.shields.io/appveyor/build/mrhnz/django-sage-painless
+   :target: https://django-sage-painless.readthedocs.io/
+   :alt: Build
+
 |br|
 
 This app supports the following combinations of Django and Python:
