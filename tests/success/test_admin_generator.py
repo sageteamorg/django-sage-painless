@@ -8,7 +8,7 @@ from sage_painless.classes.admin import Admin
 from sage_painless.services.admin_generator import AdminGenerator
 from sage_painless.utils.json_service import JsonHandler
 
-from sage_painless.tests import diagrams
+from tests import diagrams
 
 
 class TestAdminGenerator(TestCase):

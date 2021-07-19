@@ -8,7 +8,7 @@ from sage_painless.utils.json_service import JsonHandler
 
 from sage_painless.classes.field import Field
 
-from sage_painless.tests import diagrams
+from tests import diagrams
 
 
 class TestModelGenerator(TestCase):

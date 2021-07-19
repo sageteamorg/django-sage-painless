@@ -6,7 +6,7 @@ from django.conf import settings
 from sage_painless.services.api_generator import APIGenerator
 from sage_painless.utils.json_service import JsonHandler
 
-from sage_painless.tests import diagrams
+from tests import diagrams
 
 
 class TestAPIGenerator(TestCase):
