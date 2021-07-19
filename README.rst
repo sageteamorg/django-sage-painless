@@ -18,9 +18,7 @@ versions| |Documentation| |Build|
 Project Detail
 --------------
 
-You can find all technologies we used in our project into these files:
-\* Version: 1.0.0 \* Frameworks: - Django 3.2.4 \* Libraries: - Django
-rest framework 3.12.4 - Jinja2 3.0.1 \* Language: Python 3.9.4
+\* Version: 1.3.1 \* Frameworks: - Django > 3.1 \* Language: Python > 3.6
 
 Git Rules
 ---------
