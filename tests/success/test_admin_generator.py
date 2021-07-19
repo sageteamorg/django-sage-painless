@@ -1,7 +1,6 @@
 import os
 
 from django.test import TestCase
-from django.apps import apps
 from django.conf import settings
 
 from sage_painless.classes.admin import Admin
@@ -50,22 +49,6 @@ class TestAdminGenerator(TestCase):
 
     def get_obj_properties(self, obj):
         return vars(obj)
-
-    def test_get_app_models(self):
-        generator_models = self.admin_generator.get_app_models(self.app_name)
-        app_models = [model.__name__ for model in list(apps.get_app_config(self.app_name).get_models())]
-        self.assertListEqual(generator_models, app_models)
-
-    def test_validate_diagram(self):
-        app_models = self.admin_generator.get_app_models(self.app_name)
-        diagram_models = self.admin_generator.get_diagram_models(self.diagram)
-        check, diff = self.admin_generator.validate_diagram(self.diagram, self.app_name)
-        test_diff = list(set(diagram_models).symmetric_difference(set(app_models)))
-        if len(test_diff) == 0:
-            self.assertTrue(check)
-        else:
-            self.assertFalse(check)
-            self.assertListEqual(diff, test_diff)
 
     def test_extract_admin(self):
         admins = self.admin_generator.extract_admin(self.diagram)
