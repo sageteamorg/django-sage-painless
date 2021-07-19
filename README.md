@@ -12,7 +12,7 @@ We used the name painless instead of the Django code generator because this pack
 
 &nbsp;
 
-![SageTeam](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true "SageTeam")
+[![SageTeam](https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/tag_sage.png?raw=true "SageTeam")](http://sageteam.org)
 
 ![License](https://img.shields.io/github/license/sageteam-org/django-sage-painless "django-sage-painless")
 ![PyPI release](https://img.shields.io/pypi/v/django-sage-painless "django-sage-painless")
