@@ -124,3 +124,5 @@ jwt-key.pub
 
 kernel/
 manage.py
+
+docs/sage_painless/
