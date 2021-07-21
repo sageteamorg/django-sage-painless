@@ -6,6 +6,7 @@ from django.conf import settings
 from sage_painless.services.model_generator import ModelGenerator
 from sage_painless.services.admin_generator import AdminGenerator
 from sage_painless.services.api_generator import APIGenerator
+from sage_painless.services.readme_generator import ReadMeGenerator
 from sage_painless.services.test_generator import TestGenerator
 from sage_painless.services.docker_generator import DockerGenerator
 from sage_painless.utils.json_service import JsonHandler
@@ -79,7 +80,7 @@ class Command(BaseCommand, JsonHandler):
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
-                    stdout_messages.append(self.style.ERROR(f'{app_name}[INFO]: {message}'))
+                    stdout_messages.append(self.style.ERROR(f'{app_name}[ERROR]: {message}'))
             else:
                 reporter.add_question_answer(
                     question='create models.py',
@@ -96,7 +97,7 @@ class Command(BaseCommand, JsonHandler):
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
-                    stdout_messages.append(self.style.ERROR(f'{app_name}[INFO]: {message}'))
+                    stdout_messages.append(self.style.ERROR(f'{app_name}[ERROR]: {message}'))
             else:
                 reporter.add_question_answer(
                     question='create admin.py',
@@ -142,7 +143,7 @@ class Command(BaseCommand, JsonHandler):
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
-                    stdout_messages.append(self.style.ERROR(f'{app_name}[INFO]: {message}'))
+                    stdout_messages.append(self.style.ERROR(f'{app_name}[ERROR]: {message}'))
             else:
                 reporter.add_question_answer(
                     question='create serializers.py',
@@ -168,7 +169,7 @@ class Command(BaseCommand, JsonHandler):
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
-                    stdout_messages.append(self.style.ERROR(f'{app_name}[INFO]: {message}'))
+                    stdout_messages.append(self.style.ERROR(f'{app_name}[ERROR]: {message}'))
             else:
                 reporter.add_question_answer(
                     question='create test_api.py',
@@ -242,7 +243,7 @@ class Command(BaseCommand, JsonHandler):
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
             else:
-                stdout_messages.append(self.style.ERROR(f'deploy[INFO]: {message}'))
+                stdout_messages.append(self.style.ERROR(f'deploy[ERROR]: {message}'))
 
         else:
             reporter.add_question_answer(
@@ -251,6 +252,31 @@ class Command(BaseCommand, JsonHandler):
             )
             reporter.add_question_answer(
                 question='create Dockerfile',
+                answer=False
+            )
+
+        docs_support = input('Would you like to generate docs(yes/no)? ')
+
+        reporter = ReportUserAnswer(
+            app_name='docs',
+            file_prefix=f'docs-{int(datetime.datetime.now().timestamp())}'
+        )
+        reporter.init_report_file()
+
+        if docs_support == 'yes':
+            reporter.add_question_answer(
+                question='create docs',
+                answer=True
+            )
+            readme_generator = ReadMeGenerator()
+            check, message = readme_generator.generate(diagram_path)
+            if check:
+                stdout_messages.append(self.style.SUCCESS(f'docs[INFO]: {message}'))
+            else:
+                stdout_messages.append(self.style.ERROR(f'docs[ERROR]: {message}'))
+        else:
+            reporter.add_question_answer(
+                question='create docs',
                 answer=False
             )
 
