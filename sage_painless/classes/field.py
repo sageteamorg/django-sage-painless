@@ -1,46 +1,39 @@
 class Attribute:
-    """
-    Required Field object that contains `key` and `value`
-    """
+    """Required Field object that contains `key` and `value`"""
 
     def __init__(self):
+        """init"""
         self.key = None
         self.value = None
 
     def set_attr(self, attr_key, attr_value):
-        """
-        set `key` and `value`
-        """
+        """set `key` and `value`"""
         self.key = attr_key
         self.value = attr_value
 
 
 class Validator:
-    """
-    Validator attribute for Field
-    """
+    """Validator attribute for Field"""
 
     def __init__(self):
+        """init"""
         self.func = None
         self.arg = None
 
     def set_validator(self, func, arg):
-        """
-        set `func` and `kwargs`
-        """
+        """set `func` and `kwargs`"""
         self.func = func
         self.arg = arg
 
 
 class Field:
-    """
-    Field object that contains attributes of a django model field
-    """
+    """Field object that contains attributes of a django model field"""
 
     def __init__(self):
-
+        """init"""
         self.name = None
         self.type = None
+        self.encrypted: bool = False
         self.attrs = list()
         self.validators = list()
 
@@ -88,9 +81,7 @@ class Field:
     }
 
     def set_type(self, field_type):
-        """
-        Set field type based on `field_types` and required_attrs
-        """
+        """Set field type based on `field_types` and required_attrs"""
         field = self.field_types.get(field_type)
         if field:
             self.type = field.get('type')
@@ -101,18 +92,14 @@ class Field:
         return message
 
     def add_attribute(self, key, value):
-        """
-        Add attribute to Field
-        """
+        """Add attribute to Field"""
         attr = Attribute()
         attr.set_attr(key, value)
         self.attrs.append(attr)
         return True
 
     def get_attribute(self, key):
-        """
-        Get attribute from field
-        """
+        """Get attribute from field"""
         for attr in self.attrs:
             if attr.key == key:
                 return attr.value
@@ -120,9 +107,7 @@ class Field:
         return 'Not defined'
 
     def add_validator(self, func, arg):
-        """
-        Add validator to Field
-        """
+        """Add validator to Field"""
         validator = Validator()
         validator.set_validator(func, arg)
         self.validators.append(validator)
