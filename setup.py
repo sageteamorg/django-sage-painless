@@ -5,7 +5,7 @@ setup(
     packages=find_packages(exclude=['tests*']),
     package_data={'sage_painless/templates': ['*.txt']},
     include_package_data=True,
-    version='1.3.1',
+    version='1.4.0',
     license='GNU',
     description='django package for auto generating projects',
     author='Sage Team',
