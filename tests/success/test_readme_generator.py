@@ -14,3 +14,10 @@ class TestReadMeGenerator(TestCase):
         read_me_apps = self.readme_generator.get_built_in_app_names()
 
         self.assertListEqual(read_me_apps, built_in_apps)
+
+    def test_get_other_apps(self):
+        """test get apps exclude built-in apps"""
+        other_apps = [app.verbose_name for app in apps.get_app_configs() if not app.name.startswith('django.')]
+        read_me_apps = self.readme_generator.get_installed_module_names()
+
+        self.assertListEqual(read_me_apps, other_apps)
