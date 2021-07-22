@@ -7,7 +7,8 @@
             "title": {
               "type": "character",
               "max_length": 255,
-              "unique": true
+              "unique": true,
+              "encrypt": true
             },
             "created": {
               "type": "datetime",

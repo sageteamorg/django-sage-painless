@@ -6,7 +6,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
+# cache support
 from products.mixins import ModelCacheMixin
+
+
+# encrypt support
+from sage_encrypt.services.encrypt import encrypt_field
 
 
 class Category(models.Model, ModelCacheMixin):
@@ -17,11 +22,11 @@ class Category(models.Model, ModelCacheMixin):
     
     CACHE_KEY = 'category'
     
-    title = models.CharField(
+    title = encrypt_field(models.CharField(
              max_length=255,
              unique=True,
              
-    )
+    ))
     
     created = models.DateTimeField(
              auto_now_add=True,
