@@ -5,11 +5,17 @@ You may need to change some parts
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 {% if validator_support %}
+# validator support
 from importlib import import_module
 validators = import_module('django.core.validators')
 {% endif %}
 {% if cache_support %}
+# cache support
 from {{app_name}}.mixins import ModelCacheMixin
+{% endif %}
+{% if encrypt_support %}
+# encrypt support
+from sage_encrypt.services.encrypt import encrypt_field
 {% endif %}
 {% if fk_models %}
 {% for model in fk_models %}
@@ -28,7 +34,7 @@ class {{model.name}}(models.Model{% if cache_support %}, ModelCacheMixin{% endif
     {% endif %}
     {% for field in model.fields %}
     {% if field.type %}
-    {{field.name}} = models.{{field.type}}({% for attr in field.attrs %}
+    {{field.name}} = {% if field.encrypted %}encrypt_field({% endif %}models.{{field.type}}({% for attr in field.attrs %}
              {% if attr.key == 'on_delete' %}{{attr.key}}=models.{{attr.value}},{% else %}{{attr.key}}={{attr.value}},{%endif%}{% endfor %}
              {% if field.validators %}
              validators=[
@@ -37,7 +43,7 @@ class {{model.name}}(models.Model{% if cache_support %}, ModelCacheMixin{% endif
                 {% endfor %}
              ]
              {% endif %}
-    )
+    ){% if field.encrypted %}){% endif %}
     {% endif %}
     {% endfor %}
 
