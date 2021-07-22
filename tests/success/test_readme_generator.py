@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.conf import settings
 from django.test import TestCase
 from django.apps import apps
@@ -29,3 +31,13 @@ class TestReadMeGenerator(TestCase):
         readme_name = self.readme_generator.get_project_name()
 
         self.assertEqual(name, readme_name)
+
+    def test_has_docker_support(self):
+        """check for docker-compose existence"""
+        compose_file_yml = Path(f'{settings.BASE_DIR}/docker-compose.yml')
+        compose_file_yaml = Path(f'{settings.BASE_DIR}/docker-compose.yaml')
+        result = True if compose_file_yml.is_file() or compose_file_yaml.is_file() else False
+
+        readme_result = self.readme_generator.has_docker_support()
+
+        self.assertEqual(result, readme_result)
