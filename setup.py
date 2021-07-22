@@ -20,6 +20,7 @@ setup(
         'drf-yasg',
         'django-seed',
         'Faker',
-        'autopep8'
+        'autopep8',
+        'django-sage-encrypt',
     ]
 )
