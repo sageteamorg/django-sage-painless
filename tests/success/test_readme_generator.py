@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 from django.apps import apps
 
@@ -21,3 +22,10 @@ class TestReadMeGenerator(TestCase):
         read_me_apps = self.readme_generator.get_installed_module_names()
 
         self.assertListEqual(read_me_apps, other_apps)
+
+    def test_get_project_root_name(self):
+        """project root dir name"""
+        name = settings.BASE_DIR.name
+        readme_name = self.readme_generator.get_project_name()
+
+        self.assertEqual(name, readme_name)
