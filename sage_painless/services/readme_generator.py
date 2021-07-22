@@ -48,20 +48,15 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
 
     def get_built_in_app_names(self):
         """django built-in apps"""
-        return [app.verbose_name for app in apps.get_app_configs() if app.verbose_name in self.BUILTIN_APPS]
+        return [app.verbose_name for app in apps.get_app_configs() if app.name.startswith('django.')]
 
     def get_installed_module_names(self):
         """extra installed modules to setting"""
-        return [app.verbose_name for app in apps.get_app_configs() if app.verbose_name in self.INSTALLED_MODULES]
-
-    def get_other_app_names(self):
-        """other apps (generated apps, ...)"""
-        return [app.verbose_name for app in apps.get_app_configs() if app.verbose_name not in self.BUILTIN_APPS and app.verbose_name not in self.INSTALLED_MODULES]
+        return [app.verbose_name for app in apps.get_app_configs() if not app.name.startswith('django.')]
 
     def get_project_name(self):
         """get project root name"""
         base_dir = settings.BASE_DIR
-        # TODO
         return base_dir.name
 
     def get_project_version(self):
@@ -116,13 +111,9 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
         self.create_dir_if_not_exists('docs/sage_painless')
         self.create_dir_if_not_exists('docs/sage_painless/git')
 
-        diagram_apps = self.get_app_names_from_diagram(diagram)
-        generated_apps = self.get_other_app_names()
-
         modules = self.get_installed_module_names()
         django_apps = self.get_built_in_app_names()
 
-        generated_apps = self.merge(diagram_apps, generated_apps)
         project_name = self.get_project_name()
         project_version = self.get_project_version()
 
@@ -136,7 +127,6 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'README.txt'),
             data={
                 'project_name': project_name,
-                'app_names': generated_apps,
                 'built_in_apps': django_apps,
                 'installed_modules': modules,
                 'django_version': django_version,

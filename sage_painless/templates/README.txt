@@ -2,9 +2,14 @@
 
 This is an auto-generated README.md for `{{project_name}}` project
 
+- [Description](#description)
 - [Detail](#detail)
 - [Structure](#structure)
 - [Getting Started](#getting-started)
+
+## Description
+
+- Write your own
 
 ## Detail
 
@@ -24,12 +29,6 @@ Other Used Apps:
 - {{app}}
 {% endfor %}
 
-Project Apps:
-
-{% for app in app_names %}
-- {{app}}
-{% endfor %}
-
 ## Structure
 
 {{project_name}} files structure
@@ -43,6 +42,8 @@ Project Apps:
 ## Getting Started
 
 {% if docker_support %}
+
+### Docker
 
 The project is dockerized for deployment.
 
@@ -65,7 +66,9 @@ $ docker-compose exec <container_name> python manage.py check --deploy
 $ docker-compose exec <container_name> python manage.py test
 ```
 
-{% else %}
+{% endif %}
+
+### Django Server
 
 - Before running Django project you must first create virtualenv.
 
@@ -130,7 +133,5 @@ $ python manage.py collectstatic
 $ python manage.py test
 $ python manage.py check --deploy
 ```
-
-{% endif %}
 
 #### Automatically generated with ❤️ by [django-sage-painless](https://github.com/sageteam-org/django-sage-painless)
