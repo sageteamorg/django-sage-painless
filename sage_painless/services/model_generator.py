@@ -22,6 +22,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
     APPS_KEYWORD = 'apps'
     FIELDS_KEYWORD = 'fields'
     TYPE_KEYWORD = 'type'
+    ENCRYPTED_KEYWORD = 'encrypt'
     VALIDATORS_KEYWORD = 'validators'
     FUNC_KEYWORD = 'func'
     ARG_KEYWORD = 'arg'
@@ -51,20 +52,26 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
                 model_field.name = field_name
                 field_data = fields.get(field_name)
 
+                # Encrypt
+                model_field.encrypted = field_data.pop(self.ENCRYPTED_KEYWORD, False)  # field encryption
+
                 for key in field_data.keys():
-
+                    # Type
                     if key == self.TYPE_KEYWORD:
-                        model_field.set_type(field_data.get(self.TYPE_KEYWORD))
+                        model_field.set_type(field_data.get(self.TYPE_KEYWORD))  # set type of Field (CharField, etc)
 
+                        # if field is one2one create Signal
                         if model_field.type == 'OneToOneField':
                             signal = Signal()
                             signal.set_signal('post_save', table_name, field_data.get('to'), field_name)
                             signals.append(signal)
 
+                    # Validator
                     elif key == self.VALIDATORS_KEYWORD:
                         for validator in field_data.get(self.VALIDATORS_KEYWORD):
                             model_field.add_validator(validator.get(self.FUNC_KEYWORD), validator.get(self.ARG_KEYWORD))
 
+                    # Attributes
                     else:
                         value = field_data.get(key)
                         model_field.add_attribute(key, value)
@@ -90,6 +97,15 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
         for model in models:
             for field in model.fields:
                 if field.type == 'OneToOneField':
+                    return True
+
+        return False
+
+    def check_encryption_support(self, models):
+        """check models have encrypted field"""
+        for model in models:
+            for field in model.fields:
+                if field.encrypted:
                     return True
 
         return False
@@ -170,7 +186,8 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
                         'models': [model],
                         'validator_support': self.check_validator_support([model]),
                         'cache_support': cache_support,
-                        'fk_models': self.get_fk_model_names([model])
+                        'fk_models': self.get_fk_model_names([model]),
+                        'encrypt_support': self.check_encryption_support([model])
                     }
                 )
                 self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/models/{model_file_name}')
