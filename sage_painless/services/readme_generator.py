@@ -32,10 +32,6 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
         """init"""
         pass
 
-    def get_app_names_from_diagram(self, diagram):
-        """extract app names from diagram"""
-        return [app.capitalize() for app in diagram.get(self.APPS_KEYWORD).keys()]
-
     def get_built_in_app_names(self):
         """django built-in apps"""
         return [app.verbose_name for app in apps.get_app_configs() if app.name.startswith('django.')]
