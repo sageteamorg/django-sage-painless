@@ -17,16 +17,6 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
     """Generate README.md for project"""
 
     APPS_KEYWORD = 'apps'
-    BUILTIN_APPS = [
-        'Administration', 'Sessions',
-        'Authentication and Authorization',
-        'Content Types', 'Static Files', 'Messages'
-    ]
-    INSTALLED_MODULES = [
-        'Drf_Yasg', 'Django_Seed',
-        'Django REST framework',
-        'Django Sage Painless'
-    ]
     SPACE = '    '
     BRANCH = '│   '
     TEE = '├── '
