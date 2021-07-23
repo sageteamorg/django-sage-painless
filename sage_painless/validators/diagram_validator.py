@@ -11,7 +11,6 @@ get diagram as input:
 8. check required keys for diagram json
 9. check `type` is set in all fields [DONE]
 10. check field type is allowed [DONE]
-11. check admin fields [DONE]
 """
 
 from sage_painless.classes.field import Field
@@ -24,6 +23,8 @@ class DiagramValidator:
     ADMIN_KEYWORD = 'admin'
     FIELDS_KEYWORD = 'fields'
     TYPE_KEYWORD = 'type'
+    LIST_DISPLAY_KEYWORD = 'list_display'
+    LIST_FILTER_KEYWORD = 'list_filter'
 
     def __init__(self):
         """init"""
@@ -79,9 +80,9 @@ class DiagramValidator:
         if not diagram.get(self.APPS_KEYWORD):
             raise KeyError(f'key `{self.APPS_KEYWORD}` is required in diagram')
 
-    def validate_admin(self, diagram):
+    def validate_admin_list_display(self, diagram):
         """validate admin
-        field names should be in model fields
+        field names in `list_display` should be in model fields
         """
         for app_name in diagram.get(self.APPS_KEYWORD):
             app_models = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)
@@ -89,9 +90,24 @@ class DiagramValidator:
                 model_admin = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(model_name).get(self.ADMIN_KEYWORD)
                 model_fields = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(model_name).get(self.FIELDS_KEYWORD)
                 if model_admin:
-                    for attr in model_admin:
-                        data = model_admin.get(attr)
-                        if data:
-                            for field in data:
-                                if field not in model_fields:
-                                    raise KeyError(f'field `{field}` in `{attr}` of model `{model_name}` does not exists')
+                    list_display = model_admin.get(self.LIST_DISPLAY_KEYWORD)
+                    if list_display:
+                        for field in list_display:
+                            if field not in model_fields:
+                                raise KeyError(f'field `{field}` in list_display of model `{model_name}` does not exists')
+
+    def validate_admin_list_filter(self, diagram):
+        """validate admin
+        field names in `list_filter` should be in model fields
+        """
+        for app_name in diagram.get(self.APPS_KEYWORD):
+            app_models = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)
+            for model_name in app_models:
+                model_admin = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(model_name).get(self.ADMIN_KEYWORD)
+                model_fields = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(model_name).get(self.FIELDS_KEYWORD)
+                if model_admin:
+                    list_display = model_admin.get(self.LIST_FILTER_KEYWORD)
+                    if list_display:
+                        for field in list_display:
+                            if field not in model_fields:
+                                raise KeyError(f'field `{field}` in list_filter of model `{model_name}` does not exists')
