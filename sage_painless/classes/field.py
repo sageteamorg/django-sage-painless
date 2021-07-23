@@ -40,42 +40,52 @@ class Field:
     field_types = {
         'character': {
             'type': 'CharField',
-            'required': []
+            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
+            'required': ['max_length']
         },
         'integer': {
             'type': 'IntegerField',
+            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
             'required': []
         },
         'datetime': {
             'type': 'DateTimeField',
+            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'auto_now', 'auto_now_add'],
             'required': []
         },
         'text': {
             'type': 'TextField',
+            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
             'required': []
         },
         'fk': {
             'type': 'ForeignKey',
-            'required': []
+            'allowed': ['default', 'null', 'blank', 'validators', 'type', 'to', 'related_name', 'on_delete'],
+            'required': ['to', 'on_delete']
         },
         'one2one': {
             'type': 'OneToOneField',
-            'required': []
+            'allowed': ['default', 'null', 'blank', 'validators', 'type', 'to', 'related_name'],
+            'required': ['to']
         },
         'm2m': {
             'type': 'ManyToManyField',
-            'required': []
+            'allowed': ['default', 'null', 'blank', 'validators', 'type', 'to', 'related_name'],
+            'required': ['to']
         },
         'image': {
             'type': 'ImageField',
+            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'upload_to'],
             'required': []
         },
         'bool': {
             'type': 'BooleanField',
+            'allowed': ['default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
             'required': []
         },
         'slug': {
             'type': 'SlugField',
+            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
             'required': []
         }
     }
