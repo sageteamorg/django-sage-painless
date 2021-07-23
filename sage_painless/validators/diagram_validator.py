@@ -11,6 +11,7 @@ get diagram as input:
 8. check required keys for diagram json
 9. check `type` is set in all fields [DONE]
 10. check field type is allowed [DONE]
+11. check admin fields [DONE]
 """
 
 from sage_painless.classes.field import Field
@@ -20,6 +21,7 @@ class DiagramValidator:
     """validate diagram and raise errors"""
     APPS_KEYWORD = 'apps'
     MODELS_KEYWORD = 'models'
+    ADMIN_KEYWORD = 'admin'
     FIELDS_KEYWORD = 'fields'
     TYPE_KEYWORD = 'type'
 
@@ -76,3 +78,20 @@ class DiagramValidator:
         """
         if not diagram.get(self.APPS_KEYWORD):
             raise KeyError(f'key `{self.APPS_KEYWORD}` is required in diagram')
+
+    def validate_admin(self, diagram):
+        """validate admin
+        field names should be in model fields
+        """
+        for app_name in diagram.get(self.APPS_KEYWORD):
+            app_models = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)
+            for model_name in app_models:
+                model_admin = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(model_name).get(self.ADMIN_KEYWORD)
+                model_fields = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(model_name).get(self.FIELDS_KEYWORD)
+                if model_admin:
+                    for attr in model_admin:
+                        data = model_admin.get(attr)
+                        if data:
+                            for field in data:
+                                if field not in model_fields:
+                                    raise KeyError(f'field `{field}` in `{attr}` of model `{model_name}` does not exists')
