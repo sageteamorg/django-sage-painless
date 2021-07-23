@@ -7,6 +7,17 @@ Template
 Diagram is a json file that contains database tables, settings for admin panel and API configs
 It is the only thing you need to generate a whole project
 
+[NEW]: You can also use `encryption` capability in diagram. Example:
+
+.. code:: python
+
+    "title": {
+        "type": "character",
+        "max_length": 255,
+        "unique": true,
+        "encrypt": true
+      }
+
 the template of the diagram is something like this:
 
 .. code:: python

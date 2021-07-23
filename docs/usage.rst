@@ -10,6 +10,14 @@ here <https://github.com/sageteam-org/django-sage-painless/tree/develop/sage_pai
 start to generate (it is required for development. you will run tests on
 this app)
 
+[NEW]: First validate the format of your diagram, It will raise errors if diagram format was incorrect.
+
+.. code:: shell
+
+    $ python manage.py validate_diagram --diagram <path to diagram>
+
+Now you can generate code
+
 .. code:: shell
 
     $ python manage.py generate --diagram <path to diagram>
@@ -26,6 +34,7 @@ Would you like to generate serializers.py & views.py(yes/no)?           generate
 Would you like to generate test for your project(yes/no)?               generates model test and api test for your project in tests directory
 Would you like to add cache queryset support(yes/no)?                   it will cache queryset via redis in your views.py
 Would you like to dockerize your project(yes/no)?                       creates Dockerfile and docker-compose.yml for your project
+Would you like to generate docs(yes/no)?                                generates README.md and saves in docs/sage_painless/git/
 ======================================================================  ==========================================================================
 
 If you chose to dockerize project:
@@ -72,6 +81,16 @@ If you set cache support add CACHES to your settings:
         "LOCATION": os.environ['REDIS_URL'] if os.environ.get('REDIS_URL') else settings.REDIS_URL if hasattr(settings, 'REDIS_URL') else 'redis://localhost:6379/'
         }
     }
+
+If you have encrypted field in diagram:
+
+- your database should be PostgreSQL
+- you should install `pgcrypto` extension for PostgreSQL with this command
+
+.. code:: shell
+
+    $ sudo -u postgres psql <db_name>
+    $ CREATE EXTENSION pgcrypto;
 
 -  You have to migrate your new models
 

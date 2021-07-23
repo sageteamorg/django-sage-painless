@@ -18,7 +18,7 @@ versions| |Documentation| |Build|
 Project Detail
 --------------
 
-\* Version: 1.3.1 \* Frameworks: - Django > 3.1 \* Language: Python > 3.6
+\* Frameworks: - Django > 3.1 \* Language: Python > 3.6
 
 Git Rules
 ---------
@@ -113,6 +113,14 @@ here <sage_painless/docs/diagrams>`__
 
 start to generate (it is required for development. you will run tests on
 this app)
+
+First validate the format of your diagram
+
+.. code:: shell
+
+    $ python manage.py validate_diagram --diagram <path to diagram>
+
+Now you can generate code
 
 .. code:: shell
 

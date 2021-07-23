@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2021-07-23
+### Added
+- Added diagram format validator
+
+## [1.4.0] - 2021-07-21
+### Added
+- Added README.md generator
+### Fixed
+- Fixed reporter
+
 ## [1.3.0] - 2021-07-18
 ### Added
 - Added multi app generation support
@@ -39,3 +49,5 @@ All notable changes to this project will be documented in this file.
 [1.2.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.2.1]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.3.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.4.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.5.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop

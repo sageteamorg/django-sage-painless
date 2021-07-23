@@ -32,7 +32,6 @@ We used the name painless instead of the Django code generator because this pack
 
 ## Project Detail
 
-- Version: 1.3.1
 - Language: Python > 3.6
 - Framework: Django > 3.1
 
@@ -108,6 +107,14 @@ To generate a Django app you just need a diagram in JSON format. diagram is a js
 
 start to generate
 (it is required for development. you will run tests on this app)
+
+First validate your diagram format. It will raise errors if your diagram format is incorrect.
+
+```shell
+$ python manage.py validate_diagram --diagram <path to diagram>
+```
+
+Now you can generate code
 
 ```shell
 $ python manage.py generate --diagram <path to diagram>
