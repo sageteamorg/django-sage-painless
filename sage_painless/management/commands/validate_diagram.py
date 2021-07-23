@@ -16,7 +16,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
         diagram_path = options.get('diagram')
         diagram = self.load_json(diagram_path)
 
-        self.validate_field_type(diagram)
+        self.validate_all(diagram)
 
         self.stdout.write(
             self.style.SUCCESS('system check completed with [0] error')
