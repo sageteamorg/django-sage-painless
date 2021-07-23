@@ -1,19 +1,3 @@
-"""
-get diagram as input:
-
-1. in encryption mode -> check db is postgres (in model validator)
-2. in character -> check `max_length` is set [DONE]
-3. in fk -> check `to` & `on_delete` is set [DONE]
-4. in one2one -> check `to` is set [DONE]
-5. in m2m -> check `to` is set [DONE]
-6. check allowed attributes for each field type [DONE]
-7. check required attributes for each field type [DONE]
-8. check required keys for diagram json [DONE]
-9. check `type` is set in all fields [DONE]
-10. check field type is allowed [DONE]
-11. check admin [DONE]
-"""
-
 from sage_painless.classes.field import Field
 
 
@@ -308,3 +292,19 @@ class DiagramValidator:
                             if not self.search_in_list_items(field, model_fields):
                                 raise KeyError(
                                     f'field `{field}` in exclude of model `{model_name}` does not exists')
+
+    def validate_all(self, diagram):
+        """validate diagram with all conditions"""
+        self.validate_field_type(diagram)
+        self.validate_field_attributes(diagram)
+        self.validate_apps_key(diagram)
+        self.validate_admin_list_filter(diagram)
+        self.validate_admin_list_display(diagram)
+        self.validate_admin_list_editable(diagram)
+        self.validate_admin_filter_horizontal(diagram)
+        self.validate_admin_filter_vertical(diagram)
+        self.validate_admin_list_display_links(diagram)
+        self.validate_admin_exclude(diagram)
+        self.validate_admin_ordering(diagram)
+        self.validate_admin_raw_id_fields(diagram)
+        self.validate_admin_search_fields(diagram)
