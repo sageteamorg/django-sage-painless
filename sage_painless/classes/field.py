@@ -40,52 +40,92 @@ class Field:
     field_types = {
         'character': {
             'type': 'CharField',
-            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages'],
             'required': ['max_length']
         },
         'integer': {
             'type': 'IntegerField',
-            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages'],
             'required': []
         },
         'datetime': {
             'type': 'DateTimeField',
-            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'auto_now', 'auto_now_add'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'auto_now', 'auto_now_add', 'auto_now_created'],
             'required': []
         },
         'text': {
             'type': 'TextField',
-            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages'],
             'required': []
         },
         'fk': {
             'type': 'ForeignKey',
-            'allowed': ['default', 'null', 'blank', 'validators', 'type', 'to', 'related_name', 'on_delete'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'to', 'related_name', 'on_delete'],
             'required': ['to', 'on_delete']
         },
         'one2one': {
             'type': 'OneToOneField',
-            'allowed': ['default', 'null', 'blank', 'validators', 'type', 'to', 'related_name'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'to', 'related_name'],
             'required': ['to']
         },
         'm2m': {
             'type': 'ManyToManyField',
-            'allowed': ['default', 'null', 'blank', 'validators', 'type', 'to', 'related_name'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'to', 'related_name'],
             'required': ['to']
         },
         'image': {
             'type': 'ImageField',
-            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'upload_to'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'upload_to'],
             'required': []
         },
         'bool': {
             'type': 'BooleanField',
-            'allowed': ['default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
+            'allowed': [
+                'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages'],
             'required': []
         },
         'slug': {
             'type': 'SlugField',
-            'allowed': ['max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type'],
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages'],
             'required': []
         }
     }
