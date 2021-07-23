@@ -35,10 +35,37 @@ class DiagramValidator:
         for app_name in diagram.get(self.APPS_KEYWORD):
             app_models = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)
             for model_name in app_models:
-                model_fields = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(model_name).get(self.FIELDS_KEYWORD)
+                model_fields = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(
+                    model_name).get(self.FIELDS_KEYWORD)
                 for field_name in model_fields:
-                    field_data = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(model_name).get(self.FIELDS_KEYWORD).get(field_name)
+                    field_data = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(
+                        model_name).get(self.FIELDS_KEYWORD).get(field_name)
                     if not field_data.get(self.TYPE_KEYWORD):
                         raise KeyError(f'key `type` is required in model `{model_name}` for field `{field_name}`')
                     if not field_data.get(self.TYPE_KEYWORD) in Field.field_types:
-                        raise KeyError(f'type `{field_data.get(self.TYPE_KEYWORD)}` is not allowed in model `{model_name}` for field `{field_name}`')
+                        raise KeyError(
+                            f'type `{field_data.get(self.TYPE_KEYWORD)}` is not allowed in model `{model_name}` for field `{field_name}`')
+
+    def validate_field_attributes(self, diagram):
+        """validate fields
+        each field type has allowed attributes
+        and required attributes
+        """
+        for app_name in diagram.get(self.APPS_KEYWORD):
+            app_models = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)
+            for model_name in app_models:
+                model_fields = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(
+                    model_name).get(self.FIELDS_KEYWORD)
+                for field_name in model_fields:
+                    field_data = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD).get(
+                        model_name).get(self.FIELDS_KEYWORD).get(field_name)
+                    field_required_attrs = Field.field_types.get(field_data.get(self.TYPE_KEYWORD)).get('required')
+                    field_allowed_attrs = Field.field_types.get(field_data.get(self.TYPE_KEYWORD)).get('allowed')
+                    for field_attr in field_data:
+                        if field_attr not in field_allowed_attrs:
+                            raise KeyError(
+                                f'attribute `{field_attr}` is not allowed in model `{model_name}` for field `{field_name}` ')
+                    for required_attr in field_required_attrs:
+                        if required_attr not in field_data:
+                            raise KeyError(
+                                f'attribute `{required_attr}` is required in model `{model_name}` for field `{field_name}`')
