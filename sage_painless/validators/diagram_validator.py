@@ -2,13 +2,13 @@
 get diagram as input:
 
 1. in encryption mode -> check db is postgres
-2. in character -> check `max_length` is set
-3. in fk -> check `to` & `on_delete` is set
-4. in one2one -> check `to` is set
-5. in m2m -> check `to` is set
-6. check allowed attributes for each field type
-7. check required attributes for each field type
-8. check allowed keys for diagram json
+2. in character -> check `max_length` is set [DONE]
+3. in fk -> check `to` & `on_delete` is set [DONE]
+4. in one2one -> check `to` is set [DONE]
+5. in m2m -> check `to` is set [DONE]
+6. check allowed attributes for each field type [DONE]
+7. check required attributes for each field type [DONE]
+8. check required keys for diagram json
 9. check `type` is set in all fields [DONE]
 10. check field type is allowed [DONE]
 """
@@ -69,3 +69,10 @@ class DiagramValidator:
                         if required_attr not in field_data:
                             raise KeyError(
                                 f'attribute `{required_attr}` is required in model `{model_name}` for field `{field_name}`')
+
+    def validate_apps_key(self, diagram):
+        """validate diagram
+        diagram should has `apps` key
+        """
+        if not diagram.get(self.APPS_KEYWORD):
+            raise KeyError(f'key `{self.APPS_KEYWORD}` is required in diagram')
