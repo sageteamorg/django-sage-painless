@@ -23,6 +23,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
     FIELDS_KEYWORD = 'fields'
     API_KEYWORD = 'api'
     API_DIR = 'api'
+    STREAM_KEYWORD = 'stream'
 
     def __init__(self):
         """init"""
@@ -64,6 +65,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
             for field_name in fields.keys():
                 model_field = Field()
                 model_field.name = field_name
+                model_field.stream = fields.get(field_name).pop(self.STREAM_KEYWORD, False)  # video field streaming
                 model_fields.append(model_field)
 
             model.fields = model_fields
@@ -87,10 +89,20 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         """calculate time taken"""
         return (end - start) * 1000.0
 
+    def check_streaming_support(self, models):
+        """check for streaming support in models"""
+        for model in models:
+            for field in model.fields:
+                if field.stream:
+                    return True
+
+        return False
+
     def generate_api(self, diagram_path, cache_support=False):
         """
         stream serializers to app_name/api/serializers.py
         stream viewsets to app_name/api/views.py
+        stream urls to app_name/api/urls.py
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -129,11 +141,13 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
                 data={
                     'app_name': app_name,
                     'models': models,
+                    'streaming_support': self.check_streaming_support(models)
                 }
             )
 
             self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/api/serializers.py')
             self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/api/views.py')
             self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/api/urls.py')
+
         end_time = time.time()
         return True, 'API generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
