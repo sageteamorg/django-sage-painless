@@ -18,6 +18,22 @@ It is the only thing you need to generate a whole project
         "encrypt": true
       }
 
+[NEW]: You can also use `streaming` capability in videos. Example:
+
+.. code:: python
+
+    "movie": {
+        "type": "video",
+        "upload_to": "movies",
+        "stream": true
+      }
+
+It will add a new api to your project with `/stream` endpoint that gets video path in url like:
+
+`localhost:8000/api/stream?path=<video_path>`
+
+And it will stream it chunk by chunk.
+
 the template of the diagram is something like this:
 
 .. code:: python
@@ -127,12 +143,14 @@ integer     IntegerField
 float       FloatField
 datetime    DateTimeField
 date        DateField
+time        TimeField
 text        TextField
 fk          ForeignKey
 one2one     OneToOneField
 m2m         ManyToManyField
 image       ImageField
 file        FileField
+video       FileField
 bool        BooleanField
 slug        SlugField
 ==========  =======================
@@ -142,8 +160,15 @@ in admin you can set:
 ======================  =======================
       Option             Input
 ======================  =======================
+fields                  list of strings
+fieldsets               list
+ordering                list of strings
+readonly_fields         list of strings
+exclude                 list of strings
 list_display            list of strings
+list_display_links      list of strings
 list_filter             list of strings
+list_editable           list of strings
 search_fields           list of strings
 filter_horizontal       list of strings
 filter_vertical         list of strings
@@ -158,7 +183,7 @@ in api you can set:
 ======================  =======================
       Option             Input
 ======================  =======================
-methods                 list of strings
+methods                 list of strings (Not case sensitive)
 ======================  =======================
 
 Examples

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2021-07-24
+### Added
+- Added video stream support
+
 ## [1.5.0] - 2021-07-23
 ### Added
 - Added diagram format validator
@@ -51,3 +55,4 @@ All notable changes to this project will be documented in this file.
 [1.3.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.4.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.5.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.6.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
