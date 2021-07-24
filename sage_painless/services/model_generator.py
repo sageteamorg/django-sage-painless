@@ -23,6 +23,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
     FIELDS_KEYWORD = 'fields'
     TYPE_KEYWORD = 'type'
     ENCRYPTED_KEYWORD = 'encrypt'
+    STREAM_KEYWORD = 'stream'
     VALIDATORS_KEYWORD = 'validators'
     FUNC_KEYWORD = 'func'
     ARG_KEYWORD = 'arg'
@@ -54,6 +55,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
                 # Encrypt
                 model_field.encrypted = field_data.pop(self.ENCRYPTED_KEYWORD, False)  # field encryption
+                model_field.stream = field_data.pop(self.STREAM_KEYWORD, False)  # video field streaming
 
                 for key in field_data.keys():
                     # Type
