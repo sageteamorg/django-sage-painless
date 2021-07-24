@@ -56,12 +56,39 @@ class Field:
                 'error_messages'],
             'required': []
         },
+        'float': {
+            'type': 'FloatField',
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages'],
+            'required': []
+        },
         'datetime': {
             'type': 'DateTimeField',
             'allowed': [
                 'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
                 'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
                 'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'auto_now', 'auto_now_add', 'auto_now_created'],
+            'required': []
+        },
+        'date': {
+            'type': 'DateField',
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'auto_now', 'auto_now_add', 'auto_now_created'],
+            'required': []
+        },
+        'time': {
+            'type': 'TimeField',
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date', 'choices',
+                'help_text', 'db_column', 'db_tablespace',
                 'error_messages', 'auto_now', 'auto_now_add', 'auto_now_created'],
             'required': []
         },
@@ -103,6 +130,15 @@ class Field:
         },
         'image': {
             'type': 'ImageField',
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'upload_to'],
+            'required': []
+        },
+        'file': {
+            'type': 'FileField',
             'allowed': [
                 'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
                 'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
