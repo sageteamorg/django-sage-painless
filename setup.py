@@ -5,7 +5,7 @@ setup(
     packages=find_packages(exclude=['tests*']),
     package_data={'sage_painless/templates': ['*.txt']},
     include_package_data=True,
-    version='1.5.0',
+    version='1.6.0',
     license='GNU',
     description='django package for auto generating projects',
     author='Sage Team',
@@ -22,5 +22,6 @@ setup(
         'Faker',
         'autopep8',
         'django-sage-encrypt',
+        'django-sage-streaming'
     ]
 )
