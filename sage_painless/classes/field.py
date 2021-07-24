@@ -34,6 +34,7 @@ class Field:
         self.name = None
         self.type = None
         self.encrypted: bool = False
+        self.stream: bool = False
         self.attrs = list()
         self.validators = list()
 
@@ -135,6 +136,15 @@ class Field:
                 'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
                 'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
                 'error_messages', 'upload_to'],
+            'required': []
+        },
+        'video': {
+            'type': 'FileField',
+            'allowed': [
+                'max_length', 'default', 'null', 'blank', 'validators', 'encrypt', 'unique', 'type', 'verbose_name',
+                'name', 'primary_key', 'db_index', 'rel', 'editable', 'serialize', 'unique_for_date',
+                'unique_for_month', 'unique_for_year', 'choices', 'help_text', 'db_column', 'db_tablespace',
+                'error_messages', 'upload_to', 'stream'],
             'required': []
         },
         'file': {
