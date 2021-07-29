@@ -216,7 +216,7 @@ $ python manage.py test sage_painless
 - [x] db encryption
 - [x] video streaming
 - [x] improve test generation
-- [ ] coverage & tox
+- [x] coverage & tox
 - [ ] deployment questionnaire
 - [ ] management command
 - [ ] docker
