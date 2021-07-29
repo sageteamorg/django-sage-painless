@@ -9,6 +9,7 @@ from sage_painless.services.api_generator import APIGenerator
 from sage_painless.services.readme_generator import ReadMeGenerator
 from sage_painless.services.test_generator import TestGenerator
 from sage_painless.services.docker_generator import DockerGenerator
+from sage_painless.services.tox_generator import ToxGenerator
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.report_service import ReportUserAnswer
 from sage_painless.validators.diagram_validator import DiagramValidator
@@ -279,6 +280,31 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
         else:
             reporter.add_question_answer(
                 question='create docs',
+                answer=False
+            )
+
+        tox_support = input('Would you like to generate tox & coverage config files(yes/no)? ')
+
+        reporter = ReportUserAnswer(
+            app_name='tox',
+            file_prefix=f'tox-{int(datetime.datetime.now().timestamp())}'
+        )
+        reporter.init_report_file()
+
+        if tox_support == 'yes':
+            reporter.add_question_answer(
+                question='create tox & coverage config',
+                answer=True
+            )
+            tox_generator = ToxGenerator()
+            check, message = tox_generator.generate(diagram_path)
+            if check:
+                stdout_messages.append(self.style.SUCCESS(f'tox[INFO]: {message}'))
+            else:
+                stdout_messages.append(self.style.ERROR(f'tox[ERROR]: {message}'))
+        else:
+            reporter.add_question_answer(
+                question='create tox & coverage config',
                 answer=False
             )
 
