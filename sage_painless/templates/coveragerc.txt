@@ -1,0 +1,29 @@
+[run]
+branch = True
+include = {% for app_name in app_names %}
+       {{app_name}}/*
+       {% endfor %}
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain about missing debug-only code:
+    def __repr__
+    if self\.debug
+
+    # Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError
+
+ignore_errors = True
+
+[html]
+directory = coverage_html_report
+
+[paths]
+source = {% for app_name in app_names %}
+       {{app_name}}/
+       {% endfor %}

@@ -1,0 +1,14 @@
+[tox]
+envlist = py39
+
+[testenv]
+description = unit tests
+deps = pytest
+       coverage
+commands =
+    coverage run manage.py test
+    coverage report
+    coverage html
+setenv =
+    DJANGO_SETTINGS_MODULE={{kernel_name}}.settings
+    PYTHONPATH={toxinidir}
