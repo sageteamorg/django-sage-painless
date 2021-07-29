@@ -215,7 +215,7 @@ $ python manage.py test sage_painless
 - [x] generate README.md
 - [x] db encryption
 - [x] video streaming
-- [ ] improve test generation
+- [x] improve test generation
 - [ ] coverage & tox
 - [ ] deployment questionnaire
 - [ ] management command
