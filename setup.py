@@ -22,6 +22,8 @@ setup(
         'Faker',
         'autopep8',
         'django-sage-encrypt',
-        'django-sage-streaming'
+        'django-sage-streaming',
+        'tox',
+        'coverage'
     ]
 )
