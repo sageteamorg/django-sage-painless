@@ -29,6 +29,7 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
     FUNC_KEYWORD = 'func'
     ARG_KEYWORD = 'arg'
     TESTS_DIR = 'tests'
+    API_KEYWORD = 'api'
 
     def __init__(self):
         """init"""
@@ -38,6 +39,30 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         """get fields"""
         return table.get(self.FIELDS_KEYWORD)
 
+    def filter_signals_for_model(self, signals, model):
+        """return the signals with model_a model"""
+        filtered = list()
+        for signal in signals:
+            if signal.model_a == model:
+                filtered.append(signal)
+        return filtered
+
+    def get_table_api(self, table):
+        """get api"""
+        return table.get(self.API_KEYWORD)
+
+    def normalize_api_config(self, api_config):
+        """
+        get api config
+        normalize api methods
+        return api config
+        """
+        if api_config:
+            if api_config.get('methods'):
+                api_config['methods'] = [method.lower() for method in api_config.get('methods')]
+
+        return api_config
+
     def extract_models(self, diagram):
         """extract models"""
         models = list()
@@ -45,9 +70,11 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         for table_name in diagram.keys():
             table = diagram.get(table_name)
             fields = self.get_table_fields(table)
+            api_config = self.get_table_api(table)
 
             model = Model()
             model.name = table_name
+            model.api_config = self.normalize_api_config(api_config)
             model_fields = list()
 
             for field_name in fields.keys():
@@ -114,28 +141,19 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
             self.create_file_if_not_exists(f'{settings.BASE_DIR}/{app_name}/tests/__init__.py')
             self.delete_file_if_exists(f'{settings.BASE_DIR}/{app_name}/tests.py')
 
-            # generate model tests
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{app_name}/tests/test_model.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'test_model.txt'),
-                data={
-                    'app_name': app_name,
-                    'models': models,
-                    'signals': signals
-                }
-            )
+            for model in models:
+                # generate model tests
+                self.stream_to_template(
+                    output_path=f'{settings.BASE_DIR}/{app_name}/tests/test_{model.name.lower()}.py',
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'test.txt'),
+                    data={
+                        'app_name': app_name,
+                        'models': models,
+                        'model': model,
+                        'signals': self.filter_signals_for_model(signals, model)
+                    }
+                )
 
-            # generate api tests
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/{app_name}/tests/test_api.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'test_api.txt'),
-                data={
-                    'app_name': app_name,
-                    'models': models
-                }
-            )
-
-            self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/tests/test_model.py')
-            self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/tests/test_api.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/tests/test_{model.name.lower()}.py')
         end_time = time.time()
         return True, 'tests generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))

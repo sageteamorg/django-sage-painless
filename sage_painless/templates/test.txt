@@ -1,0 +1,115 @@
+"""
+Auto Generated test
+You may need to change some parts
+"""
+from django.apps import apps
+from django.urls import reverse
+from rest_framework.test import APITestCase
+from django_seed import Seed
+
+{% for model in models %}
+from {{app_name}}.models.{{model.name.lower()}} import {{model.name}}
+{% endfor %}
+
+seeder = Seed.seeder()
+
+class {{model.name.capitalize()}}Test(APITestCase):
+    """
+    {{model.name}} Test
+    Auto Generated
+    """
+    def setUp(self) -> None:
+        self.models = apps.get_app_config('{{app_name}}').get_models()
+        self.models_name = [model._meta.object_name for model in self.models]
+        {% for model in models %}
+        {% if not model.has_one_to_one() %}
+        seeder.add_entity({{model.name}}, 3)
+        {% endif %}
+        {% endfor %}
+        seeder.execute() # create instances
+    {% if not model.has_one_to_one() %}
+    def test_{{model.name.lower()}}_model(self):
+        """
+        test {{model.name}} creation
+        """
+        seeder.add_entity({{model.name}}, 1)
+        seeder.execute() # create instance
+        # assertions
+        self.assertTrue({{model.name}}.objects.exists())
+        self.assertIn('{{model.name}}', self.models_name)
+    {% endif %}
+    {% for signal in signals %}
+    def test_{{signal.model_a.lower()}}_model_signal(self):
+        """
+        test {{signal.model_b}} - {{signal.model_a}} signal
+        """
+        seeder.add_entity({{signal.model_b}}, 1)
+        seeder.execute() # create instance
+        # assertions
+        self.assertTrue({{signal.model_b}}.objects.exists())
+        self.assertTrue({{signal.model_a}}.objects.exists())
+        first_object = {{signal.model_b}}.objects.first()
+        second_object = {{signal.model_a}}.objects.first()
+        self.assertEqual(second_object.{{signal.field}}, first_object)
+    {%endfor%}
+    {% if model.api_config %}
+    {% if 'get' in model.api_config.get('methods') %}
+    def test_{{model.name.lower()}}_list_success(self):
+        """
+        test {{model.name}} list
+        """
+        url = reverse('{{model.name.lower()}}-list')
+        response = self.client.get(url)
+        # assertions
+        self.assertEqual(response.status_code, 200)
+        if type(response.data) == dict:
+            if response.data.get('count'):
+                self.assertGreater(response.data['count'], 0)
+        else:
+            self.assertGreater(len(response.data), 0)
+
+    def test_{{model.name.lower()}}_detail_success(self):
+        """
+        test {{model.name}} detail
+        """
+        {{model.name.lower()}} = {{model.name}}.objects.first()
+        url = reverse('{{model.name.lower()}}-detail', args=[{{model.name.lower()}}.pk])
+        response = self.client.get(url)
+        # assertions
+        self.assertEqual(response.status_code, 200)
+        {% for field in model.fields %}
+        {% if field.type != 'DateTimeField' and field.type != 'DateField' and field.type != 'ForeignKey' and field.type != 'OneToOneField' and field.type != 'ManyToMany' and field.type != 'ImageField' %}
+        self.assertEqual(response.data.get('{{field.name}}'), {{model.name.lower()}}.{{field.name}})
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% else %}
+    def test_{{model.name.lower()}}_list_success(self):
+        """
+        test {{model.name}} list
+        """
+        url = reverse('{{model.name.lower()}}-list')
+        response = self.client.get(url)
+        # assertions
+        self.assertEqual(response.status_code, 200)
+        if type(response.data) == dict:
+            if response.data.get('count'):
+                self.assertGreater(response.data['count'], 0)
+        else:
+            self.assertGreater(len(response.data), 0)
+
+    def test_{{model.name.lower()}}_detail_success(self):
+        """
+        test {{model.name}} detail
+        """
+        {{model.name.lower()}} = {{model.name}}.objects.first()
+        url = reverse('{{model.name.lower()}}-detail', args=[{{model.name.lower()}}.pk])
+        response = self.client.get(url)
+        # assertions
+        self.assertEqual(response.status_code, 200)
+        {% for field in model.fields %}
+        {% if field.type != 'DateTimeField' and field.type != 'DateField' and field.type != 'ForeignKey' and field.type != 'OneToOneField' and field.type != 'ManyToMany' and field.type != 'ImageField' %}
+        self.assertEqual(response.data.get('{{field.name}}'), {{model.name.lower()}}.{{field.name}})
+        {% endif %}
+        {% endfor %}
+    {%endif%}
