@@ -11,9 +11,10 @@ from sage_painless.services.test_generator import TestGenerator
 from sage_painless.services.docker_generator import DockerGenerator
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.report_service import ReportUserAnswer
+from sage_painless.validators.diagram_validator import DiagramValidator
 
 
-class Command(BaseCommand, JsonHandler):
+class Command(BaseCommand, JsonHandler, DiagramValidator):
     APPS_KEYWORD = 'apps'
     help = 'Generate all files need to your new apps.'
 
@@ -44,6 +45,7 @@ class Command(BaseCommand, JsonHandler):
         """get configs from user and generate"""
         diagram_path = options.get('diagram')
         diagram = self.load_json(diagram_path)
+        self.validate_all(diagram)  # validate diagram
         stdout_messages = list()
         for app_name in diagram.get(self.APPS_KEYWORD).keys():
             create_model = input(f'Would you like to generate models.py for {app_name} app (yes/no)? ')
