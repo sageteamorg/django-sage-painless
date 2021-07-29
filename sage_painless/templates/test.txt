@@ -29,9 +29,7 @@ class {{model.name.capitalize()}}Test(APITestCase):
         seeder.execute() # create instances
     {% if not model.has_one_to_one() %}
     def test_{{model.name.lower()}}_model(self):
-        """
-        test {{model.name}} creation
-        """
+        """test {{model.name}} creation"""
         seeder.add_entity({{model.name}}, 1)
         seeder.execute() # create instance
         # assertions
@@ -40,9 +38,7 @@ class {{model.name.capitalize()}}Test(APITestCase):
     {% endif %}
     {% for signal in signals %}
     def test_{{signal.model_a.lower()}}_model_signal(self):
-        """
-        test {{signal.model_b}} - {{signal.model_a}} signal
-        """
+        """test {{signal.model_b}} - {{signal.model_a}} signal"""
         seeder.add_entity({{signal.model_b}}, 1)
         seeder.execute() # create instance
         # assertions
@@ -55,9 +51,7 @@ class {{model.name.capitalize()}}Test(APITestCase):
     {% if model.api_config %}
     {% if 'get' in model.api_config.get('methods') %}
     def test_{{model.name.lower()}}_list_success(self):
-        """
-        test {{model.name}} list
-        """
+        """test {{model.name}} list"""
         url = reverse('{{model.name.lower()}}-list')
         response = self.client.get(url)
         # assertions
@@ -69,9 +63,7 @@ class {{model.name.capitalize()}}Test(APITestCase):
             self.assertGreater(len(response.data), 0)
 
     def test_{{model.name.lower()}}_detail_success(self):
-        """
-        test {{model.name}} detail
-        """
+        """test {{model.name}} detail"""
         {{model.name.lower()}} = {{model.name}}.objects.first()
         url = reverse('{{model.name.lower()}}-detail', args=[{{model.name.lower()}}.pk])
         response = self.client.get(url)
@@ -85,9 +77,7 @@ class {{model.name.capitalize()}}Test(APITestCase):
     {% endif %}
     {% else %}
     def test_{{model.name.lower()}}_list_success(self):
-        """
-        test {{model.name}} list
-        """
+        """test {{model.name}} list"""
         url = reverse('{{model.name.lower()}}-list')
         response = self.client.get(url)
         # assertions
@@ -99,17 +89,23 @@ class {{model.name.capitalize()}}Test(APITestCase):
             self.assertGreater(len(response.data), 0)
 
     def test_{{model.name.lower()}}_detail_success(self):
-        """
-        test {{model.name}} detail
-        """
+        """test {{model.name}} detail"""
         {{model.name.lower()}} = {{model.name}}.objects.first()
         url = reverse('{{model.name.lower()}}-detail', args=[{{model.name.lower()}}.pk])
         response = self.client.get(url)
         # assertions
         self.assertEqual(response.status_code, 200)
         {% for field in model.fields %}
-        {% if field.type != 'DateTimeField' and field.type != 'DateField' and field.type != 'ForeignKey' and field.type != 'OneToOneField' and field.type != 'ManyToMany' and field.type != 'ImageField' %}
+        {% if field.type != 'DateTimeField' and field.type != 'DateField' and field.type != 'ForeignKey' and field.type != 'OneToOneField' and field.type != 'ManyToMany' and field.type != 'ImageField' and field.type != 'FileField' %}
         self.assertEqual(response.data.get('{{field.name}}'), {{model.name.lower()}}.{{field.name}})
         {% endif %}
         {% endfor %}
+    {% if stream %}
+    def test_{{model.name.lower()}}_streaming_support(self):
+        """test streaming support"""
+        url = reverse('video-stream')
+
+        # assertions
+        self.assertTrue(url)
+    {% endif %}
     {%endif%}

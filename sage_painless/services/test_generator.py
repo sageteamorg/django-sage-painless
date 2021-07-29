@@ -30,6 +30,7 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
     ARG_KEYWORD = 'arg'
     TESTS_DIR = 'tests'
     API_KEYWORD = 'api'
+    STREAM_KEYWORD = 'stream'
 
     def __init__(self):
         """init"""
@@ -43,7 +44,7 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         """return the signals with model_a model"""
         filtered = list()
         for signal in signals:
-            if signal.model_a == model:
+            if signal.model_a == model.name:
                 filtered.append(signal)
         return filtered
 
@@ -80,6 +81,7 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
             for field_name in fields.keys():
                 model_field = Field()
                 model_field.name = field_name
+                model_field.stream = fields.get(field_name).pop(self.STREAM_KEYWORD, False)  # video field streaming
                 field_data = fields.get(field_name)
 
                 for key in field_data.keys():
@@ -128,6 +130,15 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         """calculate time taken"""
         return (end - start) * 1000.0
 
+    def check_streaming_support(self, models):
+        """check for streaming support in models"""
+        for model in models:
+            for field in model.fields:
+                if field.stream:
+                    return True
+
+        return False
+
     def generate_tests(self, diagram_path):
         """stream tests to app_name/tests/*.py"""
         start_time = time.time()
@@ -150,7 +161,8 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
                         'app_name': app_name,
                         'models': models,
                         'model': model,
-                        'signals': self.filter_signals_for_model(signals, model)
+                        'signals': self.filter_signals_for_model(signals, model),
+                        'stream': self.check_streaming_support([model])
                     }
                 )
 
