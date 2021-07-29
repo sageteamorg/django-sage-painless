@@ -8,6 +8,7 @@ build: off
 
 install:
 - pip install tox
+- pip install coverage
 
 test_script:
 - tox

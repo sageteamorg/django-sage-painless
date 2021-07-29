@@ -126,3 +126,5 @@ kernel/
 manage.py
 
 docs/sage_painless/
+
+coverage_html_report/
