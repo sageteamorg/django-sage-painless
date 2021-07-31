@@ -1,4 +1,5 @@
 import os
+import time
 
 from django.conf import settings
 
@@ -25,12 +26,16 @@ class ToxGenerator(JinjaHandler, JsonHandler):
         """get project kernel name"""
         return settings.SETTINGS_MODULE.split('.')[0]
 
+    def calculate_execute_time(self, start, end):
+        """calculate time taken"""
+        return (end - start) * 1000.0
+
     def generate(self, diagram_path):
         """generate files"""
+        start_time = time.time()
         diagram = self.load_json(diagram_path)
         app_names = self.get_app_names(diagram)
         kernel_name = self.get_kernel_name()
-        import pdb; pdb.set_trace()
         # .coveragerc
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/.coveragerc',
@@ -48,5 +53,5 @@ class ToxGenerator(JinjaHandler, JsonHandler):
                 'kernel_name': kernel_name
             }
         )
-
-        return True, 'tox config generated'
+        end_time = time.time()
+        return True, 'Tox config generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))

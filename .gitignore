@@ -128,3 +128,6 @@ manage.py
 docs/sage_painless/
 
 coverage_html_report/
+
+psude.py
+sage_painless/services/model_generator.py_pseudo.txt
