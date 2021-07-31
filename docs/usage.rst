@@ -22,6 +22,18 @@ Now you can generate code
 
     $ python manage.py generate --diagram <path to diagram>
 
+You can generate deploy config files
+
+.. code:: shell
+
+    $ python manage.py deploy --diagram <path to diagram>
+
+You can generate docs files
+
+.. code:: shell
+
+    $ python manage.py docs --diagram <path to diagram>
+
 Here system will ask you what you want to generate for your app.
 Questions:
 
