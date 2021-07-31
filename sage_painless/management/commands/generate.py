@@ -6,10 +6,7 @@ from django.conf import settings
 from sage_painless.services.model_generator import ModelGenerator
 from sage_painless.services.admin_generator import AdminGenerator
 from sage_painless.services.api_generator import APIGenerator
-from sage_painless.services.readme_generator import ReadMeGenerator
 from sage_painless.services.test_generator import TestGenerator
-from sage_painless.services.docker_generator import DockerGenerator
-from sage_painless.services.tox_generator import ToxGenerator
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.report_service import ReportUserAnswer
 from sage_painless.validators.diagram_validator import DiagramValidator
@@ -182,31 +179,6 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                     question='create test_model.py',
                     answer=False
                 )
-
-        docs_support = input('Would you like to generate docs(yes/no)? ')
-
-        reporter = ReportUserAnswer(
-            app_name='docs',
-            file_prefix=f'docs-{int(datetime.datetime.now().timestamp())}'
-        )
-        reporter.init_report_file()
-
-        if docs_support == 'yes':
-            reporter.add_question_answer(
-                question='create docs',
-                answer=True
-            )
-            readme_generator = ReadMeGenerator()
-            check, message = readme_generator.generate(diagram_path)
-            if check:
-                stdout_messages.append(self.style.SUCCESS(f'docs[INFO]: {message}'))
-            else:
-                stdout_messages.append(self.style.ERROR(f'docs[ERROR]: {message}'))
-        else:
-            reporter.add_question_answer(
-                question='create docs',
-                answer=False
-            )
 
         for message in stdout_messages:
             self.stdout.write(message)
