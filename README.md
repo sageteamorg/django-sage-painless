@@ -218,7 +218,7 @@ $ python manage.py test sage_painless
 - [x] improve test generation
 - [x] coverage & tox
 - [ ] deployment questionnaire
-- [ ] management command
+- [x] management command
 - [ ] docker
 - [ ] gunicorn, uwsgi, etc
 - [ ] nginx configuration

@@ -131,3 +131,5 @@ coverage_html_report/
 
 psude.py
 sage_painless/services/model_generator.py_pseudo.txt
+
+fifo.py
