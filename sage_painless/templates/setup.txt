@@ -1,0 +1,16 @@
+from setuptools import setup, find_packages
+
+def parse_requirements(requirements):
+    with open(requirements) as f:
+        return [l.strip('\n') for l in f if l.strip('\n') and not l.startswith('#')]
+
+install_reqs = parse_requirements('{{req_path}}')
+
+setup(
+    name='{{kernel_name}}',
+    packages=find_packages(),
+    version='{{version}}',
+    description='{{description}}',
+    author='{{author}}',
+    install_requires=install_reqs
+)

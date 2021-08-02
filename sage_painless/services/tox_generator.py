@@ -6,9 +6,10 @@ from django.conf import settings
 from sage_painless import templates
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
+from sage_painless.utils.pep8_service import Pep8
 
 
-class ToxGenerator(JinjaHandler, JsonHandler):
+class ToxGenerator(JinjaHandler, JsonHandler, Pep8):
     """
     generate tox configs & coverage support
     """
@@ -30,7 +31,7 @@ class ToxGenerator(JinjaHandler, JsonHandler):
         """calculate time taken"""
         return (end - start) * 1000.0
 
-    def generate(self, diagram_path):
+    def generate(self, diagram_path, version, req_path, description, author):
         """generate files"""
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -53,5 +54,19 @@ class ToxGenerator(JinjaHandler, JsonHandler):
                 'kernel_name': kernel_name
             }
         )
+
+        # setup.py
+        self.stream_to_template(
+            output_path=f'{settings.BASE_DIR}/setup.py',
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'setup.txt'),
+            data={
+                'kernel_name': kernel_name,
+                'req_path': req_path,
+                'version': version,
+                'description': description,
+                'author': author
+            }
+        )
+        self.fix_pep8(f'{settings.BASE_DIR}/setup.py')
         end_time = time.time()
         return True, 'Tox config generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
