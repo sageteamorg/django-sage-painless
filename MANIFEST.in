@@ -1,1 +1,2 @@
 include sage_painless/templates/*.txt
+include README.md
