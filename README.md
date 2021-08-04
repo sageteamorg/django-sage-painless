@@ -232,7 +232,7 @@ $ python manage.py test sage_painless
 - [ ] deployment questionnaire
 - [x] management command
 - [ ] docker
-- [ ] gunicorn, uwsgi, etc
+- [x] gunicorn, uwsgi, etc
 - [ ] nginx configuration
 - [ ] commit generation
 - [ ] GitHub repo integration
