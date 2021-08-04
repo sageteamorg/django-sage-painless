@@ -1,0 +1,10 @@
+"""
+Auto Generated conf.py
+You may need to change some parts
+"""
+name = '{{kernel_name}}'
+worker_class = '{{worker_class}}'
+worker_connections = {{worker_connections}}
+accesslog = '{{access_log}}'
+errorlog = '{{error_log}}'
+workers = {{workers}}
