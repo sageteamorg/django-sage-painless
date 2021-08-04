@@ -5,7 +5,7 @@ setup(
     packages=find_packages(exclude=['tests*']),
     package_data={'sage_painless/templates': ['*.txt']},
     include_package_data=True,
-    version='1.8.2',
+    version='1.9.0',
     description='django package for auto generating projects',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
