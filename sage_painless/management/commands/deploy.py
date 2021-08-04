@@ -5,6 +5,7 @@ from django.core.management import BaseCommand
 from sage_painless.services.docker_generator import DockerGenerator
 from sage_painless.services.gunicorn_generator import GunicornGenerator
 from sage_painless.services.tox_generator import ToxGenerator
+from sage_painless.services.uwsgi_generator import UwsgiGenerator
 from sage_painless.utils.report_service import ReportUserAnswer
 
 
@@ -128,6 +129,46 @@ class Command(BaseCommand):
         else:
             reporter.add_question_answer(
                 question='create gunicorn conf.py',
+                answer=False
+            )
+
+        # generate uwsgi config
+        uwsgi_support = input('Would you like to generate uwsgi config(yes/no)? ')
+
+        if uwsgi_support == 'yes':
+            reporter.add_question_answer(
+                question='create uwsgi.ini',
+                answer=True
+            )
+            chdir = input("Please enter path to your project base directory(e.g /src/kernel): ")
+            home = input("Please enter path to your project virtualenv(e.g /src/venv): ")
+            module = input('Please enter wsgi module(e.g mysite.wsgi:application): ')
+            master = input('Please enter master(True/False): ')
+            pidfile = input('Please enter project pid file path(e.g /tmp/project-master.pid): ')
+            vacuum = input('Please enter vacuum(True/False): ')
+            max_requests = input('Please enter max requests for uwsgi(default: 5000): ')
+            processes = input('Please enter max worker processes count for uwsgi(default: 10): ')
+            daemonize = input('Please enter project daemonize file path(default: /var/log/uwsgi/uwsgi.log): ')
+
+            uwsgi_generator = UwsgiGenerator()
+            check, message = uwsgi_generator.generate(
+                chdir,
+                home,
+                module,
+                master,
+                pidfile,
+                vacuum,
+                max_requests,
+                processes,
+                daemonize
+            )
+            if check:
+                stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
+            else:
+                stdout_messages.append(self.style.ERROR(f'deploy[ERROR]: {message}'))
+        else:
+            reporter.add_question_answer(
+                question='create uwsgi.ini',
                 answer=False
             )
 
