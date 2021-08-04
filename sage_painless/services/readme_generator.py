@@ -43,7 +43,7 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
     def get_project_name(self):
         """get project root name"""
         base_dir = settings.BASE_DIR
-        return base_dir.name
+        return base_dir.name if hasattr(base_dir, 'name') else base_dir
 
     def get_project_version(self):
         """get current project version if set"""
