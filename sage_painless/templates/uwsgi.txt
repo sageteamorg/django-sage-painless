@@ -1,0 +1,10 @@
+[uwsgi]
+chdir={{chdir}}
+home={{home}}
+module={{module}}
+master={{master}}
+pidfile={{pidfile}}
+vacuum={{vacuum}}
+max-requests={{max_requests}}
+processes={{processes}}
+daemonize={{daemonize}}
