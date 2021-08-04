@@ -31,6 +31,10 @@ class ToxGenerator(JinjaHandler, JsonHandler, Pep8):
         """calculate time taken"""
         return (end - start) * 1000.0
 
+    def parse_requirements(self, requirements):
+        with open(requirements) as f:
+            return [l.strip('\n') for l in f if l.strip('\n') and not l.startswith('#')]
+
     def generate(self, diagram_path, version, req_path, description, author):
         """generate files"""
         start_time = time.time()
@@ -61,7 +65,7 @@ class ToxGenerator(JinjaHandler, JsonHandler, Pep8):
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'setup.txt'),
             data={
                 'kernel_name': kernel_name,
-                'req_path': req_path,
+                'reqs': self.parse_requirements(req_path),
                 'version': version,
                 'description': description,
                 'author': author
