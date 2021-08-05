@@ -244,23 +244,23 @@ $ python manage.py test sage_painless
 - [ ] package manager support
 
 ## Version 2
-- [] modular setting
-- [] mock data generator
-- [] file field svg support
-- [] image field enhancement
-- [] traditional mixins
-- [] decorator signals
-- [] logging configuration
-- [] sentry support
-- [] monitoring feature (prometheus)
-- [] track data history
-- [] stream upload
-- [] CORS config
-- [] mongo support
-- [] Elastic search configuration
-- [] cache support (+Memcache)
-- [] error handlers (2xx, 3xx, 4xx, 5xx)
-- [] django forms support
-- [] django view support
-- [] image compression supoort
-- [] debug tools support
+- [ ] modular setting
+- [ ] mock data generator
+- [ ] file field svg support
+- [ ] image field enhancement
+- [ ] traditional mixins
+- [ ] decorator signals
+- [ ] logging configuration
+- [ ] sentry support
+- [ ] monitoring feature (prometheus)
+- [ ] track data history
+- [ ] stream upload
+- [ ] CORS config
+- [ ] mongo support
+- [ ] Elastic search configuration
+- [ ] cache support (+Memcache)
+- [ ] error handlers (2xx, 3xx, 4xx, 5xx)
+- [ ] django forms support
+- [ ] django view support
+- [ ] image compression supoort
+- [ ] debug tools support
