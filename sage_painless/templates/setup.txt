@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='{{kernel_name}}',
     packages=find_packages(),
-    version='{{version}}',
-    description='{{description}}',
-    author='{{author}}',
+    version='{{config.get('version', '1.0.0')}}',
+    description='{{config.get('description')}}',
+    author='{{config.get('author')}}',
     install_requires={{reqs}}
 )

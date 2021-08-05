@@ -2,6 +2,7 @@ import os
 import time
 
 from django.conf import settings
+from django.apps import apps
 
 from sage_painless import templates
 from sage_painless.utils.jinja_service import JinjaHandler
@@ -10,18 +11,17 @@ from sage_painless.utils.pep8_service import Pep8
 
 
 class ToxGenerator(JinjaHandler, JsonHandler, Pep8):
-    """
-    generate tox configs & coverage support
-    """
+    """generate tox configs & coverage support"""
     APPS_KEYWORD = 'apps'
+    DEPLOY_KEYWORD = 'deploy'
+    TOX_KEYWORD = 'tox'
 
     def __init__(self, *args, **kwargs):
-        """init"""
-        pass
+        super().__init__(*args, **kwargs)
 
-    def get_app_names(self, diagram):
+    def get_app_names(self):
         """get diagram app names"""
-        return diagram.get(self.APPS_KEYWORD).keys()
+        return [app.name for app in apps.get_app_configs() if not app.name.startswith('django.')]
 
     def get_kernel_name(self):
         """get project kernel name"""
@@ -35,12 +35,27 @@ class ToxGenerator(JinjaHandler, JsonHandler, Pep8):
         with open(requirements) as f:
             return [l.strip('\n') for l in f if l.strip('\n') and not l.startswith('#')]
 
-    def generate(self, diagram_path, version, req_path, description, author):
-        """generate files"""
+    def extract_tox_config(self, diagram):
+        """extract tox config from diagram json"""
+        deploy = diagram.get(self.DEPLOY_KEYWORD)
+        if not deploy:
+            raise KeyError('`deploy` not set in diagram json file')
+        return deploy.get(self.TOX_KEYWORD)
+
+    def generate(self, diagram_path):
+        """generate tox and coverage config
+        template:
+            sage_painless/templates/tox.txt
+            sage_painless/templates/coveragerc.txt
+            sage_painless/templates/setup.txt
+        """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
-        app_names = self.get_app_names(diagram)
+        app_names = self.get_app_names()
         kernel_name = self.get_kernel_name()
+
+        config = self.extract_tox_config(diagram)
+
         # .coveragerc
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/.coveragerc',
@@ -65,10 +80,8 @@ class ToxGenerator(JinjaHandler, JsonHandler, Pep8):
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'setup.txt'),
             data={
                 'kernel_name': kernel_name,
-                'reqs': self.parse_requirements(req_path),
-                'version': version,
-                'description': description,
-                'author': author
+                'config': config,
+                'reqs': self.parse_requirements(config.get('req_path'))
             }
         )
         self.fix_pep8(f'{settings.BASE_DIR}/setup.py')

@@ -112,18 +112,7 @@ class Command(BaseCommand):
                 answer=True
             )
             tox_generator = ToxGenerator()
-            version = input('Please enter the version of your project: ')
-            description = input('Please enter a description for your project: ')
-            author = input('Please enter author name/names: ')
-            req_path = input('Please enter the path of your requirements.txt (default: requirements.txt): ')
-            req_path = req_path if req_path else 'requirements.txt'
-            check, message = tox_generator.generate(
-                diagram_path=diagram_path,
-                version=version,
-                description=description,
-                author=author,
-                req_path=req_path
-            )
+            check, message = tox_generator.generate(diagram_path)
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
             else:
