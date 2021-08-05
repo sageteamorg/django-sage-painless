@@ -65,24 +65,8 @@ class Command(BaseCommand):
                 question='create gunicorn conf.py',
                 answer=True
             )
-            kernel_name = input("Please enter your django project's root name(e.g kernel): ")
-            worker_class = input('Please enter gunicorn worker class(default: gevent): ')
-            worker_connections = input('Please enter gunicorn worker connections count(default: 3000): ')
-            workers = input('Please enter gunicorn workers count(default: 5): ')
-            access_log = input(
-                'Please enter gunicorn access log path(default: /var/log/gunicorn/gunicorn-access.log): ')
-            error_log = input(
-                'Please enter gunicorn error log path(default: /var/log/gunicorn/gunicorn-error.log): ')
-
             gunicorn_generator = GunicornGenerator()
-            check, message = gunicorn_generator.generate(
-                kernel_name,
-                worker_class,
-                worker_connections,
-                access_log,
-                error_log,
-                workers
-            )
+            check, message = gunicorn_generator.generate(diagram_path)
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
             else:
