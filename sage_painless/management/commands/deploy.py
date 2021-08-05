@@ -85,28 +85,8 @@ class Command(BaseCommand):
                 question='create uwsgi.ini',
                 answer=True
             )
-            chdir = input("Please enter path to your project base directory(e.g /src/kernel): ")
-            home = input("Please enter path to your project virtualenv(e.g /src/venv): ")
-            module = input('Please enter wsgi module(e.g mysite.wsgi:application): ')
-            master = input('Please enter master(True/False): ')
-            pidfile = input('Please enter project pid file path(e.g /tmp/project-master.pid): ')
-            vacuum = input('Please enter vacuum(True/False): ')
-            max_requests = input('Please enter max requests for uwsgi(default: 5000): ')
-            processes = input('Please enter max worker processes count for uwsgi(default: 10): ')
-            daemonize = input('Please enter project daemonize file path(default: /var/log/uwsgi/uwsgi.log): ')
-
             uwsgi_generator = UwsgiGenerator()
-            check, message = uwsgi_generator.generate(
-                chdir,
-                home,
-                module,
-                master,
-                pidfile,
-                vacuum,
-                max_requests,
-                processes,
-                daemonize
-            )
+            check, message = uwsgi_generator.generate(diagram_path)
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
             else:
