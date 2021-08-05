@@ -56,19 +56,23 @@ painless creates django backend projects without developer coding
 it can generate these parts:
 
 - models.py
+- signals.py
 - admin.py
 - serializers.py
 - views.py
 - urls.py
 - tests
-- api documentation
+- API documentation
 - Dockerfile
 - docker-compose.yml
-
-it also can config pro stuff in django:
-
-- Redis cache
-- RabbitMQ
+- cache queryset (Redis)
+- video streaming
+- database encryption (PostgreSQL)
+- tox
+- coverage
+- gunicorn
+- uwsgi
+- README.md
 
 Documentation
 -------------
