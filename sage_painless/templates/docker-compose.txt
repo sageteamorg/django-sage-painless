@@ -1,30 +1,30 @@
-version: "3.8"
+version: "{{config.get('compose_version', '3.8')}}"
 
 services:
   db:
     container_name: db
-    image: {{db_image}}
+    image: {{config.get('db_image')}}
     hostname: db
     restart: on-failure
     environment:
-      - POSTGRES_DB={{db_name}}
-      - POSTGRES_USER={{db_user}}
-      - POSTGRES_PASSWORD={{db_pass}}
+      - POSTGRES_DB={{config.get('db_name')}}
+      - POSTGRES_USER={{config.get('db_user')}}
+      - POSTGRES_PASSWORD={{config.get('db_pass')}}
 
-  {% if redis_support %}
+  {% if config.get('redis') %}
   redis:
     container_name: redis
     image: redis:alpine
   {% endif %}
 
-  {% if rabbit_support %}
+  {% if config.get('rabbitmq') %}
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3-management-alpine
     environment:
-      - RABBITMQ_DEFAULT_USER={{rabbitmq_user}}
-      - RABBITMQ_DEFAULT_PASS={{rabbitmq_pass}}
-      - RABBITMQ_DEFAULT_VHOST=/
+      - RABBITMQ_DEFAULT_USER={{config.get('rabbitmq_user')}}
+      - RABBITMQ_DEFAULT_PASS={{config.get('rabbitmq_pass')}}
+      - RABBITMQ_DEFAULT_VHOST={{config.get('rabbitmq_vhost', '/')}}
   {% endif %}
 
   web:
@@ -36,15 +36,15 @@ services:
     ports:
       - 8000:8000
     hostname: web
-    {% if redis_support %}
+    {% if config.get('redis') %}
     environment:
-      - REDIS_URL='redis://redis:6379/'
+      - REDIS_URL={{config.get('redis_url', 'redis://redis:6379/')}}
     {% endif %}
     depends_on:
       - db
-      {% if redis_support %}
+      {% if config.get('redis') %}
       - redis
       {% endif %}
-      {% if rabbit_support %}
+      {% if config.get('rabbitmq') %}
       - rabbitmq
       {% endif %}
