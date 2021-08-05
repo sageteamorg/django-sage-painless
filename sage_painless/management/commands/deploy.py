@@ -38,48 +38,9 @@ class Command(BaseCommand):
                 question='create Dockerfile',
                 answer=True
             )
-            db_image = input("Please enter your project's database image(e.g postgres): ")
-            db_name = input('Please enter database name: ')
-            db_user = input('Please enter database user username: ')
-            db_pass = input('Please enter database user password: ')
-            redis_support = input('Would you like to config redis server for your project(yes/no)? ')
-            rabbit_support = input('Would you like to config rabbitMQ for your project(yes/no)? ')
-            rabbit_user = None
-            rabbit_pass = None
-            if rabbit_support == 'yes':
-                reporter.add_question_answer(
-                    question='rabbitmq support',
-                    answer=True
-                )
-                rabbit_user = input('Please enter rabbitMQ user username: ')
-                rabbit_pass = input('Please enter rabbitMQ user password: ')
-            else:
-                reporter.add_question_answer(
-                    question='rabbitmq support',
-                    answer=False
-                )
 
-            if redis_support == 'yes':
-                reporter.add_question_answer(
-                    question='redis support',
-                    answer=True
-                )
-            else:
-                reporter.add_question_answer(
-                    question='redis support',
-                    answer=False
-                )
-
-            redis_support = True if redis_support == 'yes' else False
-            rabbit_support = True if rabbit_support == 'yes' else False
-
-            docker_generator = DockerGenerator(
-                db_image, db_name, db_user, db_pass,
-                redis_support, rabbit_support,
-                rabbit_user, rabbit_pass
-            )
-
-            check, message = docker_generator.generate()
+            docker_generator = DockerGenerator()
+            check, message = docker_generator.generate(diagram_path)
 
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
