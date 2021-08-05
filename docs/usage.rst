@@ -26,7 +26,7 @@ You can generate deploy config files
 
 .. code:: shell
 
-    $ python manage.py deploy --diagram <path to diagram>
+    $ python manage.py deploy --diagram <path to deploy diagram>
 
 You can generate docs files
 
@@ -45,32 +45,8 @@ Would you like to generate admin.py(yes/no)?                            generate
 Would you like to generate serializers.py & views.py(yes/no)?           generates serializers.py and views.py in api directory for your project
 Would you like to generate test for your project(yes/no)?               generates model test and api test for your project in tests directory
 Would you like to add cache queryset support(yes/no)?                   it will cache queryset via redis in your views.py
-Would you like to dockerize your project(yes/no)?                       creates Dockerfile and docker-compose.yml for your project
-Would you like to generate docs(yes/no)?                                generates README.md and saves in docs/sage_painless/git/
 ======================================================================  ==========================================================================
 
-If you chose to dockerize project:
-
-======================================================================  ==========================================================================
-                            Question                                                       Description
-======================================================================  ==========================================================================
-Please enter the version of your project(e.g 2.1):                      the version of your project in number
-Please enter your project's database image(e.g postgres):               it can be one of docker images recommended `postgres`
-Please enter database name:                                             your database name that set in django settings
-Please enter database user username:                                    the database will create by this user
-Please enter database user password:                                    password of user
-Would you like to config redis server for your project(yes/no)?         if you want cache support `yes` else `no`
-Would you like to config rabbitMQ for your project(yes/no)?             configs RabbitMQ in your docker environment
-======================================================================  ==========================================================================
-
-If you chose to config RabbitMQ:
-
-======================================================================  ==========================================================================
-                            Question                                                       Description
-======================================================================  ==========================================================================
-Please enter rabbitMQ user username:                                    RabbitMQ user username
-Please enter rabbitMQ user password:                                    RabbitMQ user password
-======================================================================  ==========================================================================
 
 If you generated api you have to add app urls to urls.py:
 

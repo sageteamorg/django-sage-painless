@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.1] - 2021-08-06
+### Fixed
+- Fixed deploy generator
+- Refactored deploy generator
+
+## [1.10.0] - 2021-08-06
+### Added
+- Added uwsgi config generator
+
+## [1.9.0] - 2021-08-05
+### Added
+- Added gunicorn config generator
+
+## [1.8.0] - 2021-08-04
+### Added
+- Added tox & coverage config generator
+
+## [1.7.0] - 2021-08-03
+### Added
+- Improved test generation
+
 ## [1.6.0] - 2021-07-24
 ### Added
 - Added video stream support
@@ -56,3 +77,8 @@ All notable changes to this project will be documented in this file.
 [1.4.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.5.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.6.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.7.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.8.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.9.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.10.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.10.1]: https://github.com/sageteam-org/django-sage-painless/commits/develop

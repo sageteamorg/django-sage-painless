@@ -86,9 +86,9 @@ Then add 'sage_painless' to INSTALLED_APPS in settings.py
 
 However, you can add following apps in your INSTALLED_APPS:
 
-- 'rest_framework'
-- 'drf_yasg'
-- 'django_seed'
+- rest_framework
+- drf_yasg
+- django_seed
 
 ```python
 INSTALLED_APPS = [
@@ -108,25 +108,29 @@ To generate a Django app you just need a diagram in JSON format. diagram is a js
 start to generate
 (it is required for development. you will run tests on this app)
 
-First validate your diagram format. It will raise errors if your diagram format is incorrect.
+- First validate your diagram format. It will raise errors if your diagram format is incorrect.
 
 ```shell
 $ python manage.py validate_diagram --diagram <path to diagram>
 ```
 
-Now you can generate code
+- Now you can generate code (you need generate diagram json file)
+
+[Generate diagram sample](tests/diagrams/product_diagram.json)
 
 ```shell
 $ python manage.py generate --diagram <path to diagram>
 ```
 
-You can generate deploy config files 
+- You can generate deploy config files (you need a deploy diagram json file)
+
+[Deploy diagram sample](tests/diagrams/deploy_diagram.json)
 
 ```shell
-$ python manage.py deploy --diagram <path to diagram>
+$ python manage.py deploy --diagram <path to deploy diagram>
 ```
 
-You can generate doc files(README, etc) 
+- You can generate doc files (README, etc) 
 
 ```shell
 $ python manage.py docs --diagram <path to diagram>
@@ -134,7 +138,7 @@ $ python manage.py docs --diagram <path to diagram>
 
 Here system will ask you what you want to generate for your app.
 
-If you generated api you have to add app urls to urls.py:
+- If you generated api you have to add app urls to main urls.py:
 
 ```python
 urlpatterns = [
@@ -160,8 +164,6 @@ $ python manage.py test products
 ```shell
 $ python manage.py runserver
 ```
-
-- Rest API documentation is available at `localhost:8000/api/doc/`
   
 - For support Rest API doc add this part to your urls.py
 
@@ -206,10 +208,11 @@ INSTALLED_APPS = [
 
 - you have to generate everything for this app
   
-- diagram file is available here: [Diagram](sage_painless/tests/diagrams/product_diagram.json)
+- diagram file is available here: [Diagram](tests/diagrams/product_diagram.json)
+- download diagram file and generate test app using this commend
 
 ```shell
-$ python manage.py generate --diagram sage_painless/tests/diagrams/product_diagram.json
+$ python manage.py generate --diagram tests/diagrams/product_diagram.json
 ```
 
 - run tests
@@ -229,9 +232,9 @@ $ python manage.py test sage_painless
 - [x] video streaming
 - [x] improve test generation
 - [x] coverage & tox
-- [ ] deployment questionnaire
+- [x] deployment questionnaire
 - [x] management command
-- [ ] docker
+- [x] docker
 - [x] gunicorn, uwsgi, etc
 - [ ] nginx configuration
 - [ ] commit generation
@@ -262,5 +265,5 @@ $ python manage.py test sage_painless
 - [ ] error handlers (2xx, 3xx, 4xx, 5xx)
 - [ ] django forms support
 - [ ] django view support
-- [ ] image compression supoort
+- [ ] image compression support
 - [ ] debug tools support

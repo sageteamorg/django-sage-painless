@@ -64,9 +64,9 @@ Then add 'sage\_painless' to INSTALLED\_APPS in settings.py
 
 These apps should be in your INSTALLED\_APPS:
 
--  'rest\_framework'
--  'drf\_yasg'
--  'django\_seed'
+-  rest\_framework
+-  drf\_yasg
+-  django\_seed
 
 .. code:: python
 

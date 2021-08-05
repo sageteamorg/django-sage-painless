@@ -7,6 +7,11 @@ Template
 Diagram is a json file that contains database tables, settings for admin panel and API configs
 It is the only thing you need to generate a whole project
 
+There are 2 types of diagram:
+
+1. generate diagram (for generating Django apps)
+2. [NEW] deploy diagram (for generating deploy configs like docker, gunicorn, uwsgi, etc)
+
 [NEW]: You can also use `encryption` capability in diagram. Example:
 
 .. code:: python
@@ -189,7 +194,7 @@ methods                 list of strings (Not case sensitive)
 Examples
 ----------------
 
-example 1:
+example 1 (generate diagram):
 
 2 apps (ecommerce & discount)
 
@@ -332,7 +337,7 @@ example 1:
     }
 
 
-example 2:
+example 2 (generate diagram):
 
 1 app (articles)
 
@@ -413,6 +418,49 @@ example 2:
               }
             }
           }
+        }
+      }
+    }
+
+[NEW] example 3 (deploy diagram):
+
+.. code:: json
+
+    {
+      "deploy": {
+        "docker": {
+          "db_image": "postgres",
+          "db_name": "products",
+          "db_user": "postgres",
+          "db_pass": "postgres1234",
+          "redis": true,
+          "rabbitmq": false
+        },
+        "gunicorn": {
+          "project_name": "kernel",
+          "worker_class": "sync",
+          "worker_connections": 5000,
+          "workers": 5,
+          "accesslog": "/var/log/gunicorn/gunicorn-access.log",
+          "errorlog": "/var/log/gunicorn/gunicorn-error.log",
+          "reload": true
+        },
+        "uwsgi": {
+          "chdir": "/src/kernel",
+          "home": "/src/venv",
+          "module": "kernel.wsgi",
+          "master": true,
+          "pidfile": "/tmp/project-master.pid",
+          "vacuum": true,
+          "max-requests": 3000,
+          "processes": 10,
+          "daemonize": "/var/log/uwsgi/uwsgi.log"
+        },
+        "tox": {
+          "version": "1.0.0",
+          "description": "test project",
+          "author": "SageTeam",
+          "req_path": "requirements.txt"
         }
       }
     }
