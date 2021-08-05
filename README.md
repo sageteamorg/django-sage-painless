@@ -223,7 +223,7 @@ $ python manage.py test sage_painless
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Sepehr Akbarazadeh Maintainer](https://github.com/sepehr-akbarzadeh)                                                                                                             | [Mehran Rahmanzadeh Maintainer](https://github.com/mrhnz)                                                                                                       |
 
-## Goal
+## Version 1
 - [x] generate README.md
 - [x] db encryption
 - [x] video streaming
@@ -237,8 +237,30 @@ $ python manage.py test sage_painless
 - [ ] commit generation
 - [ ] GitHub repo integration
 - [ ] CI CD
-- [ ] multi Database
+- [ ] Database Support (postgres, mysql, sqlite, sql server)
 - [ ] security config and check
 - [ ] seo
 - [ ] graphql
 - [ ] package manager support
+
+## Version 2
+- [ ] modular setting
+- [ ] mock data generator
+- [ ] file field svg support
+- [ ] image field enhancement
+- [ ] traditional mixins
+- [ ] decorator signals
+- [ ] logging configuration
+- [ ] sentry support
+- [ ] monitoring feature (prometheus)
+- [ ] track data history
+- [ ] stream upload
+- [ ] CORS config
+- [ ] mongo support
+- [ ] Elastic search configuration
+- [ ] cache support (+Memcache)
+- [ ] error handlers (2xx, 3xx, 4xx, 5xx)
+- [ ] django forms support
+- [ ] django view support
+- [ ] image compression supoort
+- [ ] debug tools support
