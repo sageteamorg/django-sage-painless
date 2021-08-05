@@ -25,21 +25,15 @@ We used the name painless instead of the Django code generator because this pack
 ![Downloads](https://static.pepy.tech/badge/django-sage-painless "django-sage-painless")
 
 - [Project Detail](#project-detail)
-- [Git Rules](#git-rules)
 - [Get Started](#getting-started)
 - [Usage](#usage)
-- [Contribute](#contribute)
+- [Contribute](#how-to-contribute)
+- [Git Rules](#git-rules)
 
 ## Project Detail
 
 - Language: Python > 3.6
 - Framework: Django > 3.1
-
-## Git Rules
-
-S.A.G.E. team Git Rules Policy is available here:
-
-- [S.A.G.E. Git Policy](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
 
 ## Getting Started
 
@@ -220,6 +214,12 @@ $ python manage.py generate --diagram tests/diagrams/product_diagram.json
 ```shell
 $ python manage.py test sage_painless
 ```
+
+## Git Rules
+
+S.A.G.E. team Git Rules Policy is available here:
+
+- [S.A.G.E. Git Policy](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
 
 ## Team
 | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true" width="230px" height="230px" alt="Sepehr Akbarzadeh">](https://github.com/sepehr-akbarzadeh) | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true" width="225px" height="340px" alt="Mehran Rahmanzadeh">](https://github.com/mrhnz) |
