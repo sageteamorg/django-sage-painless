@@ -2,9 +2,6 @@
 Auto Generated conf.py
 You may need to change some parts
 """
-name = '{{kernel_name}}'
-worker_class = '{{worker_class}}'
-worker_connections = {{worker_connections}}
-accesslog = '{{access_log}}'
-errorlog = '{{error_log}}'
-workers = {{workers}}
+{% for key in config %}
+{{key}}={% if config.get(key) is string %}'{{config.get(key)}}'{%else%}{{config.get(key)}}{%endif%}
+{%endfor%}
