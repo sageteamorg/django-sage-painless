@@ -2,6 +2,34 @@
 Auto Generated conf.py
 You may need to change some parts
 """
+import multiprocessing
+
+{% if comments.get('bind') %}# {{comments.get('bind')}}{%endif%}
+bind = '{{config.pop('bind', '127.0.0.1:8000')}}'
+
+{% if comments.get('backlog') %}# {{comments.get('backlog')}}{%endif%}
+backlog = {{config.pop('backlog', '2084')}}
+
+{% if comments.get('workers') %}# {{comments.get('workers')}}{%endif%}
+workers = {{config.pop('workers', 'multiprocessing.cpu_count() * 2 + 1')}}
+
+{% if comments.get('worker_class') %}# {{comments.get('worker_class')}}{%endif%}
+worker_class = '{{config.pop('worker_class', 'sync')}}'
+
+{% if comments.get('worker_connections') %}# {{comments.get('worker_connections')}}{%endif%}
+worker_connections = {{config.pop('worker_connections', '1000')}}
+
+{% if comments.get('timeout') %}# {{comments.get('timeout')}}{%endif%}
+timeout = {{config.pop('timeout', '30')}}
+
+{% if comments.get('loglevel') %}# {{comments.get('loglevel')}}{%endif%}
+loglevel = '{{config.pop('loglevel', 'info')}}'
+
+{% if comments.get('accesslog') %}# {{comments.get('accesslog')}}{%endif%}
+accesslog = '{{config.pop('accesslog', '-')}}'
+
+{% if comments.get('errorlog') %}# {{comments.get('errorlog')}}{%endif%}
+errorlog = '{{config.pop('errorlog', '-')}}'
 {% for key in config %}
 {% if comments.get(key) %}# {{comments.get(key)}}{%endif%}
 {{key}}={% if config.get(key) is string %}'{{config.get(key)}}'{%else%}{{config.get(key)}}{%endif%}
