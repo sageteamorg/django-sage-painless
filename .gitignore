@@ -133,3 +133,6 @@ psude.py
 sage_painless/services/model_generator.py_pseudo.txt
 
 fifo.py
+gunicorn-conf.py
+uwsgi.ini
+.env.prod

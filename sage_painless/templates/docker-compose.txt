@@ -1,50 +1,56 @@
-version: "{{config.get('compose_version', '3.8')}}"
+version: "{{docker_config.get('compose_version', '3.8')}}"
 
 services:
-  db:
-    container_name: db
-    image: {{config.get('db_image')}}
-    hostname: db
-    restart: on-failure
-    environment:
-      - POSTGRES_DB={{config.get('db_name')}}
-      - POSTGRES_USER={{config.get('db_user')}}
-      - POSTGRES_PASSWORD={{config.get('db_pass')}}
-
-  {% if config.get('redis') %}
-  redis:
-    container_name: redis
-    image: redis:alpine
-  {% endif %}
-
-  {% if config.get('rabbitmq') %}
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3-management-alpine
-    environment:
-      - RABBITMQ_DEFAULT_USER={{config.get('rabbitmq_user')}}
-      - RABBITMQ_DEFAULT_PASS={{config.get('rabbitmq_pass')}}
-      - RABBITMQ_DEFAULT_VHOST={{config.get('rabbitmq_vhost', '/')}}
-  {% endif %}
-
   web:
     container_name: web
     build: .
+    {% if gunicorn %}
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn -c gunicorn-conf.py {{kernel}}.wsgi:application"
+    {%elif uwsgi%}
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && uwsgi --ini uwsgi.ini"
+    {%else%}
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    {%endif%}
     volumes:
       - .:/code
     ports:
       - 8000:8000
     hostname: web
-    {% if config.get('redis') %}
+    {% if docker_config.get('redis') %}
     environment:
-      - REDIS_URL={{config.get('redis_url', 'redis://redis:6379/')}}
+      - REDIS_URL={{docker_config.get('redis_url', 'redis://redis:6379/')}}
     {% endif %}
+    env_file:
+      - ./.env.prod
     depends_on:
       - db
-      {% if config.get('redis') %}
+      {% if docker_config.get('redis') %}
       - redis
       {% endif %}
-      {% if config.get('rabbitmq') %}
+      {% if docker_config.get('rabbitmq') %}
       - rabbitmq
       {% endif %}
+  db:
+    container_name: db
+    image: {{docker_config.get('db_image', 'postgres')}}
+    hostname: db
+    restart: on-failure
+    environment:
+      - POSTGRES_DB={{docker_config.get('db_name')}}
+      - POSTGRES_USER={{docker_config.get('db_user')}}
+      - POSTGRES_PASSWORD={{docker_config.get('db_pass')}}
+  {% if docker_config.get('redis') %}
+  redis:
+    container_name: redis
+    image: redis:alpine
+  {% endif %}
+  {% if docker_config.get('rabbitmq') %}
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER={{docker_config.get('rabbitmq_user')}}
+      - RABBITMQ_DEFAULT_PASS={{docker_config.get('rabbitmq_pass')}}
+      - RABBITMQ_DEFAULT_VHOST={{docker_config.get('rabbitmq_vhost', '/')}}
+  {% endif %}
+# TODO: nginx will add here
