@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.10.2] - 2021-08-06
+### Fixed
+- Fixed gunicorn default config
+- Integrate gunicorn & uwsgi to docker generator
+- Create .env file generation in docker
+- Fixed security some bugs
+
 ## [1.10.1] - 2021-08-06
 ### Fixed
 - Fixed deploy generator

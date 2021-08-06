@@ -5,8 +5,9 @@ setup(
     packages=find_packages(exclude=['tests*']),
     package_data={'sage_painless/templates': ['*.txt']},
     include_package_data=True,
-    version='1.10.1',
-    description='django package for auto generating projects',
+    version='1.10.2',
+    description='A handy tool for generating Django-based backend projects without coding. On the other hand, '
+                'it is a code generator of the Django framework.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     author='Sage Team',
@@ -25,6 +26,9 @@ setup(
         'django-sage-encrypt',
         'django-sage-streaming',
         'tox',
-        'coverage'
+        'coverage',
+        'gunicorn',
+        'greenlet',
+        'gevent'
     ]
 )
