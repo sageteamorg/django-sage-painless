@@ -14,7 +14,7 @@ backlog = {{config.pop('backlog', '2084')}}
 workers = {{config.pop('workers', 'multiprocessing.cpu_count() * 2 + 1')}}
 
 {% if comments.get('worker_class') %}# {{comments.get('worker_class')}}{%endif%}
-worker_class = '{{config.pop('worker_class', 'sync')}}'
+worker_class = '{{config.pop('worker_class', 'gevent')}}'
 
 {% if comments.get('worker_connections') %}# {{comments.get('worker_connections')}}{%endif%}
 worker_connections = {{config.pop('worker_connections', '1000')}}
