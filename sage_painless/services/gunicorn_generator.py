@@ -124,19 +124,19 @@ class GunicornGenerator(JinjaHandler, JsonHandler, Pep8):
         config = self.extract_gunicorn_config(diagram)  # get gunicorn config from diagram
 
         # initialize
-        self.create_dir_if_not_exists('config')
-        self.create_dir_if_not_exists('config/gunicorn/')
+        # self.create_dir_if_not_exists('config')
+        # self.create_dir_if_not_exists('config/gunicorn/')
 
         # generate conf.py
         self.stream_to_template(
-            output_path=f'{settings.BASE_DIR}/config/gunicorn/conf.py',
+            output_path=f'{settings.BASE_DIR}/gunicorn-conf.py',
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'conf.txt'),
             data={
                 'config': config,
                 'comments': self.CONFIG_COMMENTS
             }
         )
-        self.fix_pep8(f'{settings.BASE_DIR}/config/gunicorn/conf.py')
+        self.fix_pep8(f'{settings.BASE_DIR}/gunicorn-conf.py')
 
         end_time = time.time()
         return True, 'gunicorn config generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))

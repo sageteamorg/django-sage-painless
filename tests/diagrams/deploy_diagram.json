@@ -9,10 +9,7 @@
       "rabbitmq": false
     },
     "gunicorn": {
-      "project_name": "kernel",
-      "worker_class": "sync",
-      "worker_connections": 5000,
-      "workers": 5,
+      "bind": "0.0.0.0:8000",
       "accesslog": "/var/log/gunicorn/gunicorn-access.log",
       "errorlog": "/var/log/gunicorn/gunicorn-error.log",
       "reload": true
