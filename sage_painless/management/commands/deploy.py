@@ -20,47 +20,17 @@ class Command(BaseCommand):
         diagram_path = options.get('diagram')
         stdout_messages = list()  # initial empty messages
 
-        # generate docker config
-        docker_support = input('Would you like to dockerize your project(yes/no)? ')
-
         reporter = ReportUserAnswer(
             app_name='deploy-config',
             file_prefix=f'deploy-config-{int(datetime.datetime.now().timestamp())}'
         )
         reporter.init_report_file()
 
-        if docker_support == 'yes':
-            reporter.add_question_answer(
-                question='create docker-compose.yml',
-                answer=True
-            )
-            reporter.add_question_answer(
-                question='create Dockerfile',
-                answer=True
-            )
-
-            docker_generator = DockerGenerator()
-            check, message = docker_generator.generate(diagram_path)
-
-            if check:
-                stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
-            else:
-                stdout_messages.append(self.style.ERROR(f'deploy[ERROR]: {message}'))
-
-        else:
-            reporter.add_question_answer(
-                question='create docker-compose.yml',
-                answer=False
-            )
-            reporter.add_question_answer(
-                question='create Dockerfile',
-                answer=False
-            )
-
         # generate gunicorn config
         gunicorn_support = input('Would you like to generate gunicorn config(yes/no)? ')
+        gunicorn_support = True if gunicorn_support == 'yes' else False
 
-        if gunicorn_support == 'yes':
+        if gunicorn_support:
             reporter.add_question_answer(
                 question='create gunicorn conf.py',
                 answer=True
@@ -79,8 +49,9 @@ class Command(BaseCommand):
 
         # generate uwsgi config
         uwsgi_support = input('Would you like to generate uwsgi config(yes/no)? ')
+        uwsgi_support = True if uwsgi_support == 'yes' else False
 
-        if uwsgi_support == 'yes':
+        if uwsgi_support:
             reporter.add_question_answer(
                 question='create uwsgi.ini',
                 answer=True
@@ -97,8 +68,45 @@ class Command(BaseCommand):
                 answer=False
             )
 
+        # generate docker config
+        docker_support = input('Would you like to dockerize your project(yes/no)? ')
+        docker_support = True if docker_support == 'yes' else False
+
+        if docker_support:
+            reporter.add_question_answer(
+                question='create docker-compose.yml',
+                answer=True
+            )
+            reporter.add_question_answer(
+                question='create Dockerfile',
+                answer=True
+            )
+
+            docker_generator = DockerGenerator()
+            check, message = docker_generator.generate(
+                diagram_path,
+                gunicorn_support=gunicorn_support,
+                uwsgi_support=uwsgi_support
+            )
+
+            if check:
+                stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
+            else:
+                stdout_messages.append(self.style.ERROR(f'deploy[ERROR]: {message}'))
+
+        else:
+            reporter.add_question_answer(
+                question='create docker-compose.yml',
+                answer=False
+            )
+            reporter.add_question_answer(
+                question='create Dockerfile',
+                answer=False
+            )
+
         # generate tox config
         tox_support = input('Would you like to generate tox & coverage config files(yes/no)? ')
+        tox_support = True if tox_support == 'yes' else False
 
         reporter = ReportUserAnswer(
             app_name='tox',
@@ -106,7 +114,7 @@ class Command(BaseCommand):
         )
         reporter.init_report_file()
 
-        if tox_support == 'yes':
+        if tox_support:
             reporter.add_question_answer(
                 question='create tox & coverage config',
                 answer=True
