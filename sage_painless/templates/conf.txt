@@ -5,7 +5,7 @@ You may need to change some parts
 import multiprocessing
 
 {% if comments.get('bind') %}# {{comments.get('bind')}}{%endif%}
-bind = '{{config.pop('bind', '127.0.0.1:8000')}}'
+bind = '{{config.pop('bind', '0.0.0.0:8000')}}'
 
 {% if comments.get('backlog') %}# {{comments.get('backlog')}}{%endif%}
 backlog = {{config.pop('backlog', '2084')}}
