@@ -247,6 +247,7 @@ S.A.G.E. team Git Rules Policy is available here:
 - [ ] package manager support
 
 ## Version 2
+- [ ] Django admin generator
 - [ ] modular setting
 - [ ] mock data generator
 - [ ] file field svg support
