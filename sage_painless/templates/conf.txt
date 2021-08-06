@@ -3,5 +3,6 @@ Auto Generated conf.py
 You may need to change some parts
 """
 {% for key in config %}
+{% if comments.get(key) %}# {{comments.get(key)}}{%endif%}
 {{key}}={% if config.get(key) is string %}'{{config.get(key)}}'{%else%}{{config.get(key)}}{%endif%}
 {%endfor%}
