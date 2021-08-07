@@ -15,8 +15,10 @@ from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
+from sage_painless.utils.timing_service import TimingService
 
-class ModelGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
+
+class ModelGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
     """Read models data from a Json file and stream it to app_name/models.py"""
 
     MODELS_KEYWORD = 'models'
@@ -126,10 +128,6 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
     def create_app_if_not_exists(self, app_name):
         if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
             management.call_command('startapp', app_name)
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def generate_models(self, diagram_path, cache_support=False):
         """stream models to app_name/models/model_name.py

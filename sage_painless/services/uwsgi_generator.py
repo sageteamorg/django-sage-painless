@@ -6,19 +6,16 @@ from django.conf import settings
 from sage_painless import templates
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
+from sage_painless.utils.timing_service import TimingService
 
 
-class UwsgiGenerator(JinjaHandler, JsonHandler):
+class UwsgiGenerator(JinjaHandler, JsonHandler, TimingService):
     """generate uwsgi config"""
     DEPLOY_KEYWORD = 'deploy'
     UWSGI_KEYWORD = 'uwsgi'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def extract_uwsgi_config(self, diagram):
         """extract uwsgi config from diagram json"""

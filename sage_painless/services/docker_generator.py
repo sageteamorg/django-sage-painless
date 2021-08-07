@@ -7,19 +7,16 @@ from django.core.management.utils import get_random_secret_key
 from sage_painless import templates
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
+from sage_painless.utils.timing_service import TimingService
 
 
-class DockerGenerator(JinjaHandler, JsonHandler):
+class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
     """Generate DockerFile & docker-compose"""
     DEPLOY_KEYWORD = 'deploy'
     DOCKER_KEYWORD = 'docker'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def get_kernel_name(self):
         """get project kernel name"""

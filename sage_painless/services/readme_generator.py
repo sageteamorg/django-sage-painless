@@ -12,9 +12,10 @@ from sage_painless.utils.file_service import FileService
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
+from sage_painless.utils.timing_service import TimingService
 
 
-class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
+class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
     """Generate README.md for project"""
 
     APPS_KEYWORD = 'apps'
@@ -57,10 +58,6 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
     def merge(self, list_a: list, list_b: list):
         """merge 2 lists"""
         return list(set(list_a + list_b))
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def has_docker_support(self):
         """is project dockerized"""

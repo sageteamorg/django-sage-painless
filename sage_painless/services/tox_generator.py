@@ -8,9 +8,10 @@ from sage_painless import templates
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
+from sage_painless.utils.timing_service import TimingService
 
 
-class ToxGenerator(JinjaHandler, JsonHandler, Pep8):
+class ToxGenerator(JinjaHandler, JsonHandler, Pep8, TimingService):
     """generate tox configs & coverage support"""
     APPS_KEYWORD = 'apps'
     DEPLOY_KEYWORD = 'deploy'
@@ -26,10 +27,6 @@ class ToxGenerator(JinjaHandler, JsonHandler, Pep8):
     def get_kernel_name(self):
         """get project kernel name"""
         return settings.SETTINGS_MODULE.split('.')[0]
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def parse_requirements(self, requirements):
         with open(requirements) as f:

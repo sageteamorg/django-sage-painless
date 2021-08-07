@@ -12,8 +12,10 @@ from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
+from sage_painless.utils.timing_service import TimingService
 
-class AdminGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
+
+class AdminGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
 
     ADMIN_KEYWORD = 'admin'
     MODELS_KEYWORD = 'models'
@@ -63,10 +65,6 @@ class AdminGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
             admins.append(admin)
 
         return admins
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def generate(self, diagram_path):
         """generate admin.py

@@ -15,9 +15,10 @@ from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
+from sage_painless.utils.timing_service import TimingService
 
 
-class TestGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
+class TestGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
     """Create model/api tests for given diagram"""
 
     APPS_KEYWORD = 'apps'
@@ -107,10 +108,6 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
             models.append(model)
 
         return models, signals
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def check_streaming_support(self, models):
         """check for streaming support in models"""

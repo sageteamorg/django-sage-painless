@@ -9,19 +9,16 @@ from sage_painless.utils.file_service import FileService
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
+from sage_painless.utils.timing_service import TimingService
 
 
-class GunicornGenerator(JinjaHandler, JsonHandler, Pep8, FileService, CommentService):
+class GunicornGenerator(JinjaHandler, JsonHandler, Pep8, FileService, CommentService, TimingService):
     """gunicorn config generator"""
     DEPLOY_KEYWORD = 'deploy'
     GUNICORN_KEYWORD = 'gunicorn'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def extract_gunicorn_config(self, diagram):
         """extract gunicorn config from diagram json"""

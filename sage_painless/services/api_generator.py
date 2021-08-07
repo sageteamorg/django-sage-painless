@@ -12,8 +12,10 @@ from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
+from sage_painless.utils.timing_service import TimingService
 
-class APIGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
+
+class APIGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
     """Generate API serializers & viewsets"""
 
     APPS_KEYWORD = 'apps'
@@ -73,10 +75,6 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
     def add_urls_to_kernel(self):
         """TODO: add app urls to kernel"""
         pass
-
-    def calculate_execute_time(self, start, end):
-        """calculate time taken"""
-        return (end - start) * 1000.0
 
     def check_streaming_support(self, models):
         """check for streaming support in models"""
