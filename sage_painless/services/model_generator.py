@@ -8,6 +8,7 @@ from django.core import management
 from sage_painless.classes.field import Field
 from sage_painless.classes.model import Model
 from sage_painless.classes.signal import Signal
+from sage_painless.utils.file_service import FileService
 
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
@@ -15,7 +16,7 @@ from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
 
-class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
+class ModelGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
     """Read models data from a Json file and stream it to app_name/models.py"""
 
     MODELS_KEYWORD = 'models'
@@ -28,9 +29,9 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
     FUNC_KEYWORD = 'func'
     ARG_KEYWORD = 'arg'
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """init"""
-        pass
+        super().__init__(*args, **kwargs)
 
     def get_table_fields(self, table):
         """extract fields"""
@@ -122,19 +123,6 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return model_names
 
-    def create_dir_if_not_exists(self, directory, app_name):
-        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/{directory}'):
-            os.mkdir(f'{settings.BASE_DIR}/{app_name}/{directory}')
-
-    def create_file_if_not_exists(self, file_path):
-        if not os.path.isfile(file_path):
-            file = Path(file_path)
-            file.touch(exist_ok=True)
-
-    def delete_file_if_exists(self, file_path):
-        if os.path.isfile(file_path):
-            os.remove(file_path)
-
     def create_app_if_not_exists(self, app_name):
         if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
             management.call_command('startapp', app_name)
@@ -144,7 +132,14 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
         return (end - start) * 1000.0
 
     def generate_models(self, diagram_path, cache_support=False):
-        """stream models to app_name/models.py"""
+        """stream models to app_name/models/model_name.py
+        generate signals, mixins, services
+        template:
+            sage_painless/templates/models.txt
+            sage_painless/templates/signals.txt
+            sage_painless/templates/mixins.txt
+            sage_painless/templates/services.txt
+        """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
 
@@ -154,7 +149,7 @@ class ModelGenerator(JinjaHandler, JsonHandler, Pep8):
 
             # initialize
             self.create_app_if_not_exists(app_name)
-            self.create_dir_if_not_exists('models', app_name)
+            self.create_dir_for_app_if_not_exists('models', app_name)
             self.create_file_if_not_exists(f'{settings.BASE_DIR}/{app_name}/models/__init__.py')
             self.delete_file_if_exists(f'{settings.BASE_DIR}/{app_name}/models.py')
 

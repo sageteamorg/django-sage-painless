@@ -8,12 +8,13 @@ from django.apps import apps
 from django.conf import settings
 
 from sage_painless import templates
+from sage_painless.utils.file_service import FileService
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 
 
-class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
+class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
     """Generate README.md for project"""
 
     APPS_KEYWORD = 'apps'
@@ -28,9 +29,9 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
         '_static', '_templates',
     ]
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """init"""
-        pass
+        super().__init__(*args, **kwargs)
 
     def get_built_in_app_names(self):
         """django built-in apps"""
@@ -61,10 +62,6 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
         """calculate time taken"""
         return (end - start) * 1000.0
 
-    def create_dir_if_not_exists(self, directory):
-        if not os.path.exists(f'{settings.BASE_DIR}/{directory}'):
-            os.mkdir(f'{settings.BASE_DIR}/{directory}')
-
     def has_docker_support(self):
         """is project dockerized"""
         compose_file_yml = Path(f'{settings.BASE_DIR}/docker-compose.yml')
@@ -88,7 +85,10 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8):
                     yield from self.make_tree(path, prefix=prefix + extension)
 
     def generate(self, diagram_path):
-        """stream README.md to docs/sage_painless/git/README.md"""
+        """stream README.md to docs/sage_painless/git/README.md
+        template:
+            sage_painless/templates/README.txt
+        """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
 

@@ -3,9 +3,9 @@ import time
 
 from django.apps import apps
 from django.conf import settings
-from django.core import management
 
 from sage_painless.classes.admin import Admin
+from sage_painless.utils.file_service import FileService
 
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
@@ -13,16 +13,16 @@ from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
 
-class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
+class AdminGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
 
     ADMIN_KEYWORD = 'admin'
     MODELS_KEYWORD = 'models'
     APPS_KEYWORD = 'apps'
     TYPE_KEYWORD = 'type'
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """init"""
-        pass
+        super().__init__(*args, **kwargs)
 
     def get_app_models(self, app_name):
         """extract models from app"""
@@ -64,16 +64,15 @@ class AdminGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return admins
 
-    def create_app_if_not_exists(self, app_name):
-        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
-            management.call_command('startapp', app_name)
-
     def calculate_execute_time(self, start, end):
         """calculate time taken"""
         return (end - start) * 1000.0
 
     def generate(self, diagram_path):
-        """generate admin.py for given app"""
+        """generate admin.py
+        template:
+            sage_painless/templates/admin.txt
+        """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
         for app_name in diagram.get(self.APPS_KEYWORD).keys():

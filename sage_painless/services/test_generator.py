@@ -8,6 +8,7 @@ from django.core import management
 from sage_painless.classes.field import Field
 from sage_painless.classes.model import Model
 from sage_painless.classes.signal import Signal
+from sage_painless.utils.file_service import FileService
 
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
@@ -16,10 +17,8 @@ from sage_painless.utils.pep8_service import Pep8
 from sage_painless import templates
 
 
-class TestGenerator(JinjaHandler, JsonHandler, Pep8):
-    """
-    Create model/api tests for given diagram
-    """
+class TestGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
+    """Create model/api tests for given diagram"""
 
     APPS_KEYWORD = 'apps'
     MODELS_KEYWORD = 'models'
@@ -32,9 +31,9 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
     API_KEYWORD = 'api'
     STREAM_KEYWORD = 'stream'
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """init"""
-        pass
+        super().__init__(*args, **kwargs)
 
     def get_table_fields(self, table):
         """get fields"""
@@ -109,23 +108,6 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return models, signals
 
-    def create_dir_if_not_exists(self, directory, app_name):
-        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/{directory}'):
-            os.mkdir(f'{settings.BASE_DIR}/{app_name}/{directory}')
-
-    def create_file_if_not_exists(self, file_path):
-        if not os.path.isfile(file_path):
-            file = Path(file_path)
-            file.touch(exist_ok=True)
-
-    def delete_file_if_exists(self, file_path):
-        if os.path.isfile(file_path):
-            os.remove(file_path)
-
-    def create_app_if_not_exists(self, app_name):
-        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
-            management.call_command('startapp', app_name)
-
     def calculate_execute_time(self, start, end):
         """calculate time taken"""
         return (end - start) * 1000.0
@@ -140,7 +122,10 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
         return False
 
     def generate_tests(self, diagram_path):
-        """stream tests to app_name/tests/*.py"""
+        """stream tests to app_name/tests/test_model_name.py
+        template:
+            sage_painless/templates/test.txt
+        """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
         for app_name in diagram.get(self.APPS_KEYWORD).keys():
@@ -148,7 +133,7 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8):
             models, signals = self.extract_models(models_diagram)
 
             self.create_app_if_not_exists(app_name)
-            self.create_dir_if_not_exists(self.TESTS_DIR, app_name)
+            self.create_dir_for_app_if_not_exists(self.TESTS_DIR, app_name)
             self.create_file_if_not_exists(f'{settings.BASE_DIR}/{app_name}/tests/__init__.py')
             self.delete_file_if_exists(f'{settings.BASE_DIR}/{app_name}/tests.py')
 

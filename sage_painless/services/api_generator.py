@@ -2,10 +2,10 @@ import os
 import time
 
 from django.conf import settings
-from django.core import management
 
 from sage_painless.classes.field import Field
 from sage_painless.classes.model import Model
+from sage_painless.utils.file_service import FileService
 
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
@@ -13,10 +13,8 @@ from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
 
-class APIGenerator(JinjaHandler, JsonHandler, Pep8):
-    """
-    Generate API serializers & viewsets
-    """
+class APIGenerator(JinjaHandler, JsonHandler, Pep8, FileService):
+    """Generate API serializers & viewsets"""
 
     APPS_KEYWORD = 'apps'
     MODELS_KEYWORD = 'models'
@@ -25,9 +23,9 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
     API_DIR = 'api'
     STREAM_KEYWORD = 'stream'
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """init"""
-        pass
+        super().__init__(*args, **kwargs)
 
     def get_table_fields(self, table):
         """get fields"""
@@ -38,8 +36,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         return table.get(self.API_KEYWORD)
 
     def normalize_api_config(self, api_config):
-        """
-        get api config
+        """get api config
         normalize api methods
         return api config
         """
@@ -73,14 +70,6 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
 
         return models
 
-    def create_dir_if_not_exists(self, directory, app_name):
-        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/{directory}'):
-            os.mkdir(f'{settings.BASE_DIR}/{app_name}/{directory}')
-
-    def create_app_if_not_exists(self, app_name):
-        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
-            management.call_command('startapp', app_name)
-
     def add_urls_to_kernel(self):
         """TODO: add app urls to kernel"""
         pass
@@ -103,6 +92,10 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
         stream serializers to app_name/api/serializers.py
         stream viewsets to app_name/api/views.py
         stream urls to app_name/api/urls.py
+        template:
+            sage_painless/templates/serializers.txt
+            sage_painless/templates/views.txt
+            sage_painless/templates/urls.txt
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -110,8 +103,9 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8):
             models_diagram = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)  # get models data for current app
             models = self.extract_models(models_diagram)
 
+            # initialization
             self.create_app_if_not_exists(app_name)
-            self.create_dir_if_not_exists(self.API_DIR, app_name)
+            self.create_dir_for_app_if_not_exists(self.API_DIR, app_name)
 
             # stream to serializers.py
             self.stream_to_template(
