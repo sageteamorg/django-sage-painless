@@ -29,6 +29,24 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
             raise KeyError('`deploy` not set in diagram json file')
         return deploy
 
+    def get_staticfiles_dir(self):
+        """get staticfiles dir
+        `web` is container name
+        """
+        directory = settings.STATIC_ROOT
+        if not directory:
+            raise SystemError('STATIC_ROOT should be set in your settings')
+        return directory.replace(self.get_kernel_name(), 'web')
+
+    def get_mediafiles_dir(self):
+        """get mediafiles dir
+        `web` is container name
+        """
+        directory = settings.MEDIA_ROOT
+        if not directory:
+            raise SystemError('MEDIA_ROOT should be set in your settings')
+        return directory.replace(self.get_kernel_name(), 'web')
+
     def generate(self, diagram_path, gunicorn_support=False, uwsgi_support=False, nginx_support=False):
         """stream docker configs to root
         template:
@@ -70,6 +88,10 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/Dockerfile',
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'Dockerfile.txt'),
+            data={
+                'nginx': nginx_support,
+                'kernel_name': self.get_kernel_name()
+            }
         )
 
         # stream to docker-compose.yml
@@ -98,5 +120,18 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
                 'allowed_hosts': settings.ALLOWED_HOSTS
             }
         )
+
+        # stream to nginx.conf
+        if nginx_support:
+            self.stream_to_template(
+                output_path=f'{settings.BASE_DIR}/nginx.conf',
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'nginx.txt'),
+                data={
+                    'kernel_name': self.get_kernel_name(),
+                    'staticfiles': self.get_staticfiles_dir(),
+                    'mediafiles': self.get_mediafiles_dir()
+                }
+            )
+
         end_time = time.time()
         return True, 'Docker config generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))

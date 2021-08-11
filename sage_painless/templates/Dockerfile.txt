@@ -1,5 +1,8 @@
 # pull official base image
 FROM python:3.9-alpine
+{%if nginx%}
+FROM nginx:1.19.0-alpine
+{%endif%}
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -7,6 +10,12 @@ ENV PYTHONUNBUFFERED 1
 
 # set work directory
 WORKDIR /code
+
+{%if nginx%}
+# set nginx conf.d
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d
+{%endif%}
 
 # install dependencies
 COPY requirements.txt /code/

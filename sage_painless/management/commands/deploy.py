@@ -68,6 +68,10 @@ class Command(BaseCommand):
                 answer=False
             )
 
+        # generate nginx config
+        nginx_support = input('Would you like to generate nginx config(yes/no)? ')
+        nginx_support = True if nginx_support == 'yes' else False
+
         # generate docker config
         docker_support = input('Would you like to dockerize your project(yes/no)? ')
         docker_support = True if docker_support == 'yes' else False
@@ -86,7 +90,8 @@ class Command(BaseCommand):
             check, message = docker_generator.generate(
                 diagram_path,
                 gunicorn_support=gunicorn_support,
-                uwsgi_support=uwsgi_support
+                uwsgi_support=uwsgi_support,
+                nginx_support=nginx_support
             )
 
             if check:

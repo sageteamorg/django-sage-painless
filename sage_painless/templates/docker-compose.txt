@@ -53,4 +53,11 @@ services:
       - RABBITMQ_DEFAULT_PASS={{docker_config.get('rabbitmq_pass')}}
       - RABBITMQ_DEFAULT_VHOST={{docker_config.get('rabbitmq_vhost', '/')}}
   {% endif %}
-# TODO: nginx will add here
+  {%if nginx%}
+  nginx:
+      build: .
+      ports:
+        - 1337:80
+      depends_on:
+        - web
+  {%endif%}

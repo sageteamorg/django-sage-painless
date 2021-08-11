@@ -1,0 +1,22 @@
+upstream {{kernel_name}} {
+    server web:8000;
+}
+
+server {
+
+    listen 80;
+
+    location / {
+        proxy_pass http://{{kernel_name}};
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+    location /staticfiles/ {
+        alias {{staticfiles}};
+    }
+    location /mediafiles/ {
+        alias {{mediafiles}};
+    }
+
+}

@@ -136,3 +136,4 @@ fifo.py
 gunicorn-conf.py
 uwsgi.ini
 .env.prod
+nginx.conf

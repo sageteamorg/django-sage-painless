@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.11.0] - 2021-08-11
+### Added
+- Added nginx config generator
+- Added nginx container in docker
+
 ## [1.10.2] - 2021-08-06
 ### Fixed
 - Fixed gunicorn default config
