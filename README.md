@@ -236,7 +236,7 @@ S.A.G.E. team Git Rules Policy is available here:
 - [x] management command
 - [x] docker
 - [x] gunicorn, uwsgi, etc
-- [ ] nginx configuration
+- [x] nginx configuration
 - [ ] commit generation
 - [ ] GitHub repo integration
 - [ ] CI CD
