@@ -10,11 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from products.mixins import ModelCacheMixin
 
 
-
-
 from products.models.product import Product
-
-
 
 
 class Discount(models.Model, ModelCacheMixin):
@@ -25,8 +21,6 @@ class Discount(models.Model, ModelCacheMixin):
     
     CACHE_KEY = 'discount'
     
-    
-    
     product = models.ForeignKey(
              to=Product,
              related_name='discounts',
@@ -34,30 +28,22 @@ class Discount(models.Model, ModelCacheMixin):
              
     )
     
-    
-    
     discount = models.IntegerField(
              
     )
-    
-    
     
     created = models.DateTimeField(
              auto_now_add=True,
              
     )
     
-    
-    
     modified = models.DateTimeField(
              auto_now=True,
              
     )
     
-    
-
     def __str__(self):
-        return  f"Discount {self.pk}"  # you may change this section
+        return f"Discount {self.pk}"  # you may change this section
 
     class Meta:
         verbose_name = _("Discount")  # auto generated verbose_name
