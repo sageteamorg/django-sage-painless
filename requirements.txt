@@ -9,3 +9,10 @@ setuptools>=56.2.0
 autopep8>=1.5.7
 Jinja2>=3.0.1
 tox==3.24.0
+GitPython
+django-sage-encrypt
+django-sage-streaming
+coverage
+gunicorn
+greenlet
+gevent

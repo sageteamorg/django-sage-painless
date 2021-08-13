@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.12.0] - 2021-08-13
+### Added
+- Added git commit generator
+
 ## [1.11.0] - 2021-08-11
 ### Added
 - Added nginx config generator
@@ -12,7 +16,7 @@ All notable changes to this project will be documented in this file.
 - Fixed gunicorn default config
 - Integrate gunicorn & uwsgi to docker generator
 - Create .env file generation in docker
-- Fixed security some bugs
+- Fixed some security bugs
 
 ## [1.10.1] - 2021-08-06
 ### Fixed
@@ -94,3 +98,6 @@ All notable changes to this project will be documented in this file.
 [1.9.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.10.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.10.1]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.10.2]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.11.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.12.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop

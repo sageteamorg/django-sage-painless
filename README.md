@@ -237,7 +237,7 @@ S.A.G.E. team Git Rules Policy is available here:
 - [x] docker
 - [x] gunicorn, uwsgi, etc
 - [x] nginx configuration
-- [ ] commit generation
+- [x] commit generation
 - [ ] GitHub repo integration
 - [ ] CI CD
 - [ ] Database Support (postgres, mysql, sqlite, sql server)
