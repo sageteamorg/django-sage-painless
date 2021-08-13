@@ -6,6 +6,7 @@ from django.conf import settings
 from sage_painless.classes.field import Field
 from sage_painless.classes.model import Model
 from sage_painless.utils.file_service import FileService
+from sage_painless.utils.git_service import GitSupport
 
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
@@ -15,7 +16,10 @@ from sage_painless import templates
 from sage_painless.utils.timing_service import TimingService
 
 
-class APIGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
+class APIGenerator(
+    JinjaHandler, JsonHandler, Pep8,
+    FileService, TimingService, GitSupport
+):
     """Generate API serializers & viewsets"""
 
     APPS_KEYWORD = 'apps'
@@ -85,7 +89,7 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
 
         return False
 
-    def generate_api(self, diagram_path, cache_support=False):
+    def generate_api(self, diagram_path, cache_support=False, git_support=False):
         """
         stream serializers to app_name/api/serializers.py
         stream viewsets to app_name/api/views.py
@@ -104,6 +108,8 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
             # initialization
             self.create_app_if_not_exists(app_name)
             self.create_dir_for_app_if_not_exists(self.API_DIR, app_name)
+            if git_support:
+                self.init_repo(settings.BASE_DIR)
 
             # stream to serializers.py
             self.stream_to_template(
@@ -140,6 +146,19 @@ class APIGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
             self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/api/serializers.py')
             self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/api/views.py')
             self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/api/urls.py')
+            if git_support:
+                self.commit_file(
+                    f'{settings.BASE_DIR}/{app_name}/api/serializers.py',
+                    f'feat ({app_name}--serializers): Create serializers'
+                )
+                self.commit_file(
+                    f'{settings.BASE_DIR}/{app_name}/api/views.py',
+                    f'feat ({app_name}--views): Create API views'
+                )
+                self.commit_file(
+                    f'{settings.BASE_DIR}/{app_name}/api/urls.py',
+                    f'feat ({app_name}--urls): Add views to urls.py'
+                )
 
         end_time = time.time()
         return True, 'API generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
