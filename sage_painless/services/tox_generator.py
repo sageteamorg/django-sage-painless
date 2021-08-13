@@ -5,13 +5,14 @@ from django.conf import settings
 from django.apps import apps
 
 from sage_painless import templates
+from sage_painless.utils.git_service import GitSupport
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 from sage_painless.utils.timing_service import TimingService
 
 
-class ToxGenerator(JinjaHandler, JsonHandler, Pep8, TimingService):
+class ToxGenerator(JinjaHandler, JsonHandler, Pep8, TimingService, GitSupport):
     """generate tox configs & coverage support"""
     APPS_KEYWORD = 'apps'
     DEPLOY_KEYWORD = 'deploy'
@@ -39,7 +40,7 @@ class ToxGenerator(JinjaHandler, JsonHandler, Pep8, TimingService):
             raise KeyError('`deploy` not set in diagram json file')
         return deploy.get(self.TOX_KEYWORD)
 
-    def generate(self, diagram_path):
+    def generate(self, diagram_path, git_support=False):
         """generate tox and coverage config
         template:
             sage_painless/templates/tox.txt
@@ -52,6 +53,9 @@ class ToxGenerator(JinjaHandler, JsonHandler, Pep8, TimingService):
         kernel_name = self.get_kernel_name()
 
         config = self.extract_tox_config(diagram)
+
+        if git_support:
+            self.init_repo(settings.BASE_DIR)
 
         # .coveragerc
         self.stream_to_template(
@@ -82,5 +86,20 @@ class ToxGenerator(JinjaHandler, JsonHandler, Pep8, TimingService):
             }
         )
         self.fix_pep8(f'{settings.BASE_DIR}/setup.py')
+
+        if git_support:
+            self.commit_file(
+                f'{settings.BASE_DIR}/.coveragerc',
+                f'docs (coverage): Add coverage config file'
+            )
+            self.commit_file(
+                f'{settings.BASE_DIR}/tox.ini',
+                f'docs (tox): Add tox config file'
+            )
+            self.commit_file(
+                f'{settings.BASE_DIR}/setup.py',
+                f'docs (python): Create setup file'
+            )
+
         end_time = time.time()
         return True, 'Tox config generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
