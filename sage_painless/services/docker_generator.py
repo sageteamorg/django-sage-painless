@@ -5,12 +5,13 @@ from django.conf import settings
 from django.core.management.utils import get_random_secret_key
 
 from sage_painless import templates
+from sage_painless.utils.git_service import GitSupport
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.timing_service import TimingService
 
 
-class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
+class DockerGenerator(JinjaHandler, JsonHandler, TimingService, GitSupport):
     """Generate DockerFile & docker-compose"""
     DEPLOY_KEYWORD = 'deploy'
     DOCKER_KEYWORD = 'docker'
@@ -47,7 +48,7 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
             raise SystemError('MEDIA_ROOT should be set in your settings')
         return directory.replace(self.get_kernel_name(), 'web')
 
-    def generate(self, diagram_path, gunicorn_support=False, uwsgi_support=False, nginx_support=False):
+    def generate(self, diagram_path, gunicorn_support=False, uwsgi_support=False, nginx_support=False, git_support=False):
         """stream docker configs to root
         template:
             sage_painless/templates/Dockerfile.txt
@@ -56,6 +57,8 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
         start_time = time.time()
 
         diagram = self.load_json(diagram_path)
+        if git_support:
+            self.init_repo(settings.BASE_DIR)
 
         default_config = {
             "docker": {
@@ -120,6 +123,19 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
                 'allowed_hosts': settings.ALLOWED_HOSTS
             }
         )
+        if git_support:
+            self.commit_file(
+                f'{settings.BASE_DIR}/Dockerfile',
+                f'deploy (docker): Create Dockerfile'
+            )
+            self.commit_file(
+                f'{settings.BASE_DIR}/docker-compose.yml',
+                f'deploy (docker): Create docker-compose.yml'
+            )
+            self.commit_file(
+                f'{settings.BASE_DIR}/.env.prod',
+                f'deploy (docker): Add variables to .env'
+            )
 
         # stream to nginx.conf
         if nginx_support:
@@ -132,6 +148,11 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService):
                     'mediafiles': self.get_mediafiles_dir()
                 }
             )
+            if git_support:
+                self.commit_file(
+                    f'{settings.BASE_DIR}/nginx.conf',
+                    f'deploy (nginx): Create nginx.conf'
+                )
 
         end_time = time.time()
         return True, 'Docker config generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
