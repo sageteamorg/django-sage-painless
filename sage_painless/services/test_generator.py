@@ -9,6 +9,7 @@ from sage_painless.classes.field import Field
 from sage_painless.classes.model import Model
 from sage_painless.classes.signal import Signal
 from sage_painless.utils.file_service import FileService
+from sage_painless.utils.git_service import GitSupport
 
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
@@ -18,7 +19,10 @@ from sage_painless import templates
 from sage_painless.utils.timing_service import TimingService
 
 
-class TestGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
+class TestGenerator(
+    JinjaHandler, JsonHandler, Pep8,
+    FileService, TimingService, GitSupport
+):
     """Create model/api tests for given diagram"""
 
     APPS_KEYWORD = 'apps'
@@ -118,13 +122,15 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService)
 
         return False
 
-    def generate_tests(self, diagram_path):
+    def generate_tests(self, diagram_path, git_support=False):
         """stream tests to app_name/tests/test_model_name.py
         template:
             sage_painless/templates/test.txt
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
+        if git_support:
+            self.init_repo(settings.BASE_DIR)
         for app_name in diagram.get(self.APPS_KEYWORD).keys():
             models_diagram = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)  # get models data for current app
             models, signals = self.extract_models(models_diagram)
@@ -147,7 +153,11 @@ class TestGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService)
                         'stream': self.check_streaming_support([model])
                     }
                 )
-
                 self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/tests/test_{model.name.lower()}.py')
+                if git_support:
+                    self.commit_file(
+                        f'{settings.BASE_DIR}/{app_name}/tests/test_{model.name.lower()}.py',
+                        f'test ({app_name}--{model.name.lower()}): Test model & API'
+                    )
         end_time = time.time()
         return True, 'tests generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
