@@ -10,11 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from products.mixins import ModelCacheMixin
 
 
-
-
 from products.models.category import Category
-
-
 
 
 class Product(models.Model, ModelCacheMixin):
@@ -25,27 +21,19 @@ class Product(models.Model, ModelCacheMixin):
     
     CACHE_KEY = 'product'
     
-    
-    
     title = models.CharField(
              max_length=255,
              
     )
-    
-    
     
     description = models.CharField(
              max_length=255,
              
     )
     
-    
-    
     price = models.IntegerField(
              
     )
-    
-    
     
     category = models.ForeignKey(
              to=Category,
@@ -54,24 +42,18 @@ class Product(models.Model, ModelCacheMixin):
              
     )
     
-    
-    
     created = models.DateTimeField(
              auto_now_add=True,
              
     )
-    
-    
     
     modified = models.DateTimeField(
              auto_now=True,
              
     )
     
-    
-
     def __str__(self):
-        return  f"Product {self.pk}"  # you may change this section
+        return f"Product {self.pk}"  # you may change this section
 
     class Meta:
         verbose_name = _("Product")  # auto generated verbose_name
