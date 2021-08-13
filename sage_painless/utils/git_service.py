@@ -10,7 +10,7 @@ class GitSupport:
         """check repo is initialized"""
         assert self.repo
 
-    def init_repo(self, path, bare=True):
+    def init_repo(self, path, bare=False):
         """init git repo in given path"""
         repo = Repo.init(path=path, bare=bare)
         print(f'Repo initialized in path {path}')
