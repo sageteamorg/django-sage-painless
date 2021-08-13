@@ -23,9 +23,7 @@ class ModelCacheMixin:
         :return: List of Model instances.
         """
         if not hasattr(cls, 'CACHE_KEY'):
-            raise AttributeError(
-                "CACHE_KEY must be defined in {}".format(
-                    cls.__name__))
+            raise AttributeError("CACHE_KEY must be defined in {}".format(cls.__name__))
 
         if hasattr(cls, 'CACHED_RELATED_OBJECT'):
             queryset = cache.get_or_set(
@@ -85,8 +83,7 @@ class ModelCacheMixin:
             queryset = cls.get_all_from_cache()
 
         for foreign_key, related_filters in kwargs.items():
-            related_objects_list = [
-                getattr(obj, foreign_key) for obj in queryset]
+            related_objects_list = [getattr(obj, foreign_key) for obj in queryset]
             # Filtering related objects based related object's attribute filtes
             filtered_related_objects = cls.filter_from_cache(
                 related_objects_list, **related_filters
@@ -94,8 +91,7 @@ class ModelCacheMixin:
             # Filtering queryset based filtered related objects
             queryset = list(
                 filter(
-                    lambda x: getattr(
-                        x, foreign_key) in filtered_related_objects,
+                    lambda x: getattr(x, foreign_key) in filtered_related_objects,
                     queryset,
                 )
             )
