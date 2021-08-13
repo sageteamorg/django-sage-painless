@@ -167,11 +167,7 @@ class ModelGenerator(
                         'cache_support': cache_support
                     }
                 )
-                if git_support:
-                    self.commit_file(
-                        f'{settings.BASE_DIR}/{app_name}/mixins.py',
-                        f'feat ({app_name}--mixins): Create cache mixin'
-                    )
+
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/services.py',
                     template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'services.txt'),
@@ -179,13 +175,18 @@ class ModelGenerator(
                         'cache_support': cache_support
                     }
                 )
+
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/mixins.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/services.py')
                 if git_support:
                     self.commit_file(
                         f'{settings.BASE_DIR}/{app_name}/services.py',
                         f'feat ({app_name}--services): Create cache service'
                     )
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/mixins.py')
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/services.py')
+                    self.commit_file(
+                        f'{settings.BASE_DIR}/{app_name}/mixins.py',
+                        f'feat ({app_name}--mixins): Create cache mixin'
+                    )
 
             # models
             for model in models:
@@ -203,12 +204,12 @@ class ModelGenerator(
                         'encrypt_support': self.check_encryption_support([model])
                     }
                 )
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/models/{model_file_name}')
                 if git_support:
                     self.commit_file(
                         f'{settings.BASE_DIR}/{app_name}/models/{model_file_name}',
                         f'feat ({app_name}--models): Create {model.name} model'
                     )
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/models/{model_file_name}')
 
             # signals
             if self.check_signal_support(models):
@@ -223,11 +224,7 @@ class ModelGenerator(
                         'cache_support': cache_support
                     }
                 )
-                if git_support:
-                    self.commit_file(
-                        f'{settings.BASE_DIR}/{app_name}/signals.py',
-                        f'feat ({app_name}--signals): Create model OneToOne signals'
-                    )
+
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/__init__.py',
                     template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
@@ -235,11 +232,7 @@ class ModelGenerator(
                         'app_name': app_name
                     }
                 )
-                if git_support:
-                    self.commit_file(
-                        f'{settings.BASE_DIR}/{app_name}/__init__.py',
-                        f'feat ({app_name}--signals): Add signals to __init__'
-                    )
+
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/apps.py',
                     template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
@@ -248,14 +241,23 @@ class ModelGenerator(
                         'signal_support': True
                     }
                 )
+
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/signals.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/apps.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/__init__.py')
                 if git_support:
+                    self.commit_file(
+                        f'{settings.BASE_DIR}/{app_name}/signals.py',
+                        f'feat ({app_name}--signals): Create model OneToOne signals'
+                    )
                     self.commit_file(
                         f'{settings.BASE_DIR}/{app_name}/apps.py',
                         f'feat ({app_name}--signals): Add signals to apps.py'
                     )
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/signals.py')
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/apps.py')
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/__init__.py')
+                    self.commit_file(
+                        f'{settings.BASE_DIR}/{app_name}/__init__.py',
+                        f'feat ({app_name}--signals): Add signals to __init__'
+                    )
 
             elif cache_support:
                 self.stream_to_template(
@@ -269,11 +271,7 @@ class ModelGenerator(
                         'cache_support': cache_support
                     }
                 )
-                if git_support:
-                    self.commit_file(
-                        f'{settings.BASE_DIR}/{app_name}/signals.py',
-                        f'feat ({app_name}--signals): Create cache update signals'
-                    )
+
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/__init__.py',
                     template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
@@ -281,11 +279,7 @@ class ModelGenerator(
                         'app_name': app_name
                     }
                 )
-                if git_support:
-                    self.commit_file(
-                        f'{settings.BASE_DIR}/{app_name}/__init__.py',
-                        f'feat ({app_name}--signals): Add signals to __init__'
-                    )
+
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/apps.py',
                     template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
@@ -294,13 +288,22 @@ class ModelGenerator(
                         'signal_support': True
                     }
                 )
+
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/signals.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/apps.py')
+                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/__init__.py')
                 if git_support:
+                    self.commit_file(
+                        f'{settings.BASE_DIR}/{app_name}/signals.py',
+                        f'feat ({app_name}--signals): Create cache update signals'
+                    )
                     self.commit_file(
                         f'{settings.BASE_DIR}/{app_name}/apps.py',
                         f'feat ({app_name}--signals): Add signals to apps.py'
                     )
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/signals.py')
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/apps.py')
-                self.fix_pep8(f'{settings.BASE_DIR}/{app_name}/__init__.py')
+                    self.commit_file(
+                        f'{settings.BASE_DIR}/{app_name}/__init__.py',
+                        f'feat ({app_name}--signals): Add signals to __init__'
+                    )
         end_time = time.time()
         return True, 'models generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
