@@ -9,13 +9,17 @@ from django.conf import settings
 
 from sage_painless import templates
 from sage_painless.utils.file_service import FileService
+from sage_painless.utils.git_service import GitSupport
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 from sage_painless.utils.timing_service import TimingService
 
 
-class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingService):
+class ReadMeGenerator(
+    JinjaHandler, JsonHandler, Pep8,
+    FileService, TimingService, GitSupport
+):
     """Generate README.md for project"""
 
     APPS_KEYWORD = 'apps'
@@ -81,7 +85,7 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingServic
                     extension = self.BRANCH if pointer == self.TEE else self.SPACE
                     yield from self.make_tree(path, prefix=prefix + extension)
 
-    def generate(self, diagram_path):
+    def generate(self, diagram_path, git_support=False):
         """stream README.md to docs/sage_painless/git/README.md
         template:
             sage_painless/templates/README.txt
@@ -93,6 +97,8 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingServic
         self.create_dir_if_not_exists('docs')
         self.create_dir_if_not_exists('docs/sage_painless')
         self.create_dir_if_not_exists('docs/sage_painless/git')
+        if git_support:
+            self.init_repo(settings.BASE_DIR)
 
         modules = self.get_installed_module_names()
         django_apps = self.get_built_in_app_names()
@@ -119,6 +125,11 @@ class ReadMeGenerator(JinjaHandler, JsonHandler, Pep8, FileService, TimingServic
                 'structure': project_structure
             }
         )
+        if git_support:
+            self.commit_file(
+                f'{settings.BASE_DIR}/docs/sage_painless/git/README.md',
+                f'docs (git): Create README.md'
+            )
 
         end_time = time.time()
         return True, 'README generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
