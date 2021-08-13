@@ -19,6 +19,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
     def add_arguments(self, parser):
         """initialize arguments"""
         parser.add_argument('-d', '--diagram', type=str, help='sql diagram path that will make models.py from it')
+        parser.add_argument('-g', '--git', type=bool, help='generate git commits')
 
     def validate_settings(self, step):
         """validate required settings in each step"""
@@ -42,6 +43,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
     def handle(self, *args, **options):
         """get configs from user and generate"""
         diagram_path = options.get('diagram')
+        git_support = options.get('git', False)
         diagram = self.load_json(diagram_path)
         self.validate_all(diagram)  # validate diagram
         stdout_messages = list()
@@ -69,7 +71,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                         question='cache support',
                         answer=True
                     )
-                    check, message = model_generator.generate_models(diagram_path, True)
+                    check, message = model_generator.generate_models(diagram_path, True, git_support)
                 else:
                     reporter.add_question_answer(
                         question='cache support',
