@@ -15,9 +15,11 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         """initialize arguments"""
         parser.add_argument('-d', '--diagram', type=str, help='sql diagram path that will generate from it')
+        parser.add_argument('-g', '--git', type=bool, help='generate git commits')
 
     def handle(self, *args, **options):
         diagram_path = options.get('diagram')
+        git_support = options.get('git', False)
         stdout_messages = list()  # initial empty messages
 
         reporter = ReportUserAnswer(
@@ -36,7 +38,7 @@ class Command(BaseCommand):
                 answer=True
             )
             gunicorn_generator = GunicornGenerator()
-            check, message = gunicorn_generator.generate(diagram_path)
+            check, message = gunicorn_generator.generate(diagram_path, git_support=git_support)
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
             else:
@@ -57,7 +59,7 @@ class Command(BaseCommand):
                 answer=True
             )
             uwsgi_generator = UwsgiGenerator()
-            check, message = uwsgi_generator.generate(diagram_path)
+            check, message = uwsgi_generator.generate(diagram_path, git_support=git_support)
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
             else:
@@ -91,7 +93,8 @@ class Command(BaseCommand):
                 diagram_path,
                 gunicorn_support=gunicorn_support,
                 uwsgi_support=uwsgi_support,
-                nginx_support=nginx_support
+                nginx_support=nginx_support,
+                git_support=git_support
             )
 
             if check:
@@ -125,7 +128,7 @@ class Command(BaseCommand):
                 answer=True
             )
             tox_generator = ToxGenerator()
-            check, message = tox_generator.generate(diagram_path)
+            check, message = tox_generator.generate(diagram_path, git_support=git_support)
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
             else:
