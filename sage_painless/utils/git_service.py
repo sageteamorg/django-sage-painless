@@ -13,7 +13,6 @@ class GitSupport:
     def init_repo(self, path, bare=False):
         """init git repo in given path"""
         repo = Repo.init(path=path, bare=bare)
-        print(f'Repo initialized in path {path}')
         self.repo = repo
         return repo
 
@@ -22,4 +21,3 @@ class GitSupport:
         self.check_init()
         self.repo.index.add([file_path])
         self.repo.index.commit(commit_message)
-        print(f'File commit with path {file_path}')
