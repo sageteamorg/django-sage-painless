@@ -77,7 +77,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                         question='cache support',
                         answer=False
                     )
-                    check, message = model_generator.generate_models(diagram_path)
+                    check, message = model_generator.generate_models(diagram_path, git_support=git_support)
 
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
@@ -95,7 +95,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                     answer=True
                 )
                 admin_generator = AdminGenerator()
-                check, message = admin_generator.generate(diagram_path)
+                check, message = admin_generator.generate(diagram_path, git_support=git_support)
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
@@ -134,13 +134,13 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                         question='cache support',
                         answer=True
                     )
-                    check, message = api_generator.generate_api(diagram_path, True)
+                    check, message = api_generator.generate_api(diagram_path, True, git_support=git_support)
                 else:
                     reporter.add_question_answer(
                         question='cache support',
                         answer=False
                     )
-                    check, message = api_generator.generate_api(diagram_path)
+                    check, message = api_generator.generate_api(diagram_path, git_support=git_support)
 
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
@@ -167,7 +167,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                 )
                 self.validate_settings(step='test')
                 test_generator = TestGenerator()
-                check, message = test_generator.generate_tests(diagram_path)
+                check, message = test_generator.generate_tests(diagram_path, git_support=git_support)
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:

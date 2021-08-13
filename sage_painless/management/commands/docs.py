@@ -12,9 +12,11 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         """initialize arguments"""
         parser.add_argument('-d', '--diagram', type=str, help='sql diagram path that will make models.py from it')
+        parser.add_argument('-g', '--git', type=bool, help='generate git commits')
 
     def handle(self, *args, **options):
         diagram_path = options.get('diagram')
+        git_support = options.get('git', False)
         stdout_messages = list()
         docs_support = input('Would you like to generate README.md(yes/no)? ')
 
@@ -30,7 +32,7 @@ class Command(BaseCommand):
                 answer=True
             )
             readme_generator = ReadMeGenerator()
-            check, message = readme_generator.generate(diagram_path)
+            check, message = readme_generator.generate(diagram_path, git_support=git_support)
             if check:
                 stdout_messages.append(self.style.SUCCESS(f'docs[INFO]: {message}'))
             else:
