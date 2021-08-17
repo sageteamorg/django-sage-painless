@@ -8,10 +8,14 @@ from sage_painless import templates
 from sage_painless.utils.git_service import GitSupport
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
+from sage_painless.utils.package_manager_service import PackageManagerSupport
 from sage_painless.utils.timing_service import TimingService
 
 
-class DockerGenerator(JinjaHandler, JsonHandler, TimingService, GitSupport):
+class DockerGenerator(
+    JinjaHandler, JsonHandler, TimingService,
+    GitSupport, PackageManagerSupport
+):
     """Generate DockerFile & docker-compose"""
     DEPLOY_KEYWORD = 'deploy'
     DOCKER_KEYWORD = 'docker'
@@ -48,7 +52,10 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService, GitSupport):
             raise SystemError('MEDIA_ROOT should be set in your settings')
         return directory.replace(self.get_kernel_name(), 'web')
 
-    def generate(self, diagram_path, gunicorn_support=False, uwsgi_support=False, nginx_support=False, git_support=False):
+    def generate(
+            self, diagram_path, gunicorn_support=False, uwsgi_support=False,
+            nginx_support=False, git_support=False, package_manager_support=False
+    ):
         """stream docker configs to root
         template:
             sage_painless/templates/Dockerfile.txt
@@ -82,10 +89,19 @@ class DockerGenerator(JinjaHandler, JsonHandler, TimingService, GitSupport):
                 "max-requests": 3000,
                 "processes": 10,
                 "daemonize": "/var/log/uwsgi/uwsgi.log"
+            },
+            "package_manager": {
+                "type": "pip"
             }
         }
         config = self.extract_deploy_config(diagram)  # get deploy config from diagram
         default_config.update(config)  # update default config with user input
+
+        # package manager
+        if package_manager_support:
+            manager = default_config.get('package_manager').get('type')
+            self.set_package_manager_type(manager)
+            self.export_requirements()
 
         # stream to Dockerfile
         self.stream_to_template(
