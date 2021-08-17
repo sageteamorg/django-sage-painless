@@ -30,6 +30,9 @@
       "description": "test project",
       "author": "SageTeam",
       "req_path": "requirements.txt"
+    },
+    "package_manager": {
+      "type": "pip"
     }
   }
 }
