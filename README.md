@@ -244,7 +244,7 @@ S.A.G.E. team Git Rules Policy is available here:
 - [ ] security config and check
 - [ ] seo
 - [ ] graphql
-- [ ] package manager support
+- [x] package manager support
 
 ## Version 2
 - [ ] Django admin generator

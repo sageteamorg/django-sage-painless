@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.13.0] - 2021-08-13
+### Added
+- Added package manager support
+
 ## [1.12.0] - 2021-08-13
 ### Added
 - Added git commit generator
@@ -101,3 +105,4 @@ All notable changes to this project will be documented in this file.
 [1.10.2]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.11.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
 [1.12.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
+[1.13.0]: https://github.com/sageteam-org/django-sage-painless/commits/develop
