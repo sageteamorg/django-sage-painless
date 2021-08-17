@@ -17,6 +17,7 @@ from sage_painless.utils.pep8_service import Pep8
 
 from sage_painless import templates
 from sage_painless.utils.timing_service import TimingService
+from sage_painless.validators.setting_validator import SettingValidator
 
 
 class ModelGenerator(
@@ -187,6 +188,10 @@ class ModelGenerator(
                         f'{settings.BASE_DIR}/{app_name}/mixins.py',
                         f'feat ({app_name}--mixins): Create cache mixin'
                     )
+
+            # validations
+            if self.check_encryption_support(models):
+                SettingValidator.validate_pgcrypto_config()
 
             # models
             for model in models:
