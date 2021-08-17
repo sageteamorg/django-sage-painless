@@ -20,11 +20,12 @@ class DiagramValidator:
     ORDERING_KEYWORD = 'ordering'
     READONLY_FIELDS_KEYWORD = 'readonly_fields'
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """init"""
-        pass
+        super().__init__(*args, **kwargs)
 
-    def search_in_list_items(self, item, list_):
+    @classmethod
+    def search_in_list_items(cls, item, list_):
         """is item in list_ item"""
         item_parts = item.split('__')
         search_item = item_parts[0]
