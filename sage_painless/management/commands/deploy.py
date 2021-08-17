@@ -6,6 +6,7 @@ from sage_painless.services.docker_generator import DockerGenerator
 from sage_painless.services.gunicorn_generator import GunicornGenerator
 from sage_painless.services.tox_generator import ToxGenerator
 from sage_painless.services.uwsgi_generator import UwsgiGenerator
+from sage_painless.utils.package_manager_service import PackageManagerSupport
 from sage_painless.utils.report_service import ReportUserAnswer
 
 
@@ -74,6 +75,10 @@ class Command(BaseCommand):
         nginx_support = input('Would you like to generate nginx config(yes/no)? ')
         nginx_support = True if nginx_support == 'yes' else False
 
+        # package manager support
+        package_manager_support = input('Would you like to export project requirement packages(yes/no)? ')
+        package_manager_support = True if package_manager_support == 'yes' else False
+
         # generate docker config
         docker_support = input('Would you like to dockerize your project(yes/no)? ')
         docker_support = True if docker_support == 'yes' else False
@@ -94,7 +99,8 @@ class Command(BaseCommand):
                 gunicorn_support=gunicorn_support,
                 uwsgi_support=uwsgi_support,
                 nginx_support=nginx_support,
-                git_support=git_support
+                git_support=git_support,
+                package_manager_support=package_manager_support
             )
 
             if check:
