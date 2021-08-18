@@ -4,9 +4,12 @@ import subprocess
 from django.conf import settings
 
 class PackageManagerSupport:
-    VALID_MANAGERS = ['pip']
+    VALID_MANAGERS = ['pip', 'pipenv', 'Pipenv', 'poetry']
     COMMANDS = {
-        'pip': ['pip freeze >> requirements.txt']
+        'pip': ['pip freeze > requirements.txt'],
+        'pipenv': ['pipenv lock -r > requirements.txt'],
+        'Pipenv': ['pipenv lock -r > requirements.txt'],
+        'poetry': ['poetry export -f requirements.txt --output requirements.txt']
     }
 
     def __init__(self, *args, **kwargs):
