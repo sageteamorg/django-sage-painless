@@ -71,13 +71,13 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                         question='cache support',
                         answer=True
                     )
-                    check, message = model_generator.generate_models(diagram_path, True, git_support)
+                    check, message = model_generator.generate(diagram_path, True, git_support)
                 else:
                     reporter.add_question_answer(
                         question='cache support',
                         answer=False
                     )
-                    check, message = model_generator.generate_models(diagram_path, git_support=git_support)
+                    check, message = model_generator.generate(diagram_path, git_support=git_support)
 
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
