@@ -8,7 +8,7 @@
               "type": "character",
               "max_length": 255,
               "unique": true,
-              "encrypt": true
+              "encrypt": false
             },
             "created": {
               "type": "datetime",

@@ -6,7 +6,7 @@ from sage_painless.classes.field import Field
 from sage_painless.services.test_generator import TestGenerator
 from sage_painless.utils.json_service import JsonHandler
 
-from tests import diagrams
+from tests import fixtures
 
 
 class TestTestGenerator(TestCase):
@@ -14,7 +14,7 @@ class TestTestGenerator(TestCase):
         self.json_handler = JsonHandler()
         self.app_name = 'products'
         self.test_generator = TestGenerator()
-        self.diagram_path = os.path.abspath(diagrams.__file__).replace('__init__.py', 'product_diagram.json')
+        self.diagram_path = os.path.abspath(fixtures.__file__).replace('__init__.py', 'product_fixture.json')
         self.diagram = self.json_handler.load_json(self.diagram_path).get('apps').get(self.app_name).get('models')
         self.field = Field()
         self.field_types = self.field.field_types

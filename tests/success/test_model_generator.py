@@ -8,7 +8,7 @@ from sage_painless.utils.json_service import JsonHandler
 
 from sage_painless.classes.field import Field
 
-from tests import diagrams
+from tests import fixtures
 
 
 class TestModelGenerator(TestCase):
@@ -16,7 +16,7 @@ class TestModelGenerator(TestCase):
         self.json_handler = JsonHandler()
         self.app_name = 'products'
         self.model_generator = ModelGenerator()
-        self.diagram_path = os.path.abspath(diagrams.__file__).replace('__init__.py', 'product_diagram.json')
+        self.diagram_path = os.path.abspath(fixtures.__file__).replace('__init__.py', 'product_fixture.json')
         self.diagram = self.json_handler.load_json(self.diagram_path).get('apps').get(self.app_name).get('models')
         self.field = Field()
         self.field_types = self.field.field_types
@@ -71,7 +71,7 @@ class TestModelGenerator(TestCase):
         """
         extract models from Json diagram
         """
-        models, signals = self.model_generator.extract_models(self.diagram)
+        models, signals = self.model_generator.extract_models_and_signals(self.diagram)
 
         self.assertEqual(len(models), len(self.get_table_names()))
 
@@ -121,7 +121,7 @@ class TestModelGenerator(TestCase):
         """
         check is there validator in models
         """
-        models, signals = self.model_generator.extract_models(self.diagram)
+        models, signals = self.model_generator.extract_models_and_signals(self.diagram)
         check_model_generator = self.model_generator.check_validator_support(models)
         check_test = self.check_validator_support(models)
         self.assertEqual(check_test, check_model_generator)
@@ -130,7 +130,7 @@ class TestModelGenerator(TestCase):
         """
         check need signal in models
         """
-        models, signals = self.model_generator.extract_models(self.diagram)
+        models, signals = self.model_generator.extract_models_and_signals(self.diagram)
         check_model_generator = self.model_generator.check_signal_support(models)
         check_test = self.check_signal_support(models)
         self.assertEqual(check_test, check_model_generator)

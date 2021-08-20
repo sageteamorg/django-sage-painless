@@ -7,7 +7,7 @@ from sage_painless.classes.admin import Admin
 from sage_painless.services.admin_generator import AdminGenerator
 from sage_painless.utils.json_service import JsonHandler
 
-from tests import diagrams
+from tests import fixtures
 
 
 class TestAdminGenerator(TestCase):
@@ -15,7 +15,7 @@ class TestAdminGenerator(TestCase):
         self.json_handler = JsonHandler()
         self.app_name = 'products'
         self.admin_generator = AdminGenerator()
-        self.diagram_path = os.path.abspath(diagrams.__file__).replace('__init__.py', 'product_diagram.json')
+        self.diagram_path = os.path.abspath(fixtures.__file__).replace('__init__.py', 'product_fixture.json')
         self.diagram = self.json_handler.load_json(self.diagram_path).get('apps').get(self.app_name).get('models')
 
     def get_diagram_admins(self, diagram):

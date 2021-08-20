@@ -5,7 +5,7 @@ from django.test import TestCase
 from sage_painless.services.api_generator import APIGenerator
 from sage_painless.utils.json_service import JsonHandler
 
-from tests import diagrams
+from tests import fixtures
 
 
 class TestAPIGenerator(TestCase):
@@ -13,7 +13,7 @@ class TestAPIGenerator(TestCase):
         self.json_handler = JsonHandler()
         self.app_name = 'products'
         self.api_generator = APIGenerator()
-        self.diagram_path = os.path.abspath(diagrams.__file__).replace('__init__.py', 'product_diagram.json')
+        self.diagram_path = os.path.abspath(fixtures.__file__).replace('__init__.py', 'product_fixture.json')
         self.diagram = self.json_handler.load_json(self.diagram_path).get('apps').get(self.app_name).get('models')
 
     def get_table_names(self):
