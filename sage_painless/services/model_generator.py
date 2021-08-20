@@ -1,143 +1,36 @@
 import os
 import time
-from pathlib import Path
 
 from django.conf import settings
-from django.core import management
 
-from sage_painless.classes.field import Field
-from sage_painless.classes.model import Model
-from sage_painless.classes.signal import Signal
+# Base
+from sage_painless.services.abstract import AbstractModelGenerator
+
+# Helpers
 from sage_painless.utils.file_service import FileService
+from sage_painless.utils.timing_service import TimingService
 from sage_painless.utils.git_service import GitSupport
-
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 
-from sage_painless import templates
-from sage_painless.utils.timing_service import TimingService
+# Validators
 from sage_painless.validators.setting_validator import SettingValidator
 
+from sage_painless import templates
 
-class ModelGenerator(
-    JinjaHandler, JsonHandler, Pep8,
-    FileService, TimingService, GitSupport
-):
+
+class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, FileService, TimingService, GitSupport):
     """Read models data from a Json file and stream it to app_name/models.py"""
-
-    MODELS_KEYWORD = 'models'
-    APPS_KEYWORD = 'apps'
-    FIELDS_KEYWORD = 'fields'
-    TYPE_KEYWORD = 'type'
-    ENCRYPTED_KEYWORD = 'encrypt'
-    STREAM_KEYWORD = 'stream'
-    VALIDATORS_KEYWORD = 'validators'
-    FUNC_KEYWORD = 'func'
-    ARG_KEYWORD = 'arg'
 
     def __init__(self, *args, **kwargs):
         """init"""
         super().__init__(*args, **kwargs)
 
-    def get_table_fields(self, table):
-        """extract fields"""
-        return table.get(self.FIELDS_KEYWORD)
-
-    def extract_models(self, diagram):
-        """extract models"""
-        models = list()
-        signals = list()
-        for table_name in diagram.keys():
-            table = diagram.get(table_name)
-            fields = self.get_table_fields(table)
-
-            model = Model()
-            model.name = table_name
-            model_fields = list()
-
-            for field_name in fields.keys():
-                model_field = Field()
-                model_field.name = field_name
-                field_data = fields.get(field_name)
-
-                # Encrypt
-                model_field.encrypted = field_data.pop(self.ENCRYPTED_KEYWORD, False)  # field encryption
-                model_field.stream = field_data.pop(self.STREAM_KEYWORD, False)  # video field streaming
-
-                for key in field_data.keys():
-                    # Type
-                    if key == self.TYPE_KEYWORD:
-                        model_field.set_type(field_data.get(self.TYPE_KEYWORD))  # set type of Field (CharField, etc)
-
-                        # if field is one2one create Signal
-                        if model_field.type == 'OneToOneField':
-                            signal = Signal()
-                            signal.set_signal('post_save', table_name, field_data.get('to'), field_name)
-                            signals.append(signal)
-
-                    # Validator
-                    elif key == self.VALIDATORS_KEYWORD:
-                        for validator in field_data.get(self.VALIDATORS_KEYWORD):
-                            model_field.add_validator(validator.get(self.FUNC_KEYWORD), validator.get(self.ARG_KEYWORD))
-
-                    # Attributes
-                    else:
-                        value = field_data.get(key)
-                        model_field.add_attribute(key, value)
-
-                model_fields.append(model_field)
-
-            model.fields = model_fields
-            models.append(model)
-
-        return models, signals
-
-    def check_validator_support(self, models):
-        """check models have validator"""
-        for model in models:
-            for field in model.fields:
-                if len(field.validators) > 0:
-                    return True
-
-        return False
-
-    def check_signal_support(self, models):
-        """check models have one2one"""
-        for model in models:
-            for field in model.fields:
-                if field.type == 'OneToOneField':
-                    return True
-
-        return False
-
-    def check_encryption_support(self, models):
-        """check models have encrypted field"""
-        for model in models:
-            for field in model.fields:
-                if field.encrypted:
-                    return True
-
-        return False
-
-    def get_fk_model_names(self, models):
-        """check models have fk,m2m,one2one,... and return model names"""
-        model_names = list()
-        for model in models:
-            for field in model.fields:
-                if field.type in ['ManyToManyField', 'OneToOneField', 'ForeignKey']:
-                    model_names.append(field.get_attribute('to'))
-
-        return model_names
-
-    def create_app_if_not_exists(self, app_name):
-        if not os.path.exists(f'{settings.BASE_DIR}/{app_name}/'):
-            management.call_command('startapp', app_name)
-
-    def generate_models(self, diagram_path, cache_support=False, git_support=False):
+    def generate(self, diagram_path: str, cache_support: bool = False, git_support: bool = False):
         """stream models to app_name/models/model_name.py
         generate signals, mixins, services
-        template:
+        templates:
             sage_painless/templates/models.txt
             sage_painless/templates/signals.txt
             sage_painless/templates/mixins.txt
@@ -146,10 +39,10 @@ class ModelGenerator(
         start_time = time.time()
         diagram = self.load_json(diagram_path)
 
-        for app_name in diagram.get(self.APPS_KEYWORD).keys():
-            models_diagram = diagram.get(self.APPS_KEYWORD).get(app_name).get(
-                self.MODELS_KEYWORD)  # get models data for current app
-            models, signals = self.extract_models(models_diagram)  # extract models and signals from diagram data
+        for app_name in diagram.get(self.get_constant('APPS_KEYWORD')).keys():
+            models_diagram = diagram.get(self.get_constant('APPS_KEYWORD')).get(app_name).get(
+                self.get_constant('MODELS_KEYWORD'))  # get models data for current app
+            models, signals = self.extract_models_and_signals(models_diagram)  # extract models and signals from diagram data
 
             # initialize
             self.create_app_if_not_exists(app_name)
