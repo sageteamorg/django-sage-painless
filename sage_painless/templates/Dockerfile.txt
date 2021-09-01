@@ -1,7 +1,7 @@
 # pull official base image
 FROM python:3.9-alpine
 {%if nginx%}
-FROM nginx:1.19.0-alpine
+FROM nginx:1.20-alpine
 {%endif%}
 
 # set environment variables
