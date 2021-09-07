@@ -213,3 +213,94 @@ class AbstractAPIGenerator(BaseGenerator, GeneratorConstants):
             models.append(model)
 
         return models
+
+
+class AbstractTestGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract Test Generator"""
+
+    @classmethod
+    def filter_signals_for_model(cls, signals, model):
+        """return the signals with model_a model"""
+        filtered = list()
+        for signal in signals:
+            if signal.model_a == model.name:
+                filtered.append(signal)
+        return filtered
+
+    @classmethod
+    def normalize_api_config(cls, api_config):
+        """
+        get api config
+        normalize api methods
+        return api config
+        """
+        if api_config:
+            if api_config.get('methods'):
+                api_config['methods'] = [method.lower() for method in api_config.get('methods')]
+
+        return api_config
+
+    @classmethod
+    def check_streaming_support(cls, models):
+        """check for streaming support in models"""
+        for model in models:
+            for field in model.fields:
+                if field.stream:
+                    return True
+
+        return False
+
+    def get_table_fields(self, table):
+        """get fields"""
+        return table.get(self.get_constant('FIELDS_KEYWORD'))
+
+    def get_table_api(self, table):
+        """get api"""
+        return table.get(self.get_constant('API_KEYWORD'))
+
+    def extract_models(self, diagram):
+        """extract models"""
+        models = list()
+        signals = list()
+        for table_name in diagram.keys():
+            table = diagram.get(table_name)
+            fields = self.get_table_fields(table)
+            api_config = self.get_table_api(table)
+
+            model = Model()
+            model.name = table_name
+            model.api_config = self.normalize_api_config(api_config)
+            model_fields = list()
+
+            for field_name in fields.keys():
+                model_field = Field()
+                model_field.name = field_name
+                model_field.stream = fields.get(field_name).pop(
+                    self.get_constant('STREAM_KEYWORD'), False)  # video field streaming
+                field_data = fields.get(field_name)
+
+                for key in field_data.keys():
+
+                    if key == self.TYPE_KEYWORD:
+                        model_field.set_type(field_data.get(self.get_constant('TYPE_KEYWORD')))
+
+                        if model_field.type == 'OneToOneField':
+                            signal = Signal()
+                            signal.set_signal('post_save', table_name, field_data.get('to'), field_name)
+                            signals.append(signal)
+
+                    elif key == self.get_constant('VALIDATORS_KEYWORD'):
+                        for validator in field_data.get(self.get_constant('VALIDATORS_KEYWORD')):
+                            model_field.add_validator(
+                                validator.get(self.get_constant('FUNC_KEYWORD')), validator.get(self.get_constant('ARG_KEYWORD')))
+
+                    else:
+                        value = field_data.get(key)
+                        model_field.add_attribute(key, value)
+
+                model_fields.append(model_field)
+
+            model.fields = model_fields
+            models.append(model)
+
+        return models, signals

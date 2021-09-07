@@ -3,126 +3,29 @@ import time
 from pathlib import Path
 
 from django.conf import settings
-from django.core import management
 
-from sage_painless.classes.field import Field
-from sage_painless.classes.model import Model
-from sage_painless.classes.signal import Signal
+# Base
+from sage_painless.services.abstract import AbstractTestGenerator
+
+# Helpers
 from sage_painless.utils.file_service import FileService
 from sage_painless.utils.git_service import GitSupport
-
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
-
-from sage_painless import templates
 from sage_painless.utils.timing_service import TimingService
 
+from sage_painless import templates
 
-class TestGenerator(
-    JinjaHandler, JsonHandler, Pep8,
-    FileService, TimingService, GitSupport
-):
-    """Create model/api tests for given diagram"""
 
-    APPS_KEYWORD = 'apps'
-    MODELS_KEYWORD = 'models'
-    FIELDS_KEYWORD = 'fields'
-    TYPE_KEYWORD = 'type'
-    VALIDATORS_KEYWORD = 'validators'
-    FUNC_KEYWORD = 'func'
-    ARG_KEYWORD = 'arg'
-    TESTS_DIR = 'tests'
-    API_KEYWORD = 'api'
-    STREAM_KEYWORD = 'stream'
+class TestGenerator(AbstractTestGenerator, JinjaHandler, JsonHandler, Pep8, FileService, TimingService, GitSupport):
+    """Generate model/api tests for given diagram"""
 
     def __init__(self, *args, **kwargs):
         """init"""
         super().__init__(*args, **kwargs)
 
-    def get_table_fields(self, table):
-        """get fields"""
-        return table.get(self.FIELDS_KEYWORD)
-
-    def filter_signals_for_model(self, signals, model):
-        """return the signals with model_a model"""
-        filtered = list()
-        for signal in signals:
-            if signal.model_a == model.name:
-                filtered.append(signal)
-        return filtered
-
-    def get_table_api(self, table):
-        """get api"""
-        return table.get(self.API_KEYWORD)
-
-    def normalize_api_config(self, api_config):
-        """
-        get api config
-        normalize api methods
-        return api config
-        """
-        if api_config:
-            if api_config.get('methods'):
-                api_config['methods'] = [method.lower() for method in api_config.get('methods')]
-
-        return api_config
-
-    def extract_models(self, diagram):
-        """extract models"""
-        models = list()
-        signals = list()
-        for table_name in diagram.keys():
-            table = diagram.get(table_name)
-            fields = self.get_table_fields(table)
-            api_config = self.get_table_api(table)
-
-            model = Model()
-            model.name = table_name
-            model.api_config = self.normalize_api_config(api_config)
-            model_fields = list()
-
-            for field_name in fields.keys():
-                model_field = Field()
-                model_field.name = field_name
-                model_field.stream = fields.get(field_name).pop(self.STREAM_KEYWORD, False)  # video field streaming
-                field_data = fields.get(field_name)
-
-                for key in field_data.keys():
-
-                    if key == self.TYPE_KEYWORD:
-                        model_field.set_type(field_data.get(self.TYPE_KEYWORD))
-
-                        if model_field.type == 'OneToOneField':
-                            signal = Signal()
-                            signal.set_signal('post_save', table_name, field_data.get('to'), field_name)
-                            signals.append(signal)
-
-                    elif key == self.VALIDATORS_KEYWORD:
-                        for validator in field_data.get(self.VALIDATORS_KEYWORD):
-                            model_field.add_validator(validator.get(self.FUNC_KEYWORD), validator.get(self.ARG_KEYWORD))
-
-                    else:
-                        value = field_data.get(key)
-                        model_field.add_attribute(key, value)
-
-                model_fields.append(model_field)
-
-            model.fields = model_fields
-            models.append(model)
-
-        return models, signals
-
-    def check_streaming_support(self, models):
-        """check for streaming support in models"""
-        for model in models:
-            for field in model.fields:
-                if field.stream:
-                    return True
-
-        return False
-
-    def generate_tests(self, diagram_path, git_support=False):
+    def generate(self, diagram_path, git_support=False):
         """stream tests to app_name/tests/test_model_name.py
         template:
             sage_painless/templates/test.txt
@@ -131,12 +34,13 @@ class TestGenerator(
         diagram = self.load_json(diagram_path)
         if git_support:
             self.init_repo(settings.BASE_DIR)
-        for app_name in diagram.get(self.APPS_KEYWORD).keys():
-            models_diagram = diagram.get(self.APPS_KEYWORD).get(app_name).get(self.MODELS_KEYWORD)  # get models data for current app
+        for app_name in diagram.get(self.get_constant('APPS_KEYWORD')).keys():
+            models_diagram = diagram.get(
+                self.get_constant('APPS_KEYWORD')).get(app_name).get(self.get_constant('MODELS_KEYWORD'))  # get models data for current app
             models, signals = self.extract_models(models_diagram)
 
             self.create_app_if_not_exists(app_name)
-            self.create_dir_for_app_if_not_exists(self.TESTS_DIR, app_name)
+            self.create_dir_for_app_if_not_exists(self.get_constant('TESTS_DIR'), app_name)
             self.create_file_if_not_exists(f'{settings.BASE_DIR}/{app_name}/tests/__init__.py')
             self.delete_file_if_exists(f'{settings.BASE_DIR}/{app_name}/tests.py')
 
