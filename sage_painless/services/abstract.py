@@ -439,3 +439,13 @@ class AbstractToxGenerator(BaseGenerator, GeneratorConstants):
         if not deploy:
             raise KeyError('`deploy` not set in diagram json file')
         return deploy.get(self.get_constant('TOX_KEYWORD'))
+
+class AbstractUWSGIGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract UWSGI Generator"""
+
+    def extract_uwsgi_config(self, diagram):
+        """extract uwsgi config from diagram json"""
+        deploy = diagram.get(self.get_constant('DEPLOY_KEYWORD'))
+        if not deploy:
+            raise KeyError('`deploy` not set in diagram json file')
+        return deploy.get(self.get_constant('UWSGI_KEYWORD'))

@@ -30,6 +30,7 @@ class GeneratorConstants(ABC):
         '_static', '_templates',
     ]
     TOX_KEYWORD = 'tox'
+    UWSGI_KEYWORD = 'uwsgi'
 
     def get_constant(self, name):
         """get constant from variables"""
