@@ -1,3 +1,6 @@
+from pathlib import Path
+
+import django
 from django.apps import apps
 from django.conf import settings
 
@@ -293,7 +296,8 @@ class AbstractTestGenerator(BaseGenerator, GeneratorConstants):
                     elif key == self.get_constant('VALIDATORS_KEYWORD'):
                         for validator in field_data.get(self.get_constant('VALIDATORS_KEYWORD')):
                             model_field.add_validator(
-                                validator.get(self.get_constant('FUNC_KEYWORD')), validator.get(self.get_constant('ARG_KEYWORD')))
+                                validator.get(self.get_constant('FUNC_KEYWORD')),
+                                validator.get(self.get_constant('ARG_KEYWORD')))
 
                     else:
                         value = field_data.get(key)
@@ -305,6 +309,7 @@ class AbstractTestGenerator(BaseGenerator, GeneratorConstants):
             models.append(model)
 
         return models, signals
+
 
 class AbstractDockerGenerator(BaseGenerator, GeneratorConstants):
     """Abstract Docker Generator"""
@@ -339,6 +344,7 @@ class AbstractDockerGenerator(BaseGenerator, GeneratorConstants):
             raise SystemError('MEDIA_ROOT should be set in your settings')
         return directory.replace(self.get_kernel_name(), 'web')
 
+
 class AbstractGunicornGenerator(BaseGenerator, GeneratorConstants):
     """Abstract Gunicorn Generator"""
 
@@ -348,3 +354,61 @@ class AbstractGunicornGenerator(BaseGenerator, GeneratorConstants):
         if not deploy:
             raise KeyError('`deploy` not set in diagram json file')
         return deploy.get(self.get_constant('GUNICORN_KEYWORD'))
+
+
+class AbstractReadMeGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract ReadMe Generator"""
+
+    @classmethod
+    def get_built_in_app_names(cls):
+        """django built-in apps"""
+        return [app.verbose_name for app in apps.get_app_configs() if app.name.startswith('django.')]
+
+    @classmethod
+    def get_installed_module_names(cls):
+        """extra installed modules to setting"""
+        return [app.verbose_name for app in apps.get_app_configs() if not app.name.startswith('django.')]
+
+    @classmethod
+    def get_project_name(cls):
+        """get project root name"""
+        base_dir = settings.BASE_DIR
+        return base_dir.name if hasattr(base_dir, 'name') else base_dir
+
+    @classmethod
+    def get_project_version(cls):
+        """get current project version if set"""
+        return getattr(settings, 'VERSION', '1.0.0')
+
+    @classmethod
+    def get_django_version(cls):
+        """get current Django version"""
+        return django.get_version()
+
+    @classmethod
+    def merge(cls, list_a: list, list_b: list):
+        """merge 2 lists"""
+        return list(set(list_a + list_b))
+
+    @classmethod
+    def has_docker_support(cls):
+        """is project dockerized"""
+        compose_file_yml = Path(f'{settings.BASE_DIR}/docker-compose.yml')
+        compose_file_yaml = Path(f'{settings.BASE_DIR}/docker-compose.yaml')
+
+        if compose_file_yml.is_file() or compose_file_yaml.is_file():
+            return True
+
+        return False
+
+    def make_tree(self, dir_path: Path, prefix: str = ''):
+        """create project root tree structure"""
+        contents = list(dir_path.iterdir())
+        pointers = [self.get_constant('TEE')] * (len(contents) - 1) + [self.get_constant('LAST')]
+
+        for pointer, path in zip(pointers, contents):
+            if path.name not in self.get_constant('IGNORE_DIRS'):
+                yield prefix + pointer + path.name
+                if path.is_dir():
+                    extension = self.get_constant('BRANCH') if pointer == self.get_constant('TEE') else self.get_constant('SPACE')
+                    yield from self.make_tree(path, prefix=prefix + extension)

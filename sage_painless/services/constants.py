@@ -19,6 +19,16 @@ class GeneratorConstants(ABC):
     DEPLOY_KEYWORD = 'deploy'
     DOCKER_KEYWORD = 'docker'
     GUNICORN_KEYWORD = 'gunicorn'
+    SPACE = '    '
+    BRANCH = '│   '
+    TEE = '├── '
+    LAST = '└── '
+    IGNORE_DIRS = [
+        'venv', '.pytest_cache',
+        '.tox', '.vscode', 'dist',
+        '.git', '__pycache__', '_build',
+        '_static', '_templates',
+    ]
 
     def get_constant(self, name):
         """get constant from variables"""
