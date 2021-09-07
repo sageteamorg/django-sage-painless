@@ -410,5 +410,32 @@ class AbstractReadMeGenerator(BaseGenerator, GeneratorConstants):
             if path.name not in self.get_constant('IGNORE_DIRS'):
                 yield prefix + pointer + path.name
                 if path.is_dir():
-                    extension = self.get_constant('BRANCH') if pointer == self.get_constant('TEE') else self.get_constant('SPACE')
+                    extension = self.get_constant('BRANCH') if pointer == self.get_constant(
+                        'TEE') else self.get_constant('SPACE')
                     yield from self.make_tree(path, prefix=prefix + extension)
+
+
+class AbstractToxGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract Tox Generator"""
+
+    @classmethod
+    def get_app_names(cls):
+        """get diagram app names"""
+        return [app.name for app in apps.get_app_configs() if not app.name.startswith('django.')]
+
+    @classmethod
+    def get_kernel_name(cls):
+        """get project kernel name"""
+        return settings.SETTINGS_MODULE.split('.')[0]
+
+    @classmethod
+    def parse_requirements(cls, requirements):
+        with open(requirements) as f:
+            return [l.strip('\n') for l in f if l.strip('\n') and not l.startswith('#')]
+
+    def extract_tox_config(self, diagram):
+        """extract tox config from diagram json"""
+        deploy = diagram.get(self.get_constant('DEPLOY_KEYWORD'))
+        if not deploy:
+            raise KeyError('`deploy` not set in diagram json file')
+        return deploy.get(self.get_constant('TOX_KEYWORD'))

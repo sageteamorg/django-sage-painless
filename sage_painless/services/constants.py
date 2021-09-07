@@ -29,6 +29,7 @@ class GeneratorConstants(ABC):
         '.git', '__pycache__', '_build',
         '_static', '_templates',
     ]
+    TOX_KEYWORD = 'tox'
 
     def get_constant(self, name):
         """get constant from variables"""

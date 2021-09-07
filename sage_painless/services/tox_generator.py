@@ -2,43 +2,25 @@ import os
 import time
 
 from django.conf import settings
-from django.apps import apps
 
-from sage_painless import templates
+# Base
+from sage_painless.services.abstract import AbstractToxGenerator
+
+# Helpers
 from sage_painless.utils.git_service import GitSupport
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.pep8_service import Pep8
 from sage_painless.utils.timing_service import TimingService
 
+from sage_painless import templates
 
-class ToxGenerator(JinjaHandler, JsonHandler, Pep8, TimingService, GitSupport):
+
+class ToxGenerator(AbstractToxGenerator, JinjaHandler, JsonHandler, Pep8, TimingService, GitSupport):
     """generate tox configs & coverage support"""
-    APPS_KEYWORD = 'apps'
-    DEPLOY_KEYWORD = 'deploy'
-    TOX_KEYWORD = 'tox'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def get_app_names(self):
-        """get diagram app names"""
-        return [app.name for app in apps.get_app_configs() if not app.name.startswith('django.')]
-
-    def get_kernel_name(self):
-        """get project kernel name"""
-        return settings.SETTINGS_MODULE.split('.')[0]
-
-    def parse_requirements(self, requirements):
-        with open(requirements) as f:
-            return [l.strip('\n') for l in f if l.strip('\n') and not l.startswith('#')]
-
-    def extract_tox_config(self, diagram):
-        """extract tox config from diagram json"""
-        deploy = diagram.get(self.DEPLOY_KEYWORD)
-        if not deploy:
-            raise KeyError('`deploy` not set in diagram json file')
-        return deploy.get(self.TOX_KEYWORD)
 
     def generate(self, diagram_path, git_support=False):
         """generate tox and coverage config
