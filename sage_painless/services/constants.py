@@ -12,6 +12,7 @@ class GeneratorConstants(ABC):
     VALIDATORS_KEYWORD = 'validators'
     FUNC_KEYWORD = 'func'
     ARG_KEYWORD = 'arg'
+    ADMIN_KEYWORD = 'admin'
 
     def get_constant(self, name):
         """get constant from variables"""
