@@ -155,3 +155,61 @@ class AbstractAdminGenerator(BaseGenerator, GeneratorConstants):
             admins.append(admin)
 
         return admins
+
+
+class AbstractAPIGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract API Generator"""
+
+    @classmethod
+    def normalize_api_config(cls, api_config):
+        """get api config
+        normalize api methods
+        return api config
+        """
+        if api_config:
+            if api_config.get('methods'):
+                api_config['methods'] = [method.lower() for method in api_config.get('methods')]
+
+        return api_config
+
+    @classmethod
+    def check_streaming_support(cls, models):
+        """check for streaming support in models"""
+        for model in models:
+            for field in model.fields:
+                if field.stream:
+                    return True
+
+        return False
+
+    def get_table_fields(self, table):
+        """get fields"""
+        return table.get(self.get_constant('FIELDS_KEYWORD'))
+
+    def get_table_api(self, table):
+        """get api"""
+        return table.get(self.get_constant('API_KEYWORD'))
+
+    def extract_models(self, diagram):
+        """extract models"""
+        models = list()
+        for table_name in diagram.keys():
+            table = diagram.get(table_name)
+            fields = self.get_table_fields(table)
+            api_config = self.get_table_api(table)
+
+            model = Model()
+            model.name = table_name
+            model.api_config = self.normalize_api_config(api_config)
+            model_fields = list()
+
+            for field_name in fields.keys():
+                model_field = Field()
+                model_field.name = field_name
+                model_field.stream = fields.get(field_name).pop(self.STREAM_KEYWORD, False)  # video field streaming
+                model_fields.append(model_field)
+
+            model.fields = model_fields
+            models.append(model)
+
+        return models
