@@ -338,3 +338,13 @@ class AbstractDockerGenerator(BaseGenerator, GeneratorConstants):
         if not directory:
             raise SystemError('MEDIA_ROOT should be set in your settings')
         return directory.replace(self.get_kernel_name(), 'web')
+
+class AbstractGunicornGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract Gunicorn Generator"""
+
+    def extract_gunicorn_config(self, diagram):
+        """extract gunicorn config from diagram json"""
+        deploy = diagram.get(self.get_constant('DEPLOY_KEYWORD'))
+        if not deploy:
+            raise KeyError('`deploy` not set in diagram json file')
+        return deploy.get(self.get_constant('GUNICORN_KEYWORD'))

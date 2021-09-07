@@ -18,6 +18,7 @@ class GeneratorConstants(ABC):
     TESTS_DIR = 'tests'
     DEPLOY_KEYWORD = 'deploy'
     DOCKER_KEYWORD = 'docker'
+    GUNICORN_KEYWORD = 'gunicorn'
 
     def get_constant(self, name):
         """get constant from variables"""
