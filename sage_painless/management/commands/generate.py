@@ -167,7 +167,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                 )
                 self.validate_settings(step='test')
                 test_generator = TestGenerator()
-                check, message = test_generator.generate_tests(diagram_path, git_support=git_support)
+                check, message = test_generator.generate(diagram_path, git_support=git_support)
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
