@@ -4,53 +4,24 @@ import time
 from django.conf import settings
 from django.core.management.utils import get_random_secret_key
 
-from sage_painless import templates
+# Base
+from sage_painless.services.abstract import AbstractDockerGenerator
+
+# Helpers
 from sage_painless.utils.git_service import GitSupport
 from sage_painless.utils.jinja_service import JinjaHandler
 from sage_painless.utils.json_service import JsonHandler
 from sage_painless.utils.package_manager_service import PackageManagerSupport
 from sage_painless.utils.timing_service import TimingService
 
+from sage_painless import templates
 
-class DockerGenerator(
-    JinjaHandler, JsonHandler, TimingService,
-    GitSupport, PackageManagerSupport
-):
+
+class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, TimingService, GitSupport, PackageManagerSupport):
     """Generate DockerFile & docker-compose"""
-    DEPLOY_KEYWORD = 'deploy'
-    DOCKER_KEYWORD = 'docker'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def get_kernel_name(self):
-        """get project kernel name"""
-        return settings.SETTINGS_MODULE.split('.')[0]
-
-    def extract_deploy_config(self, diagram):
-        """extract deploy deploy config from diagram"""
-        deploy = diagram.get(self.DEPLOY_KEYWORD)
-        if not deploy:
-            raise KeyError('`deploy` not set in diagram json file')
-        return deploy
-
-    def get_staticfiles_dir(self):
-        """get staticfiles dir
-        `web` is container name
-        """
-        directory = settings.STATIC_ROOT
-        if not directory:
-            raise SystemError('STATIC_ROOT should be set in your settings')
-        return directory.replace(self.get_kernel_name(), 'web')
-
-    def get_mediafiles_dir(self):
-        """get mediafiles dir
-        `web` is container name
-        """
-        directory = settings.MEDIA_ROOT
-        if not directory:
-            raise SystemError('MEDIA_ROOT should be set in your settings')
-        return directory.replace(self.get_kernel_name(), 'web')
 
     def generate(
             self, diagram_path, gunicorn_support=False, uwsgi_support=False,

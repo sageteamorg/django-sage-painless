@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.conf import settings
 
 from sage_painless.classes.admin import Admin
 from sage_painless.classes.field import Field
@@ -304,3 +305,36 @@ class AbstractTestGenerator(BaseGenerator, GeneratorConstants):
             models.append(model)
 
         return models, signals
+
+class AbstractDockerGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract Docker Generator"""
+
+    @classmethod
+    def get_kernel_name(cls):
+        """get project kernel name"""
+        return settings.SETTINGS_MODULE.split('.')[0]
+
+    def extract_deploy_config(self, diagram):
+        """extract deploy deploy config from diagram"""
+        deploy = diagram.get(self.get_constant('DEPLOY_KEYWORD'))
+        if not deploy:
+            raise KeyError('`deploy` not set in diagram json file')
+        return deploy
+
+    def get_staticfiles_dir(self):
+        """get staticfiles dir
+        `web` is container name
+        """
+        directory = settings.STATIC_ROOT
+        if not directory:
+            raise SystemError('STATIC_ROOT should be set in your settings')
+        return directory.replace(self.get_kernel_name(), 'web')
+
+    def get_mediafiles_dir(self):
+        """get mediafiles dir
+        `web` is container name
+        """
+        directory = settings.MEDIA_ROOT
+        if not directory:
+            raise SystemError('MEDIA_ROOT should be set in your settings')
+        return directory.replace(self.get_kernel_name(), 'web')

@@ -16,6 +16,8 @@ class GeneratorConstants(ABC):
     API_KEYWORD = 'api'
     API_DIR = 'api'
     TESTS_DIR = 'tests'
+    DEPLOY_KEYWORD = 'deploy'
+    DOCKER_KEYWORD = 'docker'
 
     def get_constant(self, name):
         """get constant from variables"""
