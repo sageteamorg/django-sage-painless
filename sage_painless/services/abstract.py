@@ -1,3 +1,6 @@
+from django.apps import apps
+
+from sage_painless.classes.admin import Admin
 from sage_painless.classes.field import Field
 from sage_painless.classes.model import Model
 from sage_painless.classes.signal import Signal
@@ -106,3 +109,49 @@ class AbstractModelGenerator(BaseGenerator, GeneratorConstants):
             models.append(model)
 
         return models, signals
+
+
+class AbstractAdminGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract Admin Generator"""
+
+    @classmethod
+    def get_app_models(cls, app_name):
+        """extract models from app"""
+        return [model.__name__ for model in list(apps.get_app_config(app_name).get_models())]
+
+    @classmethod
+    def get_diagram_models(cls, diagram):
+        """extract models from diagram"""
+        return list(diagram.keys())
+
+    def validate_diagram(self, diagram, app_name):
+        """check diagram models with app models if any difference return False"""
+        app_models = self.get_app_models(app_name)
+        diagram_models = self.get_diagram_models(diagram)
+        differences = list(set(diagram_models).symmetric_difference(set(app_models)))
+        if len(differences) == 0:
+            message = True, 'Success'
+        else:
+            message = False, differences
+
+        return message
+
+    def get_table_admin(self, table):
+        return table.get(self.get_constant('ADMIN_KEYWORD'))
+
+    def extract_admin(self, diagram):
+        """extract admin attributes from json file"""
+        admins = list()
+        for table_name in diagram.keys():
+            table = diagram.get(table_name)
+            admin_data = self.get_table_admin(table)
+
+            admin = Admin()
+            admin.model = table_name
+            for key in admin_data.keys():
+                value = admin_data.get(key)
+                setattr(admin, key, value)
+
+            admins.append(admin)
+
+        return admins
