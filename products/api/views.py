@@ -7,6 +7,9 @@ from django.http import Http404
 
 from rest_framework.viewsets import ModelViewSet
 
+# permission support
+from rest_framework import permissions
+
 
 from products.models.category import Category
 
@@ -30,6 +33,7 @@ class CategoryViewset(ModelViewSet):
     serializer_class = CategorySerializer
     
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+    permission_classes = (permissions.AllowAny,)
     
     model_class = Category
 
@@ -44,9 +48,15 @@ class CategoryViewset(ModelViewSet):
         get object from cache
         """
         queryset = self.get_queryset()
-        if len(queryset) == 0:
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        filter_kwargs = {
+            self.lookup_field: int(
+                self.kwargs[lookup_url_kwarg]) if self.kwargs[lookup_url_kwarg].isdigit() else None
+        }
+        qs = self.model_class.filter_from_cache(queryset, **filter_kwargs)
+        if len(qs) == 0:
             raise Http404('Not Found')
-        obj = queryset[0]
+        obj = qs[0]
         return obj
     
 
@@ -70,9 +80,15 @@ class ProductViewset(ModelViewSet):
         get object from cache
         """
         queryset = self.get_queryset()
-        if len(queryset) == 0:
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        filter_kwargs = {
+            self.lookup_field: int(
+                self.kwargs[lookup_url_kwarg]) if self.kwargs[lookup_url_kwarg].isdigit() else None
+        }
+        qs = self.model_class.filter_from_cache(queryset, **filter_kwargs)
+        if len(qs) == 0:
             raise Http404('Not Found')
-        obj = queryset[0]
+        obj = qs[0]
         return obj
     
 
@@ -96,8 +112,14 @@ class DiscountViewset(ModelViewSet):
         get object from cache
         """
         queryset = self.get_queryset()
-        if len(queryset) == 0:
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        filter_kwargs = {
+            self.lookup_field: int(
+                self.kwargs[lookup_url_kwarg]) if self.kwargs[lookup_url_kwarg].isdigit() else None
+        }
+        qs = self.model_class.filter_from_cache(queryset, **filter_kwargs)
+        if len(qs) == 0:
             raise Http404('Not Found')
-        obj = queryset[0]
+        obj = qs[0]
         return obj
     

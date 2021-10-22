@@ -12,9 +12,14 @@ from products.models.discount import Discount
 
 
 class CategorySerializer(ModelSerializer):
+    """
+    Category Serializer
+    Auto generated
+    """
     class Meta:
         model = Category
         fields = [
+            'id',
             'title',
             'created',
             'modified',
@@ -22,9 +27,14 @@ class CategorySerializer(ModelSerializer):
         ]
 
 class ProductSerializer(ModelSerializer):
+    """
+    Product Serializer
+    Auto generated
+    """
     class Meta:
         model = Product
         fields = [
+            'id',
             'title',
             'description',
             'price',
@@ -35,9 +45,14 @@ class ProductSerializer(ModelSerializer):
         ]
 
 class DiscountSerializer(ModelSerializer):
+    """
+    Discount Serializer
+    Auto generated
+    """
     class Meta:
         model = Discount
         fields = [
+            'id',
             'product',
             'discount',
             'created',
