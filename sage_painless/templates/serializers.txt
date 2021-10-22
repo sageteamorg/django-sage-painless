@@ -16,6 +16,7 @@ class {{model.name}}Serializer(ModelSerializer):
     class Meta:
         model = {{model.name}}
         fields = [
+        'id',
         {%for field in model.fields%}'{{field.name}}',
         {% endfor %}
         ]
