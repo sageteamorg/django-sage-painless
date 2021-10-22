@@ -6,6 +6,10 @@ You may need to change some parts
 from django.http import Http404
 {% endif %}
 from rest_framework.viewsets import ModelViewSet
+{% if permission_support %}
+# permission support
+from rest_framework import permissions
+{% endif %}
 
 {% for model in models %}
 from {{app_name}}.models.{{model.name.lower()}} import {{model.name}}
@@ -23,7 +27,8 @@ class {{model.name}}Viewset(ModelViewSet):
     """
     serializer_class = {{model.name}}Serializer
     {% if model.api_config %}
-    {% if model.api_config.get('methods') %}http_method_names = {{model.api_config.get('methods')}}{%endif%}
+    {% if model.api_config.get('methods') %}http_method_names = {{model.api_config.get('methods')}}{% endif %}
+    {% if model.api_config.get('permission') %}permission_classes = (permissions.{{model.api_config.get('permission')}},){% endif %}
     {% endif %}
     {% if cache_support %}
     model_class = {{model.name}}
