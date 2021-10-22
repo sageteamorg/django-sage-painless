@@ -64,7 +64,8 @@ class APIGenerator(AbstractAPIGenerator, JinjaHandler, JsonHandler, Pep8, FileSe
                 data={
                     'app_name': app_name,
                     'models': models,
-                    'cache_support': cache_support
+                    'cache_support': cache_support,
+                    'permission_support': self.check_permission_support(models)
                 }
             )
 

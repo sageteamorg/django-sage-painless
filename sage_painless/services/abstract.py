@@ -164,16 +164,28 @@ class AbstractAdminGenerator(BaseGenerator, GeneratorConstants):
 class AbstractAPIGenerator(BaseGenerator, GeneratorConstants):
     """Abstract API Generator"""
 
-    @classmethod
-    def normalize_api_config(cls, api_config):
+    permission_routing = {
+        'any': 'AllowAny',
+        'auth': 'IsAuthenticated',
+        'auth_or_read': 'IsAuthenticatedOrReadOnly',
+        'admin': 'IsAdminUser'
+    }
+
+    def normalize_api_config(self, api_config):
         """get api config
         normalize api methods
+        normalize api permissions
         return api config
         """
         if api_config:
-            if api_config.get('methods'):
-                api_config['methods'] = [method.lower() for method in api_config.get('methods')]
+            if api_config.get(self.get_constant('METHODS_KEYWORD')):
+                api_config[self.get_constant('METHODS_KEYWORD')] = [
+                    method.lower() for method in api_config.get(self.get_constant('METHODS_KEYWORD'))]
 
+            if api_config.get(self.get_constant('PERMISSION_KEYWORD')):
+                api_config[self.get_constant('PERMISSION_KEYWORD')] = self.permission_routing.get(
+                    api_config.get(self.get_constant('PERMISSION_KEYWORD'))
+                )
         return api_config
 
     @classmethod
@@ -183,6 +195,14 @@ class AbstractAPIGenerator(BaseGenerator, GeneratorConstants):
             for field in model.fields:
                 if field.stream:
                     return True
+
+        return False
+    
+    def check_permission_support(self, models):
+        """check for permission support in api config"""
+        for model in models:
+            if model.api_config.get(self.get_constant('PERMISSION_KEYWORD')):
+                return True
 
         return False
 
