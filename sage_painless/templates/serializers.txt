@@ -9,6 +9,10 @@ from {{app_name}}.models.{{model.name.lower()}} import {{model.name}}
 
 {% for model in models %}
 class {{model.name}}Serializer(ModelSerializer):
+    """
+    {{model.name}} Serializer
+    Auto generated
+    """
     class Meta:
         model = {{model.name}}
         fields = [
