@@ -31,6 +31,8 @@ class GeneratorConstants(ABC):
     ]
     TOX_KEYWORD = 'tox'
     UWSGI_KEYWORD = 'uwsgi'
+    PERMISSION_KEYWORD = 'permission'
+    METHODS_KEYWORD = 'methods'
 
     def get_constant(self, name):
         """get constant from variables"""
