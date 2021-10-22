@@ -40,7 +40,8 @@
               "PUT",
               "PATCH",
               "DELETE"
-            ]
+            ],
+            "permission": "any"
           }
         },
         "Product": {
