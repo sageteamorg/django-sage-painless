@@ -39,9 +39,14 @@ class {{model.name}}Viewset(ModelViewSet):
         get object from cache
         """
         queryset = self.get_queryset()
-        if len(queryset) == 0:
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        filter_kwargs = {
+            self.lookup_field: int(self.kwargs[lookup_url_kwarg]) if self.kwargs[lookup_url_kwarg].isdigit() else None
+        }
+        qs = self.model_class.filter_from_cache(queryset, **filter_kwargs)
+        if len(qs) == 0:
             raise Http404('Not Found')
-        obj = queryset[0]
+        obj = qs[0]
         return obj
     {% else %}
     queryset = {{model.name}}.objects.all()
