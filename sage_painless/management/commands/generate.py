@@ -1,3 +1,8 @@
+"""
+django-sage-painless - generate management command
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import datetime
 
 from django.core.management.base import BaseCommand

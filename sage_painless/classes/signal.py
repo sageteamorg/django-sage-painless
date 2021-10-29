@@ -1,3 +1,10 @@
+"""
+django-sage-painless - Signal Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
+
+
 class Signal:
     def __init__(self):
         self.model_b = None

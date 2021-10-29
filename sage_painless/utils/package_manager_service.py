@@ -1,7 +1,13 @@
+"""
+django-sage-painless - Package Manager Integration Main Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import os
 import subprocess
 
 from django.conf import settings
+
 
 class PackageManagerSupport:
     VALID_MANAGERS = ['pip', 'pipenv', 'Pipenv', 'poetry']

@@ -1,3 +1,10 @@
+"""
+django-sage-painless - Field Classes
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
+
+
 class Attribute:
     """Required Field object that contains `key` and `value`"""
 

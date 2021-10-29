@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Abstract Generator Classes
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 from pathlib import Path
 
 import django

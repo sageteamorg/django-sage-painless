@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Git Integration Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 from git import Repo
 
 

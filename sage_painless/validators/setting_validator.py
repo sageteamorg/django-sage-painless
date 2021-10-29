@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Settings Validator Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 from django.db import connection
 
 

@@ -1,3 +1,8 @@
+"""
+django-sage-painless - docs management command
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import datetime
 
 from django.core.management import BaseCommand

@@ -1,8 +1,14 @@
+"""
+django-sage-painless - YAML File Handling Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import yaml
 
 
 class Yaml:
-    def load_diagram(self, diagram_path):
+    @classmethod
+    def load_diagram(cls, diagram_path):
         """
         load db diagram
         """

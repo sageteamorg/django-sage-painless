@@ -1,3 +1,10 @@
+"""
+django-sage-painless - Comments Main Observer Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
+
+
 class CommentService:
     # help comments using in gunicorn-conf.py template
     GUNICORN_CONFIG_COMMENTS = {

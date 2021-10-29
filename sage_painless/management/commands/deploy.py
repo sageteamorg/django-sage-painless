@@ -1,3 +1,8 @@
+"""
+django-sage-painless - deploy management command
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import datetime
 
 from django.core.management import BaseCommand
@@ -6,7 +11,6 @@ from sage_painless.services.docker_generator import DockerGenerator
 from sage_painless.services.gunicorn_generator import GunicornGenerator
 from sage_painless.services.tox_generator import ToxGenerator
 from sage_painless.services.uwsgi_generator import UwsgiGenerator
-from sage_painless.utils.package_manager_service import PackageManagerSupport
 from sage_painless.utils.report_service import ReportUserAnswer
 
 

@@ -1,3 +1,8 @@
+"""
+django-sage-painless - README Generator
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import os
 import time
 from platform import python_version

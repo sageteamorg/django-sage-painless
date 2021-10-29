@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Tox Config Generator
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import os
 import time
 

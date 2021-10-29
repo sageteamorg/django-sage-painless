@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Jinja Templating Main Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 from jinja2 import Environment
 
 

@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Base Generator Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 from abc import ABC, abstractmethod
 
 

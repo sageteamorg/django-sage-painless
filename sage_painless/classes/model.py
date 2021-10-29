@@ -1,3 +1,10 @@
+"""
+django-sage-painless - Model Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
+
+
 class Model:
     """
     Model object that contains `name` and `fields` of model

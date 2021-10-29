@@ -1,3 +1,10 @@
+"""
+django-sage-painless - Admin Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
+
+
 class Admin:
 
     def __init__(self):

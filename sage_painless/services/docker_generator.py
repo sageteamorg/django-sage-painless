@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Docker Generator
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import os
 import time
 

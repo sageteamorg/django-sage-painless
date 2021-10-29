@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Generator Constants Observer Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 from abc import ABC
 
 

@@ -1,3 +1,8 @@
+"""
+django-sage-painless - validate_diagram management command
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 from django.core.management.base import BaseCommand
 
 from sage_painless.utils.json_service import JsonHandler

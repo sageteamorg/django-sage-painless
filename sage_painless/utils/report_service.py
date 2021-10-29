@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Report Generate Request Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 import json
 import os
 from pathlib import Path
@@ -10,11 +15,13 @@ class ReportUserAnswer:
         self.file_prefix = file_prefix
         self.app_label = app_name
 
-    def create_dir_is_not_exists(self, directory):
+    @classmethod
+    def create_dir_is_not_exists(cls, directory):
         if not os.path.exists(directory):
             os.mkdir(directory)
 
-    def create_file_is_not_exists(self, file_path):
+    @classmethod
+    def create_file_is_not_exists(cls, file_path):
         if not os.path.isfile(file_path):
             file = Path(file_path)
             file.touch(exist_ok=True)

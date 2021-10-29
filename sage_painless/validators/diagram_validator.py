@@ -1,3 +1,8 @@
+"""
+django-sage-painless - Diagram Validator Class
+
+:author: Mehran Rahmanzadeh (mrhnz13@gmail.com)
+"""
 from sage_painless.classes.field import Field
 
 
