@@ -1,6 +1,6 @@
 """
 Auto Generated urls.py
-You may need to change some parts
+Automatically generated with ❤️ by django-sage-painless
 """
 
 from rest_framework.routers import DefaultRouter

@@ -1,6 +1,6 @@
 """
 Auto Generated test
-You may need to change some parts
+Automatically generated with ❤️ by django-sage-painless
 """
 from django.apps import apps
 from django.urls import reverse

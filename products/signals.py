@@ -1,6 +1,6 @@
 """
 Auto Generated signals.py
-You may need to change some parts
+Automatically generated with ❤️ by django-sage-painless
 """
 
 from django.db.models import signals

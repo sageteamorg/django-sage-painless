@@ -1,6 +1,6 @@
 """
 Auto Generated models.py
-You may need to change some parts
+Automatically generated with ❤️ by django-sage-painless
 """
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -19,7 +19,7 @@ class Discount(models.Model, ModelCacheMixin):
     Auto generated
     """
     
-    CACHE_KEY = 'discount'
+    CACHE_KEY = 'discount'  # auto generated CACHE_KEY
     
     product = models.ForeignKey(
              to=Product,
@@ -43,7 +43,7 @@ class Discount(models.Model, ModelCacheMixin):
     )
     
     def __str__(self):
-        return f"Discount {self.pk}"  # you may change this section
+        return f"Discount {self.pk}" 
 
     class Meta:
         verbose_name = _("Discount")  # auto generated verbose_name

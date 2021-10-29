@@ -1,6 +1,6 @@
 """
 Auto Generated mixins.py
-You may need to change some parts
+Automatically generated with ❤️ by django-sage-painless
 """
 
 from django.core.cache import cache
