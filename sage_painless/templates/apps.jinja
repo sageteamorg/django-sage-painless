@@ -1,3 +1,7 @@
+"""
+Auto Generated apps.py
+Automatically generated with ❤️ by django-sage-painless
+"""
 from django.apps import AppConfig
 
 
