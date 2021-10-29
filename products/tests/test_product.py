@@ -17,6 +17,7 @@ from products.models.discount import Discount
 
 seeder = Seed.seeder()
 
+
 class ProductTest(APITestCase):
     """
     Product Test

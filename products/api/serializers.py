@@ -26,6 +26,7 @@ class CategorySerializer(ModelSerializer):
         
         ]
 
+
 class ProductSerializer(ModelSerializer):
     """
     Product Serializer
@@ -43,6 +44,7 @@ class ProductSerializer(ModelSerializer):
             'modified',
         
         ]
+
 
 class DiscountSerializer(ModelSerializer):
     """

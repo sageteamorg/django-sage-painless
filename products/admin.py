@@ -32,6 +32,7 @@ class CategoryAdmin(admin.ModelAdmin):
     def has_delete_permission(self, *args, **kwargs):
         return True
 
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     """
@@ -54,6 +55,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, *args, **kwargs):
         return True
+
 
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
