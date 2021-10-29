@@ -84,7 +84,7 @@ class ModelCacheMixin:
 
         for foreign_key, related_filters in kwargs.items():
             related_objects_list = [getattr(obj, foreign_key) for obj in queryset]
-            # Filtering related objects based related object's attribute filtes
+            # Filtering related objects based related object's attribute filters
             filtered_related_objects = cls.filter_from_cache(
                 related_objects_list, **related_filters
             )
