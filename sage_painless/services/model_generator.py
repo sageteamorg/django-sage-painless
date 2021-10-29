@@ -22,6 +22,12 @@ from sage_painless import templates
 
 class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, FileService, TimingService, GitSupport):
     """Read models data from a Json file and stream it to app_name/models.py"""
+    MIXINS_TEMPLATE = 'mixins.jinja'
+    SERVICES_TEMPLATE = 'services.jinja'
+    MODELS_TEMPLATE = 'models.jinja'
+    SIGNALS_TEMPLATE = 'signals.jinja'
+    INIT_TEMPLATE = '__init__.jinja'
+    APPS_TEMPLATE = 'apps.jinja'
 
     def __init__(self, *args, **kwargs):
         """init"""
@@ -31,10 +37,10 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
         """stream models to app_name/models/model_name.py
         generate signals, mixins, services
         templates:
-            sage_painless/templates/models.txt
-            sage_painless/templates/signals.txt
-            sage_painless/templates/mixins.txt
-            sage_painless/templates/services.txt
+            sage_painless/templates/models.jinja
+            sage_painless/templates/signals.jinja
+            sage_painless/templates/mixins.jinja
+            sage_painless/templates/services.jinja
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -56,7 +62,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
             if cache_support:
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/mixins.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'mixins.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.MIXINS_TEMPLATE),
                     data={
                         'cache_support': cache_support
                     }
@@ -64,7 +70,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
 
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/services.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'services.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.SERVICES_TEMPLATE),
                     data={
                         'cache_support': cache_support
                     }
@@ -92,7 +98,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
                 # -> category.py)
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/models/{model_file_name}',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'models.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.MODELS_TEMPLATE),
                     data={
                         'app_name': app_name,
                         'models': [model],
@@ -113,7 +119,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
             if self.check_signal_support(models):
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/signals.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'signals.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.SIGNALS_TEMPLATE),
                     data={
                         'app_name': app_name,
                         'models': models,
@@ -125,7 +131,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
 
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/__init__.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.INIT_TEMPLATE),
                     data={
                         'app_name': app_name
                     }
@@ -133,7 +139,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
 
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/apps.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.APPS_TEMPLATE),
                     data={
                         'app_name': app_name,
                         'signal_support': True
@@ -160,7 +166,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
             elif cache_support:
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/signals.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'signals.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.SIGNALS_TEMPLATE),
                     data={
                         'app_name': app_name,
                         'models': models,
@@ -172,7 +178,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
 
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/__init__.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', '__init__.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.INIT_TEMPLATE),
                     data={
                         'app_name': app_name
                     }
@@ -180,7 +186,7 @@ class ModelGenerator(AbstractModelGenerator, JinjaHandler, JsonHandler, Pep8, Fi
 
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/apps.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'apps.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.APPS_TEMPLATE),
                     data={
                         'app_name': app_name,
                         'signal_support': True

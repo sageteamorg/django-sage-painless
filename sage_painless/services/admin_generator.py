@@ -16,8 +16,10 @@ from sage_painless.utils.timing_service import TimingService
 
 from sage_painless import templates
 
+
 class AdminGenerator(AbstractAdminGenerator, JinjaHandler, JsonHandler, Pep8, FileService, TimingService, GitSupport):
     """Generate admin.py for apps from given diagram"""
+    ADMIN_TEMPLATE = 'admin.jinja'
 
     def __init__(self, *args, **kwargs):
         """init"""
@@ -26,7 +28,7 @@ class AdminGenerator(AbstractAdminGenerator, JinjaHandler, JsonHandler, Pep8, Fi
     def generate(self, diagram_path, git_support=False):
         """generate admin.py
         template:
-            sage_painless/templates/admin.txt
+            sage_painless/templates/admin.jinja
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -34,14 +36,15 @@ class AdminGenerator(AbstractAdminGenerator, JinjaHandler, JsonHandler, Pep8, Fi
             self.init_repo(settings.BASE_DIR)
         for app_name in diagram.get(self.get_constant('APPS_KEYWORD')).keys():
             models_diagram = diagram.get(
-                self.get_constant('APPS_KEYWORD')).get(app_name).get(self.get_constant('MODELS_KEYWORD'))  # get models data for current app
+                self.get_constant('APPS_KEYWORD')).get(app_name).get(
+                self.get_constant('MODELS_KEYWORD'))  # get models data for current app
             admins = self.extract_admin(models_diagram)
 
             self.create_app_if_not_exists(app_name)
 
             self.stream_to_template(
                 output_path=f'{settings.BASE_DIR}/{app_name}/admin.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'admin.txt'),
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.ADMIN_TEMPLATE),
                 data={
                     'app_name': app_name,
                     'admins': admins,
@@ -55,4 +58,3 @@ class AdminGenerator(AbstractAdminGenerator, JinjaHandler, JsonHandler, Pep8, Fi
                 )
         end_time = time.time()
         return True, 'admin generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
-

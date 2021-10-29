@@ -19,6 +19,9 @@ from sage_painless import templates
 
 class APIGenerator(AbstractAPIGenerator, JinjaHandler, JsonHandler, Pep8, FileService, TimingService, GitSupport):
     """Generate API serializers & viewsets"""
+    SERIALIZERS_TEMPLATE = 'serializers.jinja'
+    VIEWS_TEMPLATE = 'views.jinja'
+    URLS_TEMPLATE = 'urls.jinja'
 
     def __init__(self, *args, **kwargs):
         """init"""
@@ -30,9 +33,9 @@ class APIGenerator(AbstractAPIGenerator, JinjaHandler, JsonHandler, Pep8, FileSe
         stream viewsets to app_name/api/views.py
         stream urls to app_name/api/urls.py
         template:
-            sage_painless/templates/serializers.txt
-            sage_painless/templates/views.txt
-            sage_painless/templates/urls.txt
+            sage_painless/templates/serializers.jinja
+            sage_painless/templates/views.jinja
+            sage_painless/templates/urls.jinja
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -50,7 +53,7 @@ class APIGenerator(AbstractAPIGenerator, JinjaHandler, JsonHandler, Pep8, FileSe
             # stream to serializers.py
             self.stream_to_template(
                 output_path=f'{settings.BASE_DIR}/{app_name}/api/serializers.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'serializers.txt'),
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.SERIALIZERS_TEMPLATE),
                 data={
                     'app_name': app_name,
                     'models': models
@@ -60,7 +63,7 @@ class APIGenerator(AbstractAPIGenerator, JinjaHandler, JsonHandler, Pep8, FileSe
             # stream to views.py
             self.stream_to_template(
                 output_path=f'{settings.BASE_DIR}/{app_name}/api/views.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'views.txt'),
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.VIEWS_TEMPLATE),
                 data={
                     'app_name': app_name,
                     'models': models,
@@ -72,7 +75,7 @@ class APIGenerator(AbstractAPIGenerator, JinjaHandler, JsonHandler, Pep8, FileSe
             # stream to urls.py
             self.stream_to_template(
                 output_path=f'{settings.BASE_DIR}/{app_name}/api/urls.py',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'urls.txt'),
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.URLS_TEMPLATE),
                 data={
                     'app_name': app_name,
                     'models': models,

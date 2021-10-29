@@ -197,7 +197,7 @@ class AbstractAPIGenerator(BaseGenerator, GeneratorConstants):
                     return True
 
         return False
-    
+
     def check_permission_support(self, models):
         """check for permission support in api config"""
         for model in models:
@@ -459,6 +459,7 @@ class AbstractToxGenerator(BaseGenerator, GeneratorConstants):
         if not deploy:
             raise KeyError('`deploy` not set in diagram json file')
         return deploy.get(self.get_constant('TOX_KEYWORD'))
+
 
 class AbstractUWSGIGenerator(BaseGenerator, GeneratorConstants):
     """Abstract UWSGI Generator"""

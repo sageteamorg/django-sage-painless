@@ -14,8 +14,10 @@ from sage_painless.utils.timing_service import TimingService
 
 from sage_painless import templates
 
+
 class UwsgiGenerator(AbstractUWSGIGenerator, JinjaHandler, JsonHandler, TimingService, GitSupport):
     """generate uwsgi config"""
+    UWSGI_TEMPLATE = 'uwsgi.jinja'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,7 +25,7 @@ class UwsgiGenerator(AbstractUWSGIGenerator, JinjaHandler, JsonHandler, TimingSe
     def generate(self, diagram_path, git_support=False):
         """generate uwsgi.ini
         template:
-            sage_painless/templates/uwsgi.txt
+            sage_painless/templates/uwsgi.jinja
         """
         start_time = time.time()
 
@@ -37,7 +39,7 @@ class UwsgiGenerator(AbstractUWSGIGenerator, JinjaHandler, JsonHandler, TimingSe
         # generate uwsgi.ini
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/uwsgi.ini',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'uwsgi.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.UWSGI_TEMPLATE),
             data={
                 'config': config
             }

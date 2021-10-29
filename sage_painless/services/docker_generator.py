@@ -19,6 +19,10 @@ from sage_painless import templates
 
 class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, TimingService, GitSupport, PackageManagerSupport):
     """Generate DockerFile & docker-compose"""
+    DOCKERFILE_TEMPLATE = 'Dockerfile.jinja'
+    DOCKER_COMPOSE_TEMPLATE = 'docker-compose.jinja'
+    ENV_TEMPLATE = 'env.jinja'
+    NGINX_TEMPLATE = 'nginx.jinja'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,8 +33,8 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
     ):
         """stream docker configs to root
         template:
-            sage_painless/templates/Dockerfile.txt
-            sage_painless/templates/docker-compose.txt
+            sage_painless/templates/Dockerfile.jinja
+            sage_painless/templates/docker-compose.jinja
         """
         start_time = time.time()
 
@@ -77,7 +81,7 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
         # stream to Dockerfile
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/Dockerfile',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'Dockerfile.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.DOCKERFILE_TEMPLATE),
             data={
                 'nginx': nginx_support,
                 'kernel_name': self.get_kernel_name()
@@ -87,7 +91,7 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
         # stream to docker-compose.yml
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/docker-compose.yml',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'docker-compose.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.DOCKER_COMPOSE_TEMPLATE),
             data={
                 'kernel': self.get_kernel_name(),
                 'docker_config': default_config.get('docker'),
@@ -102,7 +106,7 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
         # stream to .env.prod
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/.env.prod',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'env.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.ENV_TEMPLATE),
             data={
                 'config': default_config.get('docker'),
                 'random_secret_key': get_random_secret_key(),
@@ -128,7 +132,7 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
         if nginx_support:
             self.stream_to_template(
                 output_path=f'{settings.BASE_DIR}/nginx.conf',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'nginx.txt'),
+                template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.NGINX_TEMPLATE),
                 data={
                     'kernel_name': self.get_kernel_name(),
                     'staticfiles': self.get_staticfiles_dir(),

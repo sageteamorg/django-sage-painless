@@ -18,6 +18,9 @@ from sage_painless import templates
 
 class ToxGenerator(AbstractToxGenerator, JinjaHandler, JsonHandler, Pep8, TimingService, GitSupport):
     """generate tox configs & coverage support"""
+    COVERAGERC_TEMPLATE = 'coveragerc.jinja'
+    TOX_TEMPLATE = 'tox.jinja'
+    SETUP_TEMPLATE = 'setup.jinja'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -25,9 +28,9 @@ class ToxGenerator(AbstractToxGenerator, JinjaHandler, JsonHandler, Pep8, Timing
     def generate(self, diagram_path, git_support=False):
         """generate tox and coverage config
         template:
-            sage_painless/templates/tox.txt
-            sage_painless/templates/coveragerc.txt
-            sage_painless/templates/setup.txt
+            sage_painless/templates/tox.jinja
+            sage_painless/templates/coveragerc.jinja
+            sage_painless/templates/setup.jinja
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -42,7 +45,7 @@ class ToxGenerator(AbstractToxGenerator, JinjaHandler, JsonHandler, Pep8, Timing
         # .coveragerc
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/.coveragerc',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'coveragerc.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.COVERAGERC_TEMPLATE),
             data={
                 'app_names': app_names
             }
@@ -51,7 +54,7 @@ class ToxGenerator(AbstractToxGenerator, JinjaHandler, JsonHandler, Pep8, Timing
         # tox.ini
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/tox.ini',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'tox.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.TOX_TEMPLATE),
             data={
                 'kernel_name': kernel_name
             }
@@ -60,7 +63,7 @@ class ToxGenerator(AbstractToxGenerator, JinjaHandler, JsonHandler, Pep8, Timing
         # setup.py
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/setup.py',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'setup.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.SETUP_TEMPLATE),
             data={
                 'kernel_name': kernel_name,
                 'config': config,

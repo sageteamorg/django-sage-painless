@@ -20,6 +20,7 @@ from sage_painless import templates
 
 class ReadMeGenerator(AbstractReadMeGenerator, JinjaHandler, JsonHandler, Pep8, FileService, TimingService, GitSupport):
     """Generate README.md for project"""
+    README_TEMPLATE = 'README.jinja'
 
     def __init__(self, *args, **kwargs):
         """init"""
@@ -28,7 +29,7 @@ class ReadMeGenerator(AbstractReadMeGenerator, JinjaHandler, JsonHandler, Pep8, 
     def generate(self, diagram_path, git_support=False):
         """stream README.md to docs/sage_painless/git/README.md
         template:
-            sage_painless/templates/README.txt
+            sage_painless/templates/README.jinja
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -53,7 +54,7 @@ class ReadMeGenerator(AbstractReadMeGenerator, JinjaHandler, JsonHandler, Pep8, 
 
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/docs/sage_painless/git/README.md',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'README.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.README_TEMPLATE),
             data={
                 'project_name': project_name,
                 'built_in_apps': django_apps,

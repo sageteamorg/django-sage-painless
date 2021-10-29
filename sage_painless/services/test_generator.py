@@ -1,6 +1,5 @@
 import os
 import time
-from pathlib import Path
 
 from django.conf import settings
 
@@ -20,6 +19,7 @@ from sage_painless import templates
 
 class TestGenerator(AbstractTestGenerator, JinjaHandler, JsonHandler, Pep8, FileService, TimingService, GitSupport):
     """Generate model/api tests for given diagram"""
+    TEST_TEMPLATE = 'test.jinja'
 
     def __init__(self, *args, **kwargs):
         """init"""
@@ -28,7 +28,7 @@ class TestGenerator(AbstractTestGenerator, JinjaHandler, JsonHandler, Pep8, File
     def generate(self, diagram_path, git_support=False):
         """stream tests to app_name/tests/test_model_name.py
         template:
-            sage_painless/templates/test.txt
+            sage_painless/templates/test.jinja
         """
         start_time = time.time()
         diagram = self.load_json(diagram_path)
@@ -48,7 +48,7 @@ class TestGenerator(AbstractTestGenerator, JinjaHandler, JsonHandler, Pep8, File
                 # generate model tests
                 self.stream_to_template(
                     output_path=f'{settings.BASE_DIR}/{app_name}/tests/test_{model.name.lower()}.py',
-                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'test.txt'),
+                    template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.TEST_TEMPLATE),
                     data={
                         'app_name': app_name,
                         'models': models,

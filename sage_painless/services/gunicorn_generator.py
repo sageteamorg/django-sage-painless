@@ -21,13 +21,15 @@ from sage_painless import templates
 class GunicornGenerator(
     AbstractGunicornGenerator, JinjaHandler, JsonHandler, Pep8, FileService, CommentService, TimingService, GitSupport):
     """gunicorn config generator"""
+    CONF_TEMPLATE = 'conf.jinja'
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def generate(self, diagram_path, git_support=False):
         """generate conf.py
         template:
-            sage_painless/templates/conf.txt
+            sage_painless/templates/conf.jinja
         """
         start_time = time.time()
 
@@ -41,7 +43,7 @@ class GunicornGenerator(
         # generate conf.py
         self.stream_to_template(
             output_path=f'{settings.BASE_DIR}/gunicorn-conf.py',
-            template_path=os.path.abspath(templates.__file__).replace('__init__.py', 'conf.txt'),
+            template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.CONF_TEMPLATE),
             data={
                 'config': config,
                 'comments': self.GUNICORN_CONFIG_COMMENTS
