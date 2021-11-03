@@ -16,3 +16,6 @@ coverage
 gunicorn
 greenlet
 gevent
+docutils==0.16
+django-filter==21.1
+PyYAML==6.0
