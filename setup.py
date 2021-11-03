@@ -5,7 +5,7 @@ setup(
     packages=find_packages(exclude=['tests*']),
     package_data={'sage_painless/templates': ['*.jinja']},
     include_package_data=True,
-    version='1.13.5',
+    version='1.14.0',
     description='A handy tool for generating Django-based backend projects without coding. On the other hand, '
                 'it is a code generator of the Django framework.',
     long_description=open('README.md').read(),
@@ -18,6 +18,7 @@ setup(
     install_requires=[
         'Django',
         'django-redis',
+        'django-filter',
         'redis',
         'drf-yasg',
         'django-seed',
