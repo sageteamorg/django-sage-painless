@@ -34,7 +34,7 @@ class ModelCacheMixin:
             )
         else:
             queryset = cache.get_or_set(cls.CACHE_KEY, cls.objects.all())
-        return list(queryset)
+        return queryset
 
     @classmethod
     def filter_from_cache(cls, queryset=None, **kwargs):

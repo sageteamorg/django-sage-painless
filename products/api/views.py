@@ -11,6 +11,14 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
 
 
+# filter support
+from django_filters.rest_framework import DjangoFilterBackend
+
+
+# search support
+from rest_framework.filters import SearchFilter
+
+
 from products.models.category import Category
 
 from products.models.product import Product
@@ -34,6 +42,14 @@ class CategoryViewset(ModelViewSet):
     
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     permission_classes = (permissions.AllowAny,)
+    
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = [
+        'title', 'created', 'modified',
+    ]
+    filterset_fields = [
+        'title', 'created', 'modified',
+    ]
     
     model_class = Category
 

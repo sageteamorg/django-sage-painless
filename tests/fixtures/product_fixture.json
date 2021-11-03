@@ -41,7 +41,9 @@
               "PATCH",
               "DELETE"
             ],
-            "permission": "any"
+            "permission": "any",
+            "search": true,
+            "filter": true
           }
         },
         "Product": {
