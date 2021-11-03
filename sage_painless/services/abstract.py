@@ -191,6 +191,8 @@ class AbstractAPIGenerator(BaseGenerator, GeneratorConstants):
                 api_config[self.get_constant('PERMISSION_KEYWORD')] = self.permission_routing.get(
                     api_config.get(self.get_constant('PERMISSION_KEYWORD'))
                 )
+        else:
+            api_config = dict()
         return api_config
 
     @classmethod
@@ -207,6 +209,22 @@ class AbstractAPIGenerator(BaseGenerator, GeneratorConstants):
         """check for permission support in api config"""
         for model in models:
             if model.api_config.get(self.get_constant('PERMISSION_KEYWORD')):
+                return True
+
+        return False
+
+    def check_filter_support(self, models):
+        """check for filter support in api config"""
+        for model in models:
+            if model.api_config.get(self.get_constant('FILTER_KEYWORD')):
+                return True
+
+        return False
+
+    def check_search_support(self, models):
+        """check for search support in api config"""
+        for model in models:
+            if model.api_config.get(self.get_constant('SEARCH_KEYWORD')):
                 return True
 
         return False
@@ -233,8 +251,11 @@ class AbstractAPIGenerator(BaseGenerator, GeneratorConstants):
             model_fields = list()
 
             for field_name in fields.keys():
+                field_data = fields.get(field_name)
                 model_field = Field()
                 model_field.name = field_name
+                model_field.set_type(
+                    field_data.get(self.get_constant('TYPE_KEYWORD')))  # set type of Field (CharField, etc)
                 model_field.stream = fields.get(field_name).pop(self.STREAM_KEYWORD, False)  # video field streaming
                 model_fields.append(model_field)
 

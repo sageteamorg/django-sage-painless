@@ -26,23 +26,24 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
         parser.add_argument('-d', '--diagram', type=str, help='sql diagram path that will make models.py from it')
         parser.add_argument('-g', '--git', type=bool, help='generate git commits')
 
-    def validate_settings(self, step):
+    @classmethod
+    def validate_settings(cls, step):
         """validate required settings in each step"""
-        if not 'sage_painless' in settings.INSTALLED_APPS:
+        if 'sage_painless' not in settings.INSTALLED_APPS:
             raise IOError('Add `sage_painless` to your INSTALLED_APPS')
 
         if step == 'api':
-            if not 'rest_framework' in settings.INSTALLED_APPS:
+            if 'rest_framework' not in settings.INSTALLED_APPS:
                 raise IOError('Add `rest_framework` to your INSTALLED_APPS')
 
         if step == 'test':
-            if not 'rest_framework' in settings.INSTALLED_APPS:
+            if 'rest_framework' not in settings.INSTALLED_APPS:
                 raise IOError('Add `rest_framework` to your INSTALLED_APPS')
-            if not 'django_seed' in settings.INSTALLED_APPS:
+            if 'django_seed' not in settings.INSTALLED_APPS:
                 raise IOError('Add `django_seed` to your INSTALLED_APPS')
 
         if step == 'docs':
-            if not 'drf_yasg' in settings.INSTALLED_APPS:
+            if 'drf_yasg' not in settings.INSTALLED_APPS:
                 raise IOError('Add `drf_yasg` to your INSTALLED_APPS')
 
     def handle(self, *args, **options):

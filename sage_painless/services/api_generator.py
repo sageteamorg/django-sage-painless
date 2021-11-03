@@ -73,7 +73,9 @@ class APIGenerator(AbstractAPIGenerator, JinjaHandler, JsonHandler, Pep8, FileSe
                     'app_name': app_name,
                     'models': models,
                     'cache_support': cache_support,
-                    'permission_support': self.check_permission_support(models)
+                    'permission_support': self.check_permission_support(models),
+                    'filter_support': self.check_filter_support(models),
+                    'search_support': self.check_search_support(models)
                 }
             )
 

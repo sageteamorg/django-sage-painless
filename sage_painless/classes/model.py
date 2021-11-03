@@ -12,7 +12,7 @@ class Model:
 
     name = None
     fields = []
-    api_config = None
+    api_config = {}
 
     def has_one_to_one(self):
         """
@@ -23,6 +23,26 @@ class Model:
                 return True
 
         return False
+
+    @property
+    def filter_fields(self):
+        """return model filter patterns"""
+        fields = list()
+        for field in self.fields:
+            if field.type in ['ForeignKey', 'OneToOneField', 'ManyToManyField']:
+                fields.append(f'{field.name}__id')
+            else:
+                fields.append(field.name)
+        return fields
+
+    @property
+    def search_fields(self):
+        """return model search field patterns"""
+        fields = list()
+        for field in self.fields:
+            if field.type in ['CharField', 'TextField', 'DateTimeField', 'DateField', 'TimeField', 'SlugField']:
+                fields.append(field.name)
+        return fields
 
     @property
     def verbose_name(self):

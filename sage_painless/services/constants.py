@@ -38,6 +38,8 @@ class GeneratorConstants(ABC):
     UWSGI_KEYWORD = 'uwsgi'
     PERMISSION_KEYWORD = 'permission'
     METHODS_KEYWORD = 'methods'
+    FILTER_KEYWORD = 'filter'
+    SEARCH_KEYWORD = 'search'
 
     def get_constant(self, name):
         """get constant from variables"""

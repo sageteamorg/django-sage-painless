@@ -10,6 +10,14 @@ from rest_framework.viewsets import ModelViewSet
 # permission support
 from rest_framework import permissions
 {% endif %}
+{% if filter_support %}
+# filter support
+from django_filters.rest_framework import DjangoFilterBackend
+{% endif %}
+{% if search_support %}
+# search support
+from rest_framework.filters import SearchFilter
+{% endif %}
 
 {% for model in models %}
 from {{app_name}}.models.{{model.name.lower()}} import {{model.name}}
@@ -29,6 +37,25 @@ class {{model.name}}Viewset(ModelViewSet):
     {% if model.api_config %}
     {% if model.api_config.get('methods') %}http_method_names = {{model.api_config.get('methods')}}{% endif %}
     {% if model.api_config.get('permission') %}permission_classes = (permissions.{{model.api_config.get('permission')}},){% endif %}
+    {% if model.api_config.get('filter') and model.api_config.get('search') %}
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = [
+        {% for field in model.search_fields %}'{{field}}',{% endfor %}
+    ]
+    filterset_fields = [
+        {% for field in model.filter_fields %}'{{field}}',{% endfor %}
+    ]
+    {% elif model.api_config.get('filter') and not model.api_config.get('search') %}
+    filter_backends = [DjangoFilterBackend,]
+    filterset_fields = [
+        {% for field in model.filter_fields %}'{{field}}',{% endfor %}
+    ]
+    {% elif not model.api_config.get('filter') and model.api_config.get('search') %}
+    filter_backends = [SearchFilter,]
+    search_fields = [
+        {% for field in model.search_fields %}'{{field}}',{% endfor %}
+    ]
+    {% endif %}
     {% endif %}
     {% if cache_support %}
     model_class = {{model.name}}
