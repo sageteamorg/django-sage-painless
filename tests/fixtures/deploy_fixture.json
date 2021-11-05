@@ -1,10 +1,6 @@
 {
   "deploy": {
     "docker": {
-      "db_image": "postgres",
-      "db_name": "products",
-      "db_user": "postgres",
-      "db_pass": "postgres1234",
       "redis": true,
       "rabbitmq": false
     },
