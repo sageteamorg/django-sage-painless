@@ -1,23 +1,26 @@
 # Automatically generated with ❤️ by django-sage-painless
-upstream {{kernel_name}} {
-    server web:8000;
+upstream backend {
+    server backend:8000;  # set for dockerized project (if your project is not dockerized change this part)
 }
 
 server {
-
     listen 80;
+    server_name example.com;  # you need to specify your domain
+    client_max_body_size 100M;
 
     location / {
-        proxy_pass http://{{kernel_name}};
+        proxy_pass http://backend;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $host;
         proxy_redirect off;
     }
-    location /staticfiles/ {
-        alias {{staticfiles}};
+    location /static/ {
+        alias {{static_files}};
     }
-    location /mediafiles/ {
-        alias {{mediafiles}};
+    location /media/ {
+        alias {{media_files}};
     }
 
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
 }

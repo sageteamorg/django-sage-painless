@@ -398,7 +398,7 @@ class AbstractGunicornGenerator(BaseGenerator, GeneratorConstants):
         """extract gunicorn config from diagram json"""
         deploy = diagram.get(self.get_constant('DEPLOY_KEYWORD'))
         if not deploy:
-            raise KeyError('`deploy` not set in diagram json file')
+            return {}
         return deploy.get(self.get_constant('GUNICORN_KEYWORD'))
 
 
@@ -496,3 +496,24 @@ class AbstractUWSGIGenerator(BaseGenerator, GeneratorConstants):
         if not deploy:
             raise KeyError('`deploy` not set in diagram json file')
         return deploy.get(self.get_constant('UWSGI_KEYWORD'))
+
+
+class AbstractNiginxGenerator(BaseGenerator, GeneratorConstants):
+    """Abstract Nginx Generator"""
+
+    @classmethod
+    def get_static_files_dir(cls):
+        """get from django setting"""
+        if hasattr(settings, 'STATIC_ROOT'):
+            return getattr(settings, 'STATIC_ROOT')
+        else:
+            raise AssertionError('You need to set STATIC_ROOT in django settings')
+
+    @classmethod
+    def get_media_files_dir(cls):
+        """get from django setting"""
+        if hasattr(settings, 'MEDIA_ROOT'):
+            return getattr(settings, 'MEDIA_ROOT')
+        else:
+            raise AssertionError('You need to set MEDIA_ROOT in django settings')
+
