@@ -1,64 +1,61 @@
 # Automatically generated with ❤️ by django-sage-painless
-version: "{{docker_config.get('compose_version', '3.8')}}"
+version: "{{docker_config.get('compose_version', '3')}}"
 
 services:
-  web:
-    container_name: web
-    build: .
-    {% if gunicorn %}
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn -c gunicorn-conf.py {{kernel}}.wsgi:application"
-    {%elif uwsgi%}
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && uwsgi --ini uwsgi.ini"
-    {%else%}
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    {%endif%}
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
     volumes:
-      - .:/code
-    ports:
-      - 8000:8000
-    hostname: web
-    {% if docker_config.get('redis') %}
-    environment:
-      - REDIS_URL={{docker_config.get('redis_url', 'redis://redis:6379/')}}
-    {% endif %}
-    env_file:
-      - ./.env.prod
+      - .:/project
+      {% if gunicorn %}
+      - /var/log/gunicorn/gunicorn-access.log:/var/log/gunicorn/gunicorn-access.log
+      - /var/log/gunicorn/gunicorn-error.log:/var/log/gunicorn/gunicorn-error.log
+      {% endif %}
+    networks:
+      - pgsql_network
     depends_on:
-      - db
+      - pgsql_db
       {% if docker_config.get('redis') %}
       - redis
       {% endif %}
       {% if docker_config.get('rabbitmq') %}
       - rabbitmq
       {% endif %}
-  db:
-    container_name: db
-    image: {{docker_config.get('db_image', 'postgres')}}
-    hostname: db
-    restart: on-failure
-    environment:
-      - POSTGRES_DB={{docker_config.get('db_name')}}
-      - POSTGRES_USER={{docker_config.get('db_user')}}
-      - POSTGRES_PASSWORD={{docker_config.get('db_pass')}}
+
+  pgsql_db:
+    image: postgres:latest
+    restart: always
+    container_name: pgsql_db
+    volumes:
+      - pgsql_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.prod
+    networks:
+      - pgsql_network
+
   {% if docker_config.get('redis') %}
   redis:
+    restart: always
     container_name: redis
-    image: redis:alpine
+    image: redis:latest
+    networks:
+      - pgsql_network
   {% endif %}
+
   {% if docker_config.get('rabbitmq') %}
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3-management-alpine
-    environment:
-      - RABBITMQ_DEFAULT_USER={{docker_config.get('rabbitmq_user')}}
-      - RABBITMQ_DEFAULT_PASS={{docker_config.get('rabbitmq_pass')}}
-      - RABBITMQ_DEFAULT_VHOST={{docker_config.get('rabbitmq_vhost', '/')}}
+    env_file:
+      - .env.prod
   {% endif %}
-  {%if nginx%}
-  nginx:
-      build: .
-      ports:
-        - 1337:80
-      depends_on:
-        - web
-  {%endif%}
+
+volumes:
+  pgsql_data:
+    external: true
+networks:
+  pgsql_network:
+    external: true

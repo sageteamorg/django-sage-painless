@@ -24,7 +24,8 @@ from sage_painless import templates
 
 
 class GunicornGenerator(
-    AbstractGunicornGenerator, JinjaHandler, JsonHandler, Pep8, FileService, CommentService, TimingService, GitSupport):
+    AbstractGunicornGenerator, JinjaHandler, JsonHandler, Pep8, FileService, CommentService, TimingService, GitSupport
+):
     """gunicorn config generator"""
     CONF_TEMPLATE = 'conf.jinja'
 

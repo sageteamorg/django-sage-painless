@@ -1,28 +1,27 @@
 # Automatically generated with ❤️ by django-sage-painless
 
 # pull official base image
-FROM python:3.9-alpine
-{%if nginx%}
-FROM nginx:1.19.0-alpine
-{%endif%}
+FROM python:3.9
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # set work directory
-WORKDIR /code
-
-{%if nginx%}
-# set nginx conf.d
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d
-{%endif%}
+RUN mkdir /project
+WORKDIR /project
+COPY . /project
 
 # install dependencies
-COPY requirements.txt /code/
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# copy project
-COPY . /code/
+# migrate django project
+RUN python manage.py makemigrations
+RUN python manage.py migrate
+RUN python manage.py collectstatic
+
+{% if gunicorn %}
+RUN pip install gunicorn gevent
+CMD ["gunicorn", "-c", "gunicorn-conf.py", "--preload", "--bind", ":8000", "--chdir", "{{kernel_name}}", "{{kernel_name}}.wsgi:application"]
+{% endif %}

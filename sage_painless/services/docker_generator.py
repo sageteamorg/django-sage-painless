@@ -88,7 +88,7 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
             output_path=f'{settings.BASE_DIR}/Dockerfile',
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.DOCKERFILE_TEMPLATE),
             data={
-                'nginx': nginx_support,
+                'gunicorn': gunicorn_support,
                 'kernel_name': self.get_kernel_name()
             }
         )
@@ -99,12 +99,8 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.DOCKER_COMPOSE_TEMPLATE),
             data={
                 'kernel': self.get_kernel_name(),
-                'docker_config': default_config.get('docker'),
-                'gunicorn_config': default_config.get('gunicorn'),
-                'uwsgi_config': default_config.get('uwsgi'),
-                'gunicorn': gunicorn_support,
-                'uwsgi': uwsgi_support,
-                'nginx': nginx_support
+                'docker_config': default_config.get('docker', {}),
+                'gunicorn': gunicorn_support
             }
         )
 
@@ -113,10 +109,9 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
             output_path=f'{settings.BASE_DIR}/.env.prod',
             template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.ENV_TEMPLATE),
             data={
-                'config': default_config.get('docker'),
-                'random_secret_key': get_random_secret_key(),
-                'debug': 1 if settings.DEBUG else 0,
-                'allowed_hosts': settings.ALLOWED_HOSTS
+                'config': default_config.get('docker', {}),
+                'random_postgres_password': get_random_secret_key(),
+                'random_rabbitmq_password': get_random_secret_key()
             }
         )
         if git_support:
@@ -132,23 +127,6 @@ class DockerGenerator(AbstractDockerGenerator, JinjaHandler, JsonHandler, Timing
                 f'{settings.BASE_DIR}/.env.prod',
                 f'deploy (docker): Add variables to .env'
             )
-
-        # stream to nginx.conf
-        if nginx_support:
-            self.stream_to_template(
-                output_path=f'{settings.BASE_DIR}/nginx.conf',
-                template_path=os.path.abspath(templates.__file__).replace('__init__.py', self.NGINX_TEMPLATE),
-                data={
-                    'kernel_name': self.get_kernel_name(),
-                    'staticfiles': self.get_staticfiles_dir(),
-                    'mediafiles': self.get_mediafiles_dir()
-                }
-            )
-            if git_support:
-                self.commit_file(
-                    f'{settings.BASE_DIR}/nginx.conf',
-                    f'deploy (nginx): Create nginx.conf'
-                )
 
         end_time = time.time()
         return True, 'Docker config generated ({:.3f} ms)'.format(self.calculate_execute_time(start_time, end_time))
