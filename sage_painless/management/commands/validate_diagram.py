@@ -14,7 +14,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
 
     def add_arguments(self, parser):
         """initialize arguments"""
-        parser.add_argument('-d', '--diagram', type=str, help='sql diagram path')
+        parser.add_argument('-d', '--diagram', type=str, help='sql diagram path', required=True)
 
     def handle(self, *args, **options):
         """get configs from user and generate"""

@@ -23,8 +23,9 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
 
     def add_arguments(self, parser):
         """initialize arguments"""
-        parser.add_argument('-d', '--diagram', type=str, help='sql diagram path that will make models.py from it')
-        parser.add_argument('-g', '--git', type=bool, help='generate git commits')
+        parser.add_argument(
+            '-d', '--diagram', type=str, help='sql diagram path that will make models.py from it', required=True)
+        parser.add_argument('-g', '--git', type=bool, help='generate git commits', required=False)
 
     @classmethod
     def validate_settings(cls, step):

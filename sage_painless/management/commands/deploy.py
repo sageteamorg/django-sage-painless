@@ -9,6 +9,7 @@ from django.core.management import BaseCommand
 
 from sage_painless.services.docker_generator import DockerGenerator
 from sage_painless.services.gunicorn_generator import GunicornGenerator
+from sage_painless.services.nginx_generator import NginxGenerator
 from sage_painless.services.tox_generator import ToxGenerator
 from sage_painless.services.uwsgi_generator import UwsgiGenerator
 from sage_painless.utils.report_service import ReportUserAnswer
@@ -19,8 +20,9 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         """initialize arguments"""
-        parser.add_argument('-d', '--diagram', type=str, help='sql diagram path that will generate from it')
-        parser.add_argument('-g', '--git', type=bool, help='generate git commits')
+        parser.add_argument(
+            '-d', '--diagram', type=str, help='sql diagram path that will generate from it', required=True)
+        parser.add_argument('-g', '--git', type=bool, help='generate git commits', required=False)
 
     def handle(self, *args, **options):
         diagram_path = options.get('diagram')
@@ -79,6 +81,23 @@ class Command(BaseCommand):
         nginx_support = input('Would you like to generate nginx config(yes/no)? ')
         nginx_support = True if nginx_support == 'yes' else False
 
+        if nginx_support:
+            reporter.add_question_answer(
+                question='create nginx.conf',
+                answer=True
+            )
+            nginx_generator = NginxGenerator()
+            check, message = nginx_generator.generate(git_support=git_support)
+            if check:
+                stdout_messages.append(self.style.SUCCESS(f'deploy[INFO]: {message}'))
+            else:
+                stdout_messages.append(self.style.ERROR(f'deploy[ERROR]: {message}'))
+        else:
+            reporter.add_question_answer(
+                question='create nginx.conf',
+                answer=False
+            )
+
         # package manager support
         package_manager_support = input('Would you like to export project requirement packages(yes/no)? ')
         package_manager_support = True if package_manager_support == 'yes' else False
@@ -101,8 +120,8 @@ class Command(BaseCommand):
             check, message = docker_generator.generate(
                 diagram_path,
                 gunicorn_support=gunicorn_support,
-                uwsgi_support=uwsgi_support,
-                nginx_support=nginx_support,
+                # uwsgi_support=uwsgi_support, # TODO: will support in future
+                # nginx_support=nginx_support, # TODO: will support in future
                 git_support=git_support,
                 package_manager_support=package_manager_support
             )
