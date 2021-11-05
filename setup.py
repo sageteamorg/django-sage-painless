@@ -5,7 +5,7 @@ setup(
     packages=find_packages(exclude=['tests*']),
     package_data={'sage_painless/templates': ['*.jinja']},
     include_package_data=True,
-    version='1.14.0',
+    version='1.14.1',
     description='A handy tool for generating Django-based backend projects without coding. On the other hand, '
                 'it is a code generator of the Django framework.',
     long_description=open('README.md').read(),
@@ -14,7 +14,10 @@ setup(
     author_email='mail@sageteam.org',
     url='https://github.com/sageteam-org/django-sage-painless',
     download_url='https://github.com/sageteam-org/django-sage-painless/archive/refs/tags/1.5.0.tar.gz',
-    keywords=['django', 'python', 'generate', 'code generator'],
+    keywords=[
+        'django', 'python', 'generate',
+        'code generator', 'django rest framework',
+        'nginx', 'redis', 'rabbitmq', 'docker', 'gunicorn', 'automation'],
     install_requires=[
         'Django',
         'django-redis',
