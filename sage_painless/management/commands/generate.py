@@ -78,13 +78,13 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                         question='cache support',
                         answer=True
                     )
-                    check, message = model_generator.generate(diagram_path, True, git_support)
+                    check, message = model_generator.generate(diagram_path, app_name, True, git_support)
                 else:
                     reporter.add_question_answer(
                         question='cache support',
                         answer=False
                     )
-                    check, message = model_generator.generate(diagram_path, git_support=git_support)
+                    check, message = model_generator.generate(diagram_path, app_name, git_support=git_support)
 
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
@@ -102,7 +102,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                     answer=True
                 )
                 admin_generator = AdminGenerator()
-                check, message = admin_generator.generate(diagram_path, git_support=git_support)
+                check, message = admin_generator.generate(diagram_path, app_name, git_support=git_support)
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
@@ -127,7 +127,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
 
                 if cache_support == 'yes':
                     print("""
-                    hint: This setting should be in settings.py
+                    hint: Redis setting should be in settings.py
 
                     REDIS_URL = 'redis://localhost:6379/'
                     CACHES = {
@@ -141,13 +141,13 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                         question='cache support',
                         answer=True
                     )
-                    check, message = api_generator.generate(diagram_path, True, git_support=git_support)
+                    check, message = api_generator.generate(diagram_path, app_name, True, git_support=git_support)
                 else:
                     reporter.add_question_answer(
                         question='cache support',
                         answer=False
                     )
-                    check, message = api_generator.generate(diagram_path, git_support=git_support)
+                    check, message = api_generator.generate(diagram_path, app_name, git_support=git_support)
 
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
@@ -174,7 +174,7 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                 )
                 self.validate_settings(step='test')
                 test_generator = TestGenerator()
-                check, message = test_generator.generate(diagram_path, git_support=git_support)
+                check, message = test_generator.generate(diagram_path, app_name, git_support=git_support)
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
