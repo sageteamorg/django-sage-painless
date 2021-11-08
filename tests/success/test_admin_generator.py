@@ -68,7 +68,7 @@ class TestAdminGenerator(TestCase):
 
     def test_stream_to_jinja(self):
         admins = self.admin_generator.extract_admin(self.diagram)
-        self.admin_generator.generate(self.diagram_path)
+        self.admin_generator.generate(self.diagram_path, self.app_name)
         admin_data = self.open_generated_file(f'{settings.BASE_DIR}/{self.app_name}/admin.py')
         for admin in admins:
             for prop in self.get_obj_properties(admin):
