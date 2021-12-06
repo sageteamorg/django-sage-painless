@@ -13,7 +13,7 @@ class JinjaHandler:
         """
         load jinja template from template_path
         """
-        with open(template_path, 'r') as t:
+        with open(template_path, 'r', encoding='utf8') as t:
             template = self.env.from_string(t.read())
         return template
 
@@ -22,7 +22,7 @@ class JinjaHandler:
         generate output file using template and data
         """
         template = self.load_template(template_path)
-        with open(output_path, 'w') as o:
+        with open(output_path, 'w', encoding='utf8') as o:
             if data:
                 template.stream(
                     **data
