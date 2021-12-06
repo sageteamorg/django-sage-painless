@@ -30,7 +30,9 @@ class TestGenerator(AbstractTestGenerator, JinjaHandler, JsonHandler, Pep8, File
         """init"""
         super().__init__(*args, **kwargs)
 
-    def generate(self, diagram_path: str, app_name: str, git_support: bool = False):
+    def generate(
+            self, diagram_path: str, app_name: str, model_test: bool = True,
+            api_test: bool = True, git_support: bool = False):
         """stream tests to app_name/tests/test_model_name.py
         template:
             sage_painless/templates/test.jinja
@@ -59,6 +61,8 @@ class TestGenerator(AbstractTestGenerator, JinjaHandler, JsonHandler, Pep8, File
                     'app_name': app_name,
                     'models': models,
                     'model': model,
+                    'api_test': api_test,
+                    'model_test': model_test,
                     'signals': self.filter_signals_for_model(signals, model),
                     'stream': self.check_streaming_support([model])
                 }

@@ -27,6 +27,7 @@ class {{model.name.capitalize()}}Test(APITestCase):
         {% endif %}
         {% endfor %}
         seeder.execute() # create instances
+    {% if model_test %}
     {% if not model.has_one_to_one() %}
     def test_{{model.name.lower()}}_model(self):
         """test {{model.name}} creation"""
@@ -48,6 +49,8 @@ class {{model.name.capitalize()}}Test(APITestCase):
         second_object = {{signal.model_a}}.objects.first()
         self.assertEqual(second_object.{{signal.field}}, first_object)
     {%endfor%}
+    {% endif %}
+    {% if api_test %}
     {% if model.api_config %}
     {% if 'get' in model.api_config.get('methods') %}
     def test_{{model.name.lower()}}_list_success(self):
@@ -100,6 +103,7 @@ class {{model.name.capitalize()}}Test(APITestCase):
         self.assertEqual(response.data.get('{{field.name}}'), {{model.name.lower()}}.{{field.name}})
         {% endif %}
         {% endfor %}
+    {% endif %}
     {% if stream %}
     def test_{{model.name.lower()}}_streaming_support(self):
         """test streaming support"""

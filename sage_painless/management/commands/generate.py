@@ -174,7 +174,11 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                 )
                 self.validate_settings(step='test')
                 test_generator = TestGenerator()
-                check, message = test_generator.generate(diagram_path, app_name, git_support=git_support)
+                api_test = True if create_api == 'yes' else False
+                model_test = True if create_model == 'yes' else False
+                check, message = test_generator.generate(
+                    diagram_path, app_name, api_test=api_test,
+                    model_test=model_test, git_support=git_support)
                 if check:
                     stdout_messages.append(self.style.SUCCESS(f'{app_name}[INFO]: {message}'))
                 else:
