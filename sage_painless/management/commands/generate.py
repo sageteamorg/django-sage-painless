@@ -20,6 +20,7 @@ from sage_painless.validators.diagram_validator import DiagramValidator
 class Command(BaseCommand, JsonHandler, DiagramValidator):
     APPS_KEYWORD = 'apps'
     help = 'Generate all files need to your new apps.'
+    redis_message_showed = False
 
     def add_arguments(self, parser):
         """initialize arguments"""
@@ -126,17 +127,19 @@ class Command(BaseCommand, JsonHandler, DiagramValidator):
                 api_generator = APIGenerator()
 
                 if cache_support == 'yes':
-                    print("""
-                    hint: Redis setting should be in settings.py
-
-                    REDIS_URL = 'redis://localhost:6379/'
-                    CACHES = {
-                        "default": {
-                        "BACKEND": "django_redis.cache.RedisCache",
-                        "LOCATION": os.environ['REDIS_URL'] if os.environ.get('REDIS_URL') else settings.REDIS_URL if hasattr(settings, 'REDIS_URL') else 'redis://localhost:6379/'
+                    if not self.redis_message_showed:
+                        self.redis_message_showed = True
+                        print("""
+                        hint: Redis setting should be in settings.py
+    
+                        REDIS_URL = 'redis://localhost:6379/'
+                        CACHES = {
+                            "default": {
+                            "BACKEND": "django_redis.cache.RedisCache",
+                            "LOCATION": os.environ['REDIS_URL'] if os.environ.get('REDIS_URL') else settings.REDIS_URL if hasattr(settings, 'REDIS_URL') else 'redis://localhost:6379/'
+                            }
                         }
-                    }
-                    """)
+                        """)
                     reporter.add_question_answer(
                         question='cache support',
                         answer=True
