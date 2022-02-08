@@ -226,6 +226,11 @@ S.A.G.E. team Git Rules Policy is available here:
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Sepehr Akbarazadeh Maintainer](https://github.com/sepehr-akbarzadeh)                                                                                                             | [Mehran Rahmanzadeh Maintainer](https://github.com/mehran-rahmanzadeh)                                                                                                       |
 
+## Awards
+
+### Second Degree of Khwarizmi 23rd Festival
+#### Issued by Ministry of Education, Ministry of Science Research and Technology, Iranian Research Organization for Science and Technology (IROST) · Dec 2021
+
 ## Version 1
 - [x] generate README.md
 - [x] db encryption
