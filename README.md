@@ -221,16 +221,6 @@ S.A.G.E. team Git Rules Policy is available here:
 
 - [S.A.G.E. Git Policy](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
 
-## Team
-| [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/sepehr.jpeg?raw=true" width="230px" height="230px" alt="Sepehr Akbarzadeh">](https://github.com/sepehr-akbarzadeh) | [<img src="https://github.com/sageteam-org/django-sage-painless/blob/develop/docs/images/mehran.png?raw=true" width="225px" height="340px" alt="Mehran Rahmanzadeh">](https://github.com/mehran-rahmanzadeh) |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Sepehr Akbarazadeh Maintainer](https://github.com/sepehr-akbarzadeh)                                                                                                             | [Mehran Rahmanzadeh Maintainer](https://github.com/mehran-rahmanzadeh)                                                                                                       |
-
-## Awards
-
-### Second Degree of Khwarizmi 23rd Festival
-#### Issued by Ministry of Education, Ministry of Science Research and Technology, Iranian Research Organization for Science and Technology (IROST) · Dec 2021
-
 ## Version 1
 - [x] generate README.md
 - [x] db encryption
